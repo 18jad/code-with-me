@@ -1,0 +1,21 @@
+// Global variables
+
+/*
+    Responsive breakpoints:
+        @include breakpoint($size) { @content }
+*/
+@mixin breakpoint($size) {
+  @if $size == mobile {
+    @media (max-width: 600px) {
+      @content;
+    }
+  } @else if $size == tablet {
+    @media (max-width: 900px) {
+      @content;
+    }
+  } @else if $size == laptop {
+    @media (max-width: 1200px) {
+      @content;
+    }
+  }
+}
