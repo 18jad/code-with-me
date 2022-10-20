@@ -1,7 +1,12 @@
-import styles from "./App.module.scss";
+import { Route, Routes } from "react-router-dom";
+import Home from "views/Home";
 
 function App() {
-  return <div className={styles.App}>Hello Boilerplate</div>;
+  return (
+    <Routes>
+      <Route path='/' element={<Home />} />
+    </Routes>
+  );
 }
 
 export default App;
