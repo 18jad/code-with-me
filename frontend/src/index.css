@@ -3,9 +3,23 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: "Josefin Sans";
+}
+
+input,
+button,
+select,
+option,
+textarea {
+  font-family: inherit;
 }
 
 /* / Loading fonts */
