@@ -1,7 +1,113 @@
+@import "global.scss";
+
 .mainContainer {
   background: url("../../assets/background_earth.png") no-repeat;
   height: 100vh;
   width: 100vw;
   background-size: cover;
   position: relative;
+  color: $white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  .heroSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    flex: 0.8;
+    margin: 0 auto;
+    @include breakpoint(mobile) {
+      align-items: flex-start;
+    }
+
+    .introduction {
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 15px;
+      h1 {
+        font-size: calc(1.5em + 3vw);
+        font-weight: bold;
+
+        @include breakpoint(mobile) {
+          width: 300px;
+          text-align: left;
+        }
+      }
+
+      p {
+        font-size: calc(1em + 0.3vw);
+        font-weight: 200;
+        color: $lighgray;
+
+        @include breakpoint(mobile) {
+          width: 300px;
+          text-align: left;
+        }
+      }
+    }
+
+    .interactions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      margin-top: 25px;
+      gap: 15px;
+      @include breakpoint(mobile) {
+        align-items: flex-start;
+      }
+
+      .getStartedBtn {
+        background: $blue;
+        padding: 7px 20px;
+        border-radius: 5px;
+        font-weight: 600;
+        box-shadow: 0 4px 20px rgba($blue, 0.5);
+
+        transition: background 150ms ease-in-out, transform 250ms ease-in-out,
+          box-shadow 250ms ease-in-out;
+
+        @include breakpoint(mobile) {
+          font-size: 0.8em;
+        }
+
+        &:hover {
+          background: darken($blue, 5%);
+          transform: translateY(-5px);
+          box-shadow: 0 4px 10px rgba($blue, 0.6);
+        }
+      }
+
+      .mobileDownload {
+        text-align: center;
+        font-weight: 200;
+        font-size: 0.9em;
+        color: $lighgray;
+        @include breakpoint(mobile) {
+          text-align: left;
+        }
+
+        .platformSelection {
+          text-decoration: underline;
+          margin-right: 5px;
+          cursor: pointer;
+          transition: color 150ms ease-in-out;
+
+          &:nth-last-child(1) {
+            margin-left: 5px;
+          }
+
+          &:hover {
+            color: $white;
+          }
+        }
+      }
+    }
+  }
 }
