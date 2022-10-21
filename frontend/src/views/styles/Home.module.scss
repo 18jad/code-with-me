@@ -44,7 +44,7 @@
           animation: textShine 2s linear infinite;
           -webkit-background-clip: text;
           background-clip: text;
-          -webkit-text-fill-color: rgba(255, 255, 255, 0.7);
+          -webkit-text-fill-color: rgba(255, 255, 255, 0.65);
 
           @include breakpoint(mobile) {
             width: 300px;
@@ -78,12 +78,17 @@
         .getStartedBtn {
           background: $blue;
           padding: 7px 20px;
-          border-radius: 5px;
+          border-radius: 3px;
           font-weight: 600;
-          box-shadow: 0 4px 20px rgba($blue, 0.5);
-
-          transition: background 150ms ease-in-out, transform 250ms ease-in-out,
-            box-shadow 250ms ease-in-out;
+          box-shadow: 0 4px 20px rgba($blue, 0.5), inset 2px -2px 0px #0002,
+            inset -2px -2px 0 #0002, 0px 3px 0px 2px #0003;
+          transform: rotateX(33deg);
+          border-bottom: 7px solid darken($blue, 13%);
+          border-left: 1.4px solid darken($blue, 13%);
+          border-right: 1.4px solid darken($blue, 13%);
+          transition: background 150ms ease-in-out, translate 250ms ease-in-out,
+            box-shadow 250ms ease-in-out, transform 250ms ease-in-out,
+            border 250ms ease-in-out, margin 250ms ease-in-out;
 
           @include breakpoint(mobile) {
             font-size: 0.8em;
@@ -91,8 +96,16 @@
 
           &:hover {
             background: darken($blue, 5%);
-            transform: translateY(-5px);
+            translate: 0 -5px;
             box-shadow: 0 4px 10px rgba($blue, 0.6);
+            transform: rotateX(0deg);
+            border-bottom-width: 3px;
+            margin-bottom: 4px;
+            border-color: darken($blue, 20%);
+          }
+
+          &:not(:hover) {
+            animation: drop 0.5s ease-in-out;
           }
         }
 
@@ -148,6 +161,9 @@
     }
   }
 }
+.bottomContent {
+  position: relative;
+}
 
 @keyframes textShine {
   0% {
@@ -155,6 +171,26 @@
   }
   100% {
     background-position: 500%;
+  }
+}
+
+@keyframes drop {
+  0% {
+    translate: 0 -5px;
+    box-shadow: 0 4px 10px rgba($blue, 0.5);
+  }
+
+  50% {
+    translate: 0 3px;
+    box-shadow: 0 4px 4px #0002;
+  }
+
+  70% {
+    translate: 0 -2px;
+  }
+
+  100% {
+    translate: 0;
   }
 }
 
