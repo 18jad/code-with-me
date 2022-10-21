@@ -123,6 +123,30 @@
       }
     }
   }
+
+  .editorPreviewSection {
+    height: 45vw;
+    margin-top: -300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    animation-name: floating;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    @include breakpoint(mobile) {
+      height: 100%;
+      width: 150vw;
+      margin-left: 80px;
+    }
+
+    .editorPreview {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 @keyframes textShine {
@@ -131,5 +155,20 @@
   }
   100% {
     background-position: 500%;
+  }
+}
+
+@keyframes floating {
+  0% {
+    box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);
+    transform: translatey(0px);
+  }
+  50% {
+    box-shadow: 0 25px 15px 0px rgba(0, 0, 0, 0.2);
+    transform: translatey(-10px);
+  }
+  100% {
+    box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);
+    transform: translatey(0px);
   }
 }
