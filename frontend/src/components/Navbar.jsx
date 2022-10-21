@@ -3,14 +3,18 @@ import Logo from "components/Logo";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
+  // link styling
   const linkCss =
-    "text-gray font-semibold transition duration-200 hover:text-white";
+    "text-gray font-semibold transition duration-200 hover:text-white select-none hover:drop-shadow-wmd";
+
   return (
     <div className='flex items-center justify-center md:justify-between px-10 py-5 w-screen'>
       <Link to='/'>
-        <div className='flex items-center justify-center gap-5'>
+        <div className='flex items-center justify-center gap-5 select-none'>
           <Logo width={44} />
-          <span className='text-xl font-bold text-white'>Code With Me</span>
+          <span className='text-xl font-bold text-white mt-1'>
+            Code With Me
+          </span>
         </div>
       </Link>
       <div className='hidden md:flex'>
@@ -35,7 +39,7 @@ const Navbar = () => {
           <Icon
             i='github'
             width={30}
-            className='text-gray transition duration-200 hover:text-white'
+            className='text-gray transition duration-200 hover:text-white hover:drop-shadow-wmd'
           />
         </a>
       </div>
