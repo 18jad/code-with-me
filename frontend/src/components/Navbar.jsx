@@ -17,7 +17,7 @@ const Navbar = () => {
           </span>
         </div>
       </Link>
-      <div className='hidden md:flex'>
+      <div className='hidden md:flex mr-20'>
         <li className='flex items-center justify-center gap-10'>
           <Link to='/docs' className={linkCss}>
             Docs
@@ -30,7 +30,7 @@ const Navbar = () => {
           </Link>
         </li>
       </div>
-      <div className='hidden md:block'>
+      <div className='hidden md:block '>
         <a
           href='https://github.com'
           target='_blank'
