@@ -1,5 +1,7 @@
 import editorPreview from "assets/editor_preview.svg";
 import Navbar from "components/Navbar";
+import Particles from "react-tsparticles";
+import { initEngine, starsOptions } from "./particles/StarsParticles";
 import styles from "./styles/Home.module.scss";
 
 const Home = () => {
@@ -8,6 +10,12 @@ const Home = () => {
       <div className={styles.topContainer}>
         <Navbar />
         <div className={styles.heroSection}>
+          <Particles
+            options={starsOptions}
+            id='tsparticles'
+            init={initEngine}
+            className='h-full absolute mt-60 w-full pointer-events-none'
+          />
           <div className={styles.introduction}>
             <h1>A collaborative online IDE.</h1>
             <p>
@@ -33,12 +41,21 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className={styles.editorPreviewSection}>
-        <img
-          src={editorPreview}
-          alt='editor-preview'
-          className={styles.editorPreview}
+      <div className={styles.bottomContent}>
+        <Particles
+          options={starsOptions}
+          id='tsparticles2'
+          init={initEngine}
+          className='h-full absolute mt-60 w-full pointer-events-none'
         />
+        <div className={styles.editorPreviewSection}>
+          <img
+            src={editorPreview}
+            alt='editor-preview'
+            className={styles.editorPreview}
+          />
+        </div>
+        <div className='text-white'></div>
       </div>
     </main>
   );
