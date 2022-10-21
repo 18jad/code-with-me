@@ -33,6 +33,14 @@
       h1 {
         font-size: calc(1.5em + 3vw);
         font-weight: bold;
+        overflow: hidden;
+        background: linear-gradient(90deg, #000, #fff, #000);
+        background-repeat: no-repeat;
+        background-size: 80%;
+        animation: textShine 2s linear infinite;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: rgba(255, 255, 255, 0.7);
 
         @include breakpoint(mobile) {
           width: 300px;
@@ -109,5 +117,14 @@
         }
       }
     }
+  }
+}
+
+@keyframes textShine {
+  0% {
+    background-position: -500%;
+  }
+  100% {
+    background-position: 500%;
   }
 }
