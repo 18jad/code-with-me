@@ -45,9 +45,9 @@ const ContactForm = () => {
     `;
 
   return (
-    <div className='bg-white/10 rounded-md md:w-2/3 mx-auto flex flex-col items-center r p-10 border border-white/30 backdrop-blur-sm gap-10 w-11/12  h-full'>
+    <div className='bg-white/10 rounded-md md:w-2/3 mx-auto flex flex-col items-center r p-10 border border-white/30 backdrop-blur-sm gap-14 w-11/12  h-full'>
       <h1 className='text-3xl md:text-5xl text-white'>Contact Me</h1>
-      <form className='inputs flex flex-col w-full m-auto justify-center items-end'>
+      <form className='inputs flex flex-col w-full m-auto justify-center items-end md:gap-14'>
         <div className='flex flex-col md:flex-row w-full h-full gap-10 my-10 justify-center'>
           <div className='left_inputs flex flex-col gap-14 w-full md:w-1/3'>
             <FormInput placeholder='Full name' type='text' required />
