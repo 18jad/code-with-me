@@ -1,4 +1,5 @@
 import EditorPreview from "assets/EditorPreview.jsx";
+import ContactForm from "components/ContactForm";
 import IdeInfo from "components/IdeInfo";
 import Navbar from "components/Navbar";
 import Particles from "react-tsparticles";
@@ -50,12 +51,16 @@ const Home = () => {
           className='h-full absolute mt-60 w-full pointer-events-none'
         />
         <div className={styles.editorPreviewSection}>
-          <EditorPreview className='h-full' />
+          <EditorPreview className='h-full' /> {/* Extracted svg */}
         </div>
         <div className={styles.idePowers}>
-          <IdeInfo />
+          <IdeInfo /> {/* Github + collaboration divs */}
+        </div>
+        <div className={styles.contactFormContainer}>
+          <ContactForm /> {/* Contact form */}
         </div>
       </div>
+      <footer className={styles.footerContainer}></footer>
     </main>
   );
 };
