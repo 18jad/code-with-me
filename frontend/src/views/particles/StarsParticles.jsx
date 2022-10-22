@@ -2,7 +2,6 @@ import { loadStarsPreset } from "tsparticles-preset-stars";
 
 // Init particles engine
 const initEngine = async (engine) => {
-  console.log(engine);
   await loadStarsPreset(engine);
 };
 
