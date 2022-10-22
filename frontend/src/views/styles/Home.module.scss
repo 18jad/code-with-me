@@ -122,10 +122,10 @@
           }
 
           .platformSelection {
+            @apply hover:drop-shadow-wmd transition duration-200;
             text-decoration: underline;
             margin-right: 5px;
             cursor: pointer;
-            transition: color 150ms ease-in-out;
 
             &:nth-last-child(1) {
               margin-left: 5px;
