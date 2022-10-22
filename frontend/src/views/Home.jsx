@@ -3,15 +3,22 @@ import ContactForm from "components/ContactForm";
 import Footer from "components/Footer";
 import IdeInfo from "components/IdeInfo";
 import Navbar from "components/Navbar";
+import { useRef } from "react";
 import Particles from "react-tsparticles";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
 import styles from "./styles/Home.module.scss";
 
 const Home = () => {
+  const contactRef = useRef(null);
+
+  const scrollToContact = () => {
+    contactRef.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <main className={styles.mainContainer}>
       <div className={styles.topContainer}>
-        <Navbar />
+        <Navbar contact={scrollToContact} />
         <div className={styles.heroSection}>
           <Particles
             options={starsOptions}
@@ -57,12 +64,14 @@ const Home = () => {
         <div className={styles.idePowers}>
           <IdeInfo /> {/* Github + collaboration divs */}
         </div>
+        <hr className='mb-10 opacity-0 pointer-events-none' ref={contactRef} />{" "}
+        {/* Contact form reference */}
         <div className={styles.contactFormContainer}>
           <ContactForm /> {/* Contact form */}
         </div>
       </div>
       <footer className={styles.footerContainer}>
-        <Footer />
+        <Footer contact={scrollToContact} />
       </footer>
     </main>
   );
