@@ -1,5 +1,6 @@
 import EditorPreview from "assets/EditorPreview.jsx";
 import ContactForm from "components/ContactForm";
+import Footer from "components/Footer";
 import IdeInfo from "components/IdeInfo";
 import Navbar from "components/Navbar";
 import Particles from "react-tsparticles";
@@ -60,7 +61,9 @@ const Home = () => {
           <ContactForm /> {/* Contact form */}
         </div>
       </div>
-      <footer className={styles.footerContainer}></footer>
+      <footer className={styles.footerContainer}>
+        <Footer />
+      </footer>
     </main>
   );
 };
