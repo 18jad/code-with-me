@@ -6,6 +6,7 @@ const Logo = ({ transparent, width, height, className }) => {
     <img
       src={logoTransparent}
       alt='Logo Transparent'
+      height={height}
       width={width}
       style={{ aspectRatio: 1 / 1 }}
       className={className}
@@ -15,6 +16,7 @@ const Logo = ({ transparent, width, height, className }) => {
       src={logo}
       alt='Logo'
       width={width}
+      height={height}
       style={{ aspectRatio: 1 / 1 }}
       className={className}
     />
