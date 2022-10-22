@@ -8,7 +8,10 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <React.StrictMode>
-      <App />
+      <React.Suspense
+        fallback={<div className='text-white text-2xl'>Loading...</div>}>
+        <App />
+      </React.Suspense>
     </React.StrictMode>
   </BrowserRouter>,
 );
