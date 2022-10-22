@@ -108,7 +108,7 @@
           }
 
           &:not(:hover) {
-            animation: drop 0.5s ease-in-out;
+            animation: drop 0.5s ease-in-out; // drop effect when unhovering
           }
         }
 
