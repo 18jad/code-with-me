@@ -10,7 +10,7 @@ const Navbar = () => {
   return (
     <div className='flex items-center justify-center md:justify-between px-10 py-5 w-screen'>
       <Link to='/'>
-        <div className='flex items-center justify-center gap-5 select-none'>
+        <div className='flex items-center justify-center gap-5 select-none hover:drop-shadow-wmd transition duration-200'>
           <Logo width={44} />
           <span className='text-xl font-bold text-white mt-1'>
             Code With Me
