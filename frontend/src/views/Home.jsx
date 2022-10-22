@@ -5,6 +5,7 @@ import IdeInfo from "components/IdeInfo";
 import Navbar from "components/Navbar";
 import { useRef } from "react";
 import Particles from "react-tsparticles";
+import homeInfo from "./lang/homeInfo";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
 import styles from "./styles/Home.module.scss";
 
@@ -14,6 +15,9 @@ const Home = () => {
   const scrollToContact = () => {
     contactRef.current.scrollIntoView({ behavior: "smooth" });
   };
+
+  const lang = localStorage.getItem("lang-preference") || "english"; // get current language preference or select english as default
+  const langComp = homeInfo[lang]; // store translated informations
 
   return (
     <main className={styles.mainContainer}>
@@ -27,22 +31,23 @@ const Home = () => {
             className='h-full absolute mt-60 w-full pointer-events-none'
           />
           <div className={styles.introduction}>
-            <h1>A collaborative online IDE.</h1>
+            <h1>{langComp.title}</h1>
             <p>
-              Code online with you friends, increase your productivity and chat
-              together. <br />
-              Save your projects online and don't worry about them!
+              {langComp.body1}
+              <br />
+              {langComp.body2}
             </p>
           </div>
           <div className={styles.interactions}>
-            <button className={styles.getStartedBtn}>Get Started</button>
+            <button className={styles.getStartedBtn}>{langComp.start}</button>
             <div className={styles.mobileDownload}>
               <p>
-                Mobile app available for both <br />
+                {langComp.mobile}
+                <br />
                 <span className={styles.platformSelection}>
                   <b>Android</b>
                 </span>
-                and
+                {langComp.and}
                 <span className={styles.platformSelection}>
                   <b>IOS</b>
                 </span>
