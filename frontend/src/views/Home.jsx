@@ -1,4 +1,4 @@
-import editorPreview from "assets/editor_preview.svg";
+import EditorPreview from "assets/EditorPreview.jsx";
 import Navbar from "components/Navbar";
 import Particles from "react-tsparticles";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
@@ -49,13 +49,9 @@ const Home = () => {
           className='h-full absolute mt-60 w-full pointer-events-none'
         />
         <div className={styles.editorPreviewSection}>
-          <img
-            src={editorPreview}
-            alt='editor-preview'
-            className={styles.editorPreview}
-          />
+          <EditorPreview className='h-full' />
         </div>
-        <div className='text-white'></div>
+        <div className={styles.idePowers}></div>
       </div>
     </main>
   );
