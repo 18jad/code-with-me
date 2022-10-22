@@ -1,7 +1,7 @@
 @import "global.scss";
 
 .mainContainer {
-  background: #000;
+  background: $black;
   overflow: hidden;
 
   .topContainer {
@@ -28,6 +28,7 @@
       }
 
       .introduction {
+        $tcolor: rgba(255, 255, 255, 0.6);
         text-align: center;
         display: flex;
         align-items: center;
@@ -38,13 +39,14 @@
           font-size: calc(1.5em + 3vw);
           font-weight: bold;
           overflow: hidden;
-          background: linear-gradient(90deg, #000, #fff, #000);
+          background: linear-gradient(90deg, $black, $white, $black);
           background-repeat: no-repeat;
           background-size: 80%;
           animation: textShine 2s linear infinite;
           -webkit-background-clip: text;
           background-clip: text;
-          -webkit-text-fill-color: rgba(255, 255, 255, 0.65);
+          color: $tcolor;
+          -webkit-text-fill-color: $tcolor;
 
           @include breakpoint(mobile) {
             width: 300px;
@@ -76,6 +78,7 @@
         }
 
         .getStartedBtn {
+          $ctrans: 250ms ease-in-out;
           background: $blue;
           padding: 7px 20px;
           border-radius: 3px;
@@ -86,9 +89,9 @@
           border-bottom: 7px solid darken($blue, 13%);
           border-left: 1.4px solid darken($blue, 13%);
           border-right: 1.4px solid darken($blue, 13%);
-          transition: background 150ms ease-in-out, translate 250ms ease-in-out,
-            box-shadow 250ms ease-in-out, transform 250ms ease-in-out,
-            border 250ms ease-in-out, margin 250ms ease-in-out;
+          transition: background 150ms ease-in-out, translate $ctrans,
+            box-shadow $ctrans, transform $ctrans, border $ctrans,
+            margin $ctrans;
 
           @include breakpoint(mobile) {
             font-size: 0.8em;
@@ -160,9 +163,21 @@
       height: 100%;
     }
   }
-}
-.bottomContent {
-  position: relative;
+
+  .bottomContent {
+    position: relative;
+
+    .idePowers {
+      $mg: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 100px;
+      margin-top: $mg;
+      margin-bottom: $mg;
+    }
+  }
 }
 
 @keyframes textShine {
