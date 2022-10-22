@@ -1,11 +1,15 @@
 import Icon from "assets/icons/icons";
 import Logo from "components/Logo";
 import { Link } from "react-router-dom";
+import navStore from "./lang/navStore";
 
 const Navbar = ({ contact }) => {
   // link styling
   const linkCss =
     "text-gray font-semibold transition duration-200 hover:text-white select-none hover:drop-shadow-wmd";
+
+  const lang = localStorage.getItem("lang-preference") || "english";
+  const langComp = navStore[lang];
 
   return (
     <div className='flex items-center justify-center md:justify-between px-10 py-5 w-screen'>
@@ -20,13 +24,13 @@ const Navbar = ({ contact }) => {
       <div className='hidden md:flex mr-20'>
         <li className='flex items-center justify-center gap-10'>
           <Link to='/docs' className={linkCss}>
-            Docs
+            {langComp.docs}
           </Link>
           <Link to='/downloads' className={linkCss}>
-            Download
+            {langComp.download}
           </Link>
           <Link onClick={contact} className={linkCss}>
-            Contact
+            {langComp.contact}
           </Link>
         </li>
       </div>
