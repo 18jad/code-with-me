@@ -2,7 +2,7 @@ import Icon from "assets/icons/icons";
 import Logo from "components/Logo";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ contact }) => {
   // link styling
   const linkCss =
     "text-gray font-semibold transition duration-200 hover:text-white select-none hover:drop-shadow-wmd";
@@ -25,7 +25,7 @@ const Navbar = () => {
           <Link to='/downloads' className={linkCss}>
             Download
           </Link>
-          <Link to='#contact' className={linkCss}>
+          <Link onClick={contact} className={linkCss}>
             Contact
           </Link>
         </li>

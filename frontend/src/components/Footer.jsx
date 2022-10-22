@@ -2,7 +2,7 @@ import Icon from "assets/icons/icons";
 import { tw } from "utils/TailwindComponent";
 import Logo from "./Logo";
 
-const Footer = ({ repo }) => {
+const Footer = ({ contact }) => {
   const ListChild = tw.li`
         text-gray
         transition
@@ -12,6 +12,7 @@ const Footer = ({ repo }) => {
         w-fit
         cursor-pointer
         mt-1
+        whitespace-nowrap
     `;
 
   return (
@@ -46,7 +47,7 @@ const Footer = ({ repo }) => {
           <ul>
             <ListChild>Docs</ListChild>
             <ListChild>About us</ListChild>
-            <ListChild>Contact</ListChild>
+            <ListChild onClick={contact}>Contact</ListChild>
           </ul>
         </div>
         <div className='developers flex-grow'>
