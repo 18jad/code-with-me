@@ -1,4 +1,5 @@
 import EditorPreview from "assets/EditorPreview.jsx";
+import IdeInfo from "components/IdeInfo";
 import Navbar from "components/Navbar";
 import Particles from "react-tsparticles";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
@@ -51,7 +52,9 @@ const Home = () => {
         <div className={styles.editorPreviewSection}>
           <EditorPreview className='h-full' />
         </div>
-        <div className={styles.idePowers}></div>
+        <div className={styles.idePowers}>
+          <IdeInfo />
+        </div>
       </div>
     </main>
   );
