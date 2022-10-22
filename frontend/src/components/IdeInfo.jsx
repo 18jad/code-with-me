@@ -27,7 +27,7 @@ const IdeInfo = () => {
               className={value.classMame || ""}
             />
             <div className='flex flex-col justify-center gap-2 md:w-1/2 mx-10 text-left text-white lg:scale-125 '>
-              <h1 className='text-xl md:text-4xl lg:text-6xl '>
+              <h1 className='text-xl md:text-4xl lg:text-5xl '>
                 {value.title}
               </h1>
               <p className='font-thin md:text-md lg:text-lg'>{value.body}</p>
