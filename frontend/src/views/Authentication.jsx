@@ -11,9 +11,10 @@ const Authentication = () => {
         items-center 
         gap-10
         border
-        w-96
+        w-[340px]
+        md:w-96
         h-96
-        p-10
+        p-8
         bg-white/10
         border-white/30
         backdrop-blur-sm
@@ -83,7 +84,15 @@ const Authentication = () => {
               </span>
             </div>
           </div>
-          <Submit>Sign in</Submit>
+          <div className='w-full text-center flex flex-col gap-5'>
+            <Submit>Sign in</Submit>
+            <p className='text-white font-light text-sm '>
+              New here?{" "}
+              <span className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'>
+                Sign up
+              </span>
+            </p>
+          </div>
         </Form>
       </div>
     </div>
