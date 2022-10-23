@@ -1,10 +1,17 @@
 import TextLogo from "components/TextLogo";
+import { useState } from "react";
 import Particles from "react-tsparticles";
 import { tw } from "utils/TailwindComponent";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
 import styles from "./styles/Authentication.module.scss";
 
 const Authentication = () => {
+  const [isLogin, setIsLogin] = useState(true);
+
+  const handleFormSwitch = () => {
+    setIsLogin(!isLogin);
+  };
+
   const Form = tw.form`
     flex 
     flex-col 
@@ -19,6 +26,7 @@ const Authentication = () => {
     border-white/30
     backdrop-blur-sm
     rounded-md
+    absolute
     `;
 
   const Input = tw.input`
@@ -72,28 +80,64 @@ const Authentication = () => {
         <TextLogo text='Authentication' width={65} />
       </div>
       <div className='h-32'></div>
-      <div className='flex-1'>
-        <Form>
-          <h1 className='text-white text-4xl'>Sign in</h1>
-          <div className='flex flex-col gap-4 w-full'>
-            <Input placeholder='Email address' type='email' required />
-            <div className='w-full flex flex-col items-end'>
-              <Input placeholder='Password' type='password' required />
-              <span className='text-gray text-xs mt-1  hover:text-white duration-200 transition cursor-pointer'>
-                Forget password?
-              </span>
+      <div className={styles.formsWrapper}>
+        <div
+          className='relative h-full w-full transition duration-1000'
+          style={{
+            transformStyle: "preserve-3d",
+            transform: `rotateY(${isLogin ? "0deg" : "180deg"})`,
+          }}>
+          <Form style={{ backfaceVisibility: "hidden", marginTop: "-40px" }}>
+            <h1 className='text-white text-4xl'>Sign in</h1>
+            <div className='flex flex-col gap-4 w-full'>
+              <Input placeholder='Email address' type='email' required />
+              <div className='w-full flex flex-col items-end'>
+                <Input placeholder='Password' type='password' required />
+                <span className='text-gray text-xs mt-1  hover:text-white duration-200 transition cursor-pointer'>
+                  Forget password?
+                </span>
+              </div>
             </div>
-          </div>
-          <div className='w-full text-center flex flex-col gap-5'>
-            <Submit type='submit'>Sign in</Submit>
-            <p className='text-white font-light text-sm '>
-              New here?{" "}
-              <span className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'>
-                Sign up
-              </span>
-            </p>
-          </div>
-        </Form>
+            <div className='w-full text-center flex flex-col gap-5'>
+              <Submit type='submit'>Sign in</Submit>
+              <p className='text-white font-light text-sm '>
+                New here?{" "}
+                <span
+                  className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'
+                  onClick={handleFormSwitch}>
+                  Sign up
+                </span>
+              </p>
+            </div>
+          </Form>
+          <Form
+            style={{
+              backfaceVisibility: "hidden",
+              transform: "rotateY(180deg)",
+              height: "480px",
+              marginTop: "-80px",
+            }}
+            className='ml-0 md:-ml-10'>
+            <h1 className='text-white text-4xl'>Register</h1>
+            <div className='flex flex-col gap-4 w-full'>
+              <Input placeholder='Email address' type='email' required />
+              <Input placeholder='Username' type='text' required />
+              <Input placeholder='Password' type='password' required />
+              <Input placeholder='Confirm password' type='password' required />
+            </div>
+            <div className='w-full text-center flex flex-col gap-5'>
+              <Submit type='submit'>Register</Submit>
+              <p className='text-white font-light text-sm '>
+                Already a member?{" "}
+                <span
+                  className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'
+                  onClick={handleFormSwitch}>
+                  Sign in
+                </span>
+              </p>
+            </div>
+          </Form>
+        </div>
       </div>
     </div>
   );
