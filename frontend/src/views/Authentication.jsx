@@ -106,7 +106,7 @@ const Authentication = () => {
               <Input placeholder='Email address' type='email' required />
               <div className='w-full flex flex-col items-end'>
                 <Input placeholder='Password' type='password' required />
-                <span className='text-gray text-xs mt-1  hover:text-white duration-200 transition cursor-pointer'>
+                <span className='text-gray text-xs mt-2  hover:text-white duration-200 transition cursor-pointer'>
                   Forget password?
                 </span>
               </div>
