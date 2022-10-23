@@ -4,12 +4,15 @@ import Footer from "components/home/Footer";
 import IdeInfo from "components/home/IdeInfo";
 import Navbar from "components/home/Navbar";
 import { useReducer, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
 import homeInfo from "./lang/homeInfo";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
 import styles from "./styles/Home.module.scss";
 
 const Home = () => {
+  const navigate = useNavigate();
+
   const contactRef = useRef(null);
 
   const scrollToContact = () => {
@@ -48,7 +51,13 @@ const Home = () => {
             </p>
           </div>
           <div className={styles.interactions}>
-            <button className={styles.getStartedBtn}>{langComp.start}</button>
+            <button
+              className={styles.getStartedBtn}
+              onClick={() => {
+                navigate("/auth");
+              }}>
+              {langComp.start}
+            </button>
             <div className={styles.mobileDownload}>
               <p>
                 {langComp.mobile}
