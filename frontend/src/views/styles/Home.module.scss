@@ -226,22 +226,5 @@
 
 // Scrollbar styling
 ::-webkit-scrollbar {
-  width: 6px;
-
-  &-thumb {
-    background: rgba($blue, 0.7);
-    border-radius: 100px;
-
-    &:hover {
-      background: rgba($blue, 0.5);
-    }
-
-    &:active {
-      background: rgba($blue, 0.3);
-    }
-  }
-
-  &-track {
-    background: #000;
-  }
+  width: 0px;
 }
