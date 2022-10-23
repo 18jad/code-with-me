@@ -30,6 +30,8 @@ const Home = () => {
     <main className={styles.mainContainer}>
       <div className={styles.topContainer}>
         <Navbar contact={scrollToContact} fn={handleLanguageSwitch} />
+        {/* To seperate nav bar and body content */}
+        <div className='mt-20 pointer-events-none opacity-0'></div>
         <div className={styles.heroSection}>
           <Particles
             options={starsOptions}
