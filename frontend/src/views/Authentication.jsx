@@ -1,17 +1,25 @@
 import TextLogo from "components/TextLogo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Particles from "react-tsparticles";
 import { tw } from "utils/TailwindComponent";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
 import styles from "./styles/Authentication.module.scss";
 
 const Authentication = () => {
+  // Login and sign up state (for switching between the two)
   const [isLogin, setIsLogin] = useState(true);
 
+  // Edit page title
+  useEffect(() => {
+    document.title = "Authentication | CWM";
+  }, []);
+
+  // Handle form switching
   const handleFormSwitch = () => {
     setIsLogin(!isLogin);
   };
 
+  // Form tailwind styled component
   const Form = tw.form`
     flex 
     flex-col 
@@ -29,6 +37,7 @@ const Authentication = () => {
     absolute
     `;
 
+  // Form input tailwind styled component
   const Input = tw.input`
     bg-white/10
     border
@@ -49,6 +58,7 @@ const Authentication = () => {
     w-full
 `;
 
+  // Submit button tailwind styled component
   const Submit = tw.button`
     bg-primary/60
     border
@@ -79,7 +89,9 @@ const Authentication = () => {
       <div className='py-10'>
         <TextLogo text='Authentication' width={65} />
       </div>
+      {/* Seperator */}
       <div className='h-32'></div>
+      {/* Sign in/up form wrapper */}
       <div className={styles.formsWrapper}>
         <div
           className='relative h-full w-full transition duration-1000'
@@ -87,6 +99,7 @@ const Authentication = () => {
             transformStyle: "preserve-3d",
             transform: `rotateY(${isLogin ? "0deg" : "180deg"})`,
           }}>
+          {/* Sign in form */}
           <Form style={{ backfaceVisibility: "hidden", marginTop: "-40px" }}>
             <h1 className='text-white text-4xl'>Sign in</h1>
             <div className='flex flex-col gap-4 w-full'>
@@ -110,6 +123,8 @@ const Authentication = () => {
               </p>
             </div>
           </Form>
+
+          {/* Register form */}
           <Form
             style={{
               backfaceVisibility: "hidden",
