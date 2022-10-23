@@ -7,12 +7,13 @@ import { createElement, forwardRef } from "react";
 
 function twFactory(element) {
   return ([className, ..._NULL]) => {
-    const StyledComponent = forwardRef(({ additionalClasses, ...props }, ref) =>
-      createElement(element, {
-        ...props,
-        className: [className, additionalClasses],
-        ref,
-      }),
+    const StyledComponent = forwardRef(
+      ({ className: additionalClass, ...props }, ref) =>
+        createElement(element, {
+          ...props,
+          className: [className + additionalClass],
+          ref,
+        }),
     );
     return StyledComponent;
   };
