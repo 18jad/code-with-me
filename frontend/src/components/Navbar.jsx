@@ -1,10 +1,13 @@
 import Icon from "assets/icons/icons";
 import Logo from "components/Logo";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { tw } from "utils/TailwindComponent";
 import navStore from "./lang/navStore";
 
 const Navbar = ({ contact, fn }) => {
+  const [nav, setNav] = useState(false);
+
   // link element styling
   const linkCss =
     "text-gray font-semibold transition duration-200 hover:text-white select-none hover:drop-shadow-wmd";
@@ -29,8 +32,21 @@ const Navbar = ({ contact, fn }) => {
     hover:drop-shadow-wmd
   `;
 
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 10) {
+      setNav(true);
+    } else {
+      setNav(false);
+    }
+  });
+
   return (
-    <div className='flex items-center justify-between px-10 py-5 w-screen'>
+    <div
+      className={`flex items-center justify-between border-b px-10 py-2 w-screen fixed top-0 z-50 transition duration-200 ${
+        nav
+          ? "bg-white/5 backdrop-blur border-white/10"
+          : "bg-transparent border-transparent"
+      }`}>
       <Link to='/'>
         <div className='flex items-center justify-center gap-5 select-none hover:drop-shadow-wmd transition duration-200'>
           <Logo width={44} />
