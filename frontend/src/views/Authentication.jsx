@@ -6,19 +6,19 @@ import styles from "./styles/Authentication.module.scss";
 
 const Authentication = () => {
   const Form = tw.form`
-        flex 
-        flex-col 
-        items-center 
-        gap-10
-        border
-        w-[340px]
-        md:w-96
-        h-96
-        p-8
-        bg-white/10
-        border-white/30
-        backdrop-blur-sm
-        rounded-md
+    flex 
+    flex-col 
+    items-center 
+    gap-10
+    border
+    w-[340px]
+    md:w-96
+    h-96
+    p-8
+    bg-white/10
+    border-white/30
+    backdrop-blur-sm
+    rounded-md
     `;
 
   const Input = tw.input`
@@ -76,16 +76,16 @@ const Authentication = () => {
         <Form>
           <h1 className='text-white text-4xl'>Sign in</h1>
           <div className='flex flex-col gap-4 w-full'>
-            <Input placeholder='Email address' type='email' />
+            <Input placeholder='Email address' type='email' required />
             <div className='w-full flex flex-col items-end'>
-              <Input placeholder='Password' type='password' />
+              <Input placeholder='Password' type='password' required />
               <span className='text-gray text-xs mt-1  hover:text-white duration-200 transition cursor-pointer'>
                 Forget password?
               </span>
             </div>
           </div>
           <div className='w-full text-center flex flex-col gap-5'>
-            <Submit>Sign in</Submit>
+            <Submit type='submit'>Sign in</Submit>
             <p className='text-white font-light text-sm '>
               New here?{" "}
               <span className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'>
