@@ -4,14 +4,15 @@ import { Link } from "react-router-dom";
 import { tw } from "utils/TailwindComponent";
 import navStore from "./lang/navStore";
 
-const Navbar = ({ contact }) => {
-  // link styling
+const Navbar = ({ contact, fn }) => {
+  // link element styling
   const linkCss =
     "text-gray font-semibold transition duration-200 hover:text-white select-none hover:drop-shadow-wmd";
 
-  const lang = localStorage.getItem("lang-preference") || "english";
-  const langComp = navStore[lang];
+  const lang = localStorage.getItem("lang-preference") || "english"; // get language preference
+  const langComp = navStore[lang]; // store translated informations
 
+  // select element styling
   const Select = tw.select`
     bg-transparent
     text-white
@@ -27,11 +28,6 @@ const Navbar = ({ contact }) => {
     py-1
     hover:drop-shadow-wmd
   `;
-
-  const handleLangChange = (e) => {
-    localStorage.setItem("lang-preference", e.target.value);
-    window.location.reload();
-  };
 
   return (
     <div className='flex items-center justify-between px-10 py-5 w-screen'>
@@ -59,7 +55,7 @@ const Navbar = ({ contact }) => {
       <div className='flex flex-row gap-5'>
         <Select
           onChange={(e) => {
-            handleLangChange(e);
+            fn(e);
           }}
           title='Change Language'>
           <option

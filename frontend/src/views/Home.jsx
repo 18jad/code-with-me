@@ -3,7 +3,7 @@ import ContactForm from "components/ContactForm";
 import Footer from "components/Footer";
 import IdeInfo from "components/IdeInfo";
 import Navbar from "components/Navbar";
-import { useRef } from "react";
+import { useReducer, useRef } from "react";
 import Particles from "react-tsparticles";
 import homeInfo from "./lang/homeInfo";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
@@ -13,16 +13,23 @@ const Home = () => {
   const contactRef = useRef(null);
 
   const scrollToContact = () => {
-    contactRef.current.scrollIntoView({ behavior: "smooth" });
+    contactRef.current.scrollIntoView({ behavior: "smooth" }); // scroll to contact me components reference
   };
+
+  const forceRerender = useReducer(() => ({}))[1]; // to rerender components on the page when a language change
 
   const lang = localStorage.getItem("lang-preference") || "english"; // get current language preference or select english as default
   const langComp = homeInfo[lang]; // store translated informations
 
+  const handleLanguageSwitch = (e) => {
+    localStorage.setItem("lang-preference", e.target.value); // set current preference in local storage
+    forceRerender();
+  };
+
   return (
     <main className={styles.mainContainer}>
       <div className={styles.topContainer}>
-        <Navbar contact={scrollToContact} />
+        <Navbar contact={scrollToContact} fn={handleLanguageSwitch} />
         <div className={styles.heroSection}>
           <Particles
             options={starsOptions}
