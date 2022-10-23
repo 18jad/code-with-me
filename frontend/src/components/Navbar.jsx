@@ -1,6 +1,7 @@
 import Icon from "assets/icons/icons";
 import Logo from "components/Logo";
 import { Link } from "react-router-dom";
+import { tw } from "utils/TailwindComponent";
 import navStore from "./lang/navStore";
 
 const Navbar = ({ contact }) => {
@@ -11,8 +12,29 @@ const Navbar = ({ contact }) => {
   const lang = localStorage.getItem("lang-preference") || "english";
   const langComp = navStore[lang];
 
+  const Select = tw.select`
+    bg-transparent
+    text-white
+    font-semibold
+    text-sm
+    outline-none
+    border-none
+    cursor-pointer
+    transition 
+    duration-200
+    hover:text-gray
+    px-2
+    py-1
+    hover:drop-shadow-wmd
+  `;
+
+  const handleLangChange = (e) => {
+    localStorage.setItem("lang-preference", e.target.value);
+    window.location.reload();
+  };
+
   return (
-    <div className='flex items-center justify-center md:justify-between px-10 py-5 w-screen'>
+    <div className='flex items-center justify-between px-10 py-5 w-screen'>
       <Link to='/'>
         <div className='flex items-center justify-center gap-5 select-none hover:drop-shadow-wmd transition duration-200'>
           <Logo width={44} />
@@ -21,7 +43,7 @@ const Navbar = ({ contact }) => {
           </span>
         </div>
       </Link>
-      <div className='hidden md:flex mr-20'>
+      <div className='hidden md:flex '>
         <li className='flex items-center justify-center gap-10'>
           <Link to='/docs' className={linkCss}>
             {langComp.docs}
@@ -34,11 +56,36 @@ const Navbar = ({ contact }) => {
           </Link>
         </li>
       </div>
-      <div className='hidden md:block '>
+      <div className='flex flex-row gap-5'>
+        <Select
+          onChange={(e) => {
+            handleLangChange(e);
+          }}
+          title='Change Language'>
+          <option
+            value='english'
+            className='bg-black'
+            selected={lang.slice(0, 2) === "en"}>
+            en
+          </option>
+          <option
+            value='french'
+            className='bg-black'
+            selected={lang.slice(0, 2) === "fr"}>
+            fr
+          </option>
+          <option
+            value='chinese'
+            className='bg-black'
+            selected={lang.slice(0, 2) === "ch"}>
+            ch
+          </option>
+        </Select>
         <a
           href='https://github.com'
           target='_blank'
           rel='noreferrer'
+          className='hidden md:block '
           title='Github Repo'>
           <Icon
             i='github'
