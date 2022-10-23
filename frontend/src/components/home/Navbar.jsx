@@ -1,5 +1,5 @@
 import Icon from "assets/icons/icons";
-import Logo from "components/home/Logo";
+import Logo from "components/Logo";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { tw } from "utils/TailwindComponent";
