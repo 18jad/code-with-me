@@ -57,23 +57,15 @@ const Navbar = ({ contact, fn }) => {
           onChange={(e) => {
             fn(e);
           }}
-          title='Change Language'>
-          <option
-            value='english'
-            className='bg-black'
-            selected={lang.slice(0, 2) === "en"}>
+          title='Change Language'
+          defaultValue={lang}>
+          <option value='english' className='bg-black'>
             en
           </option>
-          <option
-            value='french'
-            className='bg-black'
-            selected={lang.slice(0, 2) === "fr"}>
+          <option value='french' className='bg-black'>
             fr
           </option>
-          <option
-            value='chinese'
-            className='bg-black'
-            selected={lang.slice(0, 2) === "ch"}>
+          <option value='chinese' className='bg-black'>
             ch
           </option>
         </Select>
