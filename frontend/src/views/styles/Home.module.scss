@@ -35,32 +35,38 @@
         justify-content: center;
         flex-direction: column;
         gap: 15px;
-        h1 {
+
+        @include breakpoint(mobile) {
+          max-width: 300px;
+
+          text-align: left;
+        }
+        span {
           font-size: calc(1.5em + 3vw);
           font-weight: bold;
           overflow: hidden;
           background: linear-gradient(90deg, $black, $white, $black);
           background-repeat: no-repeat;
           background-size: 80%;
-          animation: textShine 2s linear infinite;
+          animation: textShine 3s linear infinite;
           -webkit-background-clip: text;
           background-clip: text;
           color: $tcolor;
           -webkit-text-fill-color: $tcolor;
 
           @include breakpoint(mobile) {
-            width: 300px;
+            // width: 300px;
             text-align: left;
           }
         }
 
         p {
-          font-size: calc(1em + 0.3vw);
+          font-size: calc(1em + 0.23vw);
           font-weight: 200;
           color: $lighgray;
 
           @include breakpoint(mobile) {
-            width: 300px;
+            // width: 300px;
             text-align: left;
           }
         }
@@ -91,7 +97,7 @@
           border-right: 1.4px solid darken($blue, 13%);
           transition: background 150ms ease-in-out, translate $ctrans,
             box-shadow $ctrans, transform $ctrans, border $ctrans,
-            margin $ctrans;
+            margin 0.5s ease-in-out;
 
           @include breakpoint(mobile) {
             font-size: 0.8em;
@@ -102,7 +108,6 @@
             translate: 0 -5px;
             box-shadow: 0 4px 10px rgba($blue, 0.6);
             transform: rotateX(0deg);
-            border-bottom-width: 3px;
             margin-bottom: 4px;
             border-color: darken($blue, 20%);
           }
