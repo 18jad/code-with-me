@@ -9,7 +9,7 @@ const infoStore = {
       title: "Github integration",
       body: "In addition to your online profile storage, we did integrate your favorite code hosting platform Github! in case you want to share your code there! Push and import files directly from there.",
       image: require("../../assets/github.png"),
-      classMame: "w-[270px]",
+      classMame: "w-[260px]",
     },
   },
   french: {
@@ -22,7 +22,7 @@ const infoStore = {
       title: "Intégration Github",
       body: "En plus de votre stockage de profil en ligne, nous avons intégré votre plateforme de codage préférée Github! au cas où vous voudriez partager votre code là-bas! Poussez et importez des fichiers directement depuis là-bas.",
       image: require("../../assets/github.png"),
-      classMame: "w-[270px]",
+      classMame: "w-[260px]",
     },
   },
   chinese: {
@@ -35,7 +35,7 @@ const infoStore = {
       title: "Github集成",
       body: "除了您的在线个人资料存储之外，我们还集成了您最喜欢的代码托管平台Github！如果您想在那里分享您的代码！直接从那里推送和导入文件。",
       image: require("../../assets/github.png"),
-      classMame: "w-[270px]",
+      classMame: "w-[260px]",
     },
   },
 };
