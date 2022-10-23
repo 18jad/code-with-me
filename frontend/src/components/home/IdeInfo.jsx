@@ -1,4 +1,4 @@
-import infoStore from "./lang/infoStore";
+import infoStore from "../lang/infoStore";
 
 const IdeInfo = () => {
   const lang = localStorage.getItem("lang-preference") || "english";

@@ -1,8 +1,8 @@
 import EditorPreview from "assets/EditorPreview.jsx";
-import ContactForm from "components/ContactForm";
-import Footer from "components/Footer";
-import IdeInfo from "components/IdeInfo";
-import Navbar from "components/Navbar";
+import ContactForm from "components/home/ContactForm";
+import Footer from "components/home/Footer";
+import IdeInfo from "components/home/IdeInfo";
+import Navbar from "components/home/Navbar";
 import { useReducer, useRef } from "react";
 import Particles from "react-tsparticles";
 import homeInfo from "./lang/homeInfo";

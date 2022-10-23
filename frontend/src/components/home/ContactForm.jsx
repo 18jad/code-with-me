@@ -1,6 +1,6 @@
 import Icon from "assets/icons/icons";
 import { tw } from "utils/TailwindComponent";
-import contactStore from "./lang/contactStore";
+import contactStore from "../lang/contactStore";
 
 const ContactForm = () => {
   const lang = localStorage.getItem("lang-preference") || "english";

@@ -1,5 +1,5 @@
-import logo from "../assets/logo.svg";
-import logoTransparent from "../assets/logo_transparent.svg";
+import logo from "../../assets/logo.svg";
+import logoTransparent from "../../assets/logo_transparent.svg";
 
 const Logo = ({ transparent, width, height, className }) => {
   return transparent ? ( // transparent background or normal
