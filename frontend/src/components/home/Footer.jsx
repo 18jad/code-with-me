@@ -1,7 +1,7 @@
 import Icon from "assets/icons/icons";
 import { tw } from "utils/TailwindComponent";
 import footerStore from "../lang/footerStore";
-import Logo from "./Logo";
+import Logo from "../Logo";
 
 const Footer = ({ contact }) => {
   const lang = localStorage.getItem("lang-preference") || "english";
