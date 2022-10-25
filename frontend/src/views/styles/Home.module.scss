@@ -96,7 +96,7 @@
           border-left: 1.4px solid darken($blue, 13%);
           border-right: 1.4px solid darken($blue, 13%);
           transition: background 150ms ease-in-out, translate $ctrans,
-            box-shadow $ctrans, transform $ctrans, border $ctrans,
+            box-shadow $ctrans, transform $ctrans, border $ctrans, scale $ctrans,
             margin 0.5s ease-in-out;
 
           @include breakpoint(mobile) {
@@ -110,6 +110,11 @@
             transform: rotateX(0deg);
             margin-bottom: 4px;
             border-color: darken($blue, 20%);
+          }
+
+          &:active {
+            transition-delay: 0ms;
+            scale: 0.7;
           }
 
           &:not(:hover) {
