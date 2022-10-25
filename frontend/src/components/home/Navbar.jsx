@@ -44,7 +44,7 @@ const Navbar = ({ contact, fn }) => {
     <div
       className={`flex items-center justify-between border-b px-10 py-2 w-screen fixed top-0 z-50 transition duration-200 ${
         nav
-          ? "bg-white/5 backdrop-blur border-white/10"
+          ? "bg-black/20 backdrop-blur-md border-white/10"
           : "bg-transparent border-transparent"
       }`}>
       <Link to='/'>
