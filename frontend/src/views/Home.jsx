@@ -3,6 +3,7 @@ import ContactForm from "components/home/ContactForm";
 import Footer from "components/home/Footer";
 import IdeInfo from "components/home/IdeInfo";
 import Navbar from "components/home/Navbar";
+import Transitions from "components/Transition";
 import { motion, useAnimation } from "framer-motion";
 import { useEffect, useReducer, useRef } from "react";
 import { useInView } from "react-intersection-observer";
@@ -86,187 +87,192 @@ const Home = () => {
   /////////////////////////////////////////////////////
 
   return (
-    <main className={styles.mainContainer}>
-      <div className={styles.topContainer}>
-        {/* Navbar */}
-        <Navbar contact={scrollToContact} fn={handleLanguageSwitch} />
+    <Transitions>
+      <main className={styles.mainContainer}>
+        <div className={styles.topContainer}>
+          {/* Navbar */}
+          <Navbar contact={scrollToContact} fn={handleLanguageSwitch} />
 
-        {/* Hidden div to seperate navbar and body content */}
-        <div className='mt-20 pointer-events-none opacity-0 '></div>
+          {/* Hidden div to seperate navbar and body content */}
+          <div className='mt-20 pointer-events-none opacity-0 '></div>
 
-        {/* Hero Section */}
-        <div className={styles.heroSection}>
-          {/* Stars background */}
-          <Particles
-            options={starsOptions}
-            id='tsparticles'
-            init={initEngine}
-            className='h-full absolute mt-60 w-full pointer-events-none'
-          />
-          <div className={styles.introduction}>
-            <h1>
-              {langComp.title.split(" ").map((word, index) => {
-                return (
-                  <motion.div
-                    ref={ref}
-                    aria-hidden='true'
-                    key={index}
-                    style={{
-                      display: "inline-block",
-                      whiteSpace: "nowrap",
-                      marginRight: "1.25rem",
-                    }}
-                    initial='hidden'
-                    animate={controls}
-                    variants={wordAnimation}
-                    transition={{
-                      delayChildren: index * 0.25,
-                      staggerChildren: 0.05,
-                    }}>
-                    {word.split("").map((character, index) => (
-                      <motion.span
-                        aria-hidden='true'
-                        key={index}
-                        style={{ display: "inline-block" }}
-                        variants={characterAnimation}>
-                        {character}
-                      </motion.span>
-                    ))}
-                  </motion.div>
-                );
-              })}
-            </h1>
-            <p>
-              {langComp.body1.split(" ").map((word, index) => {
-                return (
-                  <motion.div
-                    ref={ref}
-                    aria-hidden='true'
-                    key={index}
-                    style={{
-                      display: "inline-block",
-                      whiteSpace: "nowrap",
-                      marginRight: "0.5rem",
-                    }}
-                    initial='hidden'
-                    animate={controls}
-                    variants={wordAnimation}
-                    transition={{
-                      delayChildren: index * 0.05,
-                      staggerChildren: 0.05,
-                    }}>
-                    {word.split("").map((character, index) => (
-                      <motion.p
-                        aria-hidden='true'
-                        key={index}
-                        style={{ display: "inline-block" }}
-                        variants={characterAnimation}>
-                        {character}
-                      </motion.p>
-                    ))}
-                  </motion.div>
-                );
-              })}
-              <br />
-              {langComp.body2.split(" ").map((word, index) => {
-                return (
-                  <motion.div
-                    ref={ref}
-                    aria-hidden='true'
-                    key={index}
-                    style={{
-                      display: "inline-block",
-                      whiteSpace: "nowrap",
-                      marginRight: "0.5rem",
-                    }}
-                    initial='hidden'
-                    animate={controls}
-                    variants={wordAnimation}
-                    transition={{
-                      delayChildren: index * 0.05,
-                      staggerChildren: 0.05,
-                    }}>
-                    {word.split("").map((character, index) => (
-                      <motion.p
-                        aria-hidden='true'
-                        key={index}
-                        style={{ display: "inline-block" }}
-                        variants={characterAnimation}>
-                        {character}
-                      </motion.p>
-                    ))}
-                  </motion.div>
-                );
-              })}
-            </p>
-          </div>
-          <div className={styles.interactions}>
-            <motion.button
-              className={styles.getStartedBtn}
-              initial={{
-                opacity: 0,
-                border: "none",
-                scale: 0.3,
-              }}
-              animate={{
-                opacity: 1,
-                scale: 1,
-                borderBottom: "7px solid #2e73f1",
-                borderLeft: "1.4px solid #2e73f1",
-                borderRight: "1.4px solid #2e73f1",
-              }}
-              whileHover={{
-                borderBottom: "3px solid #315dae",
-              }}
-              transition={{ duration: 0.2 }}
-              onClick={() => {
-                navigate("/auth");
-              }}>
-              {langComp.start}
-            </motion.button>
-            <div className={styles.mobileDownload}>
+          {/* Hero Section */}
+          <div className={styles.heroSection}>
+            {/* Stars background */}
+            <Particles
+              options={starsOptions}
+              id='tsparticles'
+              init={initEngine}
+              className='h-full absolute mt-60 w-full pointer-events-none'
+            />
+            <div className={styles.introduction}>
+              <h1>
+                {langComp.title.split(" ").map((word, index) => {
+                  return (
+                    <motion.div
+                      ref={ref}
+                      aria-hidden='true'
+                      key={index}
+                      style={{
+                        display: "inline-block",
+                        whiteSpace: "nowrap",
+                        marginRight: "1.25rem",
+                      }}
+                      initial='hidden'
+                      animate={controls}
+                      variants={wordAnimation}
+                      transition={{
+                        delayChildren: index * 0.25,
+                        staggerChildren: 0.05,
+                      }}>
+                      {word.split("").map((character, index) => (
+                        <motion.span
+                          aria-hidden='true'
+                          key={index}
+                          style={{ display: "inline-block" }}
+                          variants={characterAnimation}>
+                          {character}
+                        </motion.span>
+                      ))}
+                    </motion.div>
+                  );
+                })}
+              </h1>
               <p>
-                {langComp.mobile}
+                {langComp.body1.split(" ").map((word, index) => {
+                  return (
+                    <motion.div
+                      ref={ref}
+                      aria-hidden='true'
+                      key={index}
+                      style={{
+                        display: "inline-block",
+                        whiteSpace: "nowrap",
+                        marginRight: "0.5rem",
+                      }}
+                      initial='hidden'
+                      animate={controls}
+                      variants={wordAnimation}
+                      transition={{
+                        delayChildren: index * 0.05,
+                        staggerChildren: 0.05,
+                      }}>
+                      {word.split("").map((character, index) => (
+                        <motion.p
+                          aria-hidden='true'
+                          key={index}
+                          style={{ display: "inline-block" }}
+                          variants={characterAnimation}>
+                          {character}
+                        </motion.p>
+                      ))}
+                    </motion.div>
+                  );
+                })}
                 <br />
-                <span className={styles.platformSelection}>
-                  <b>Android</b>
-                </span>
-                {langComp.and}
-                <span className={styles.platformSelection}>
-                  <b>IOS</b>
-                </span>
+                {langComp.body2.split(" ").map((word, index) => {
+                  return (
+                    <motion.div
+                      ref={ref}
+                      aria-hidden='true'
+                      key={index}
+                      style={{
+                        display: "inline-block",
+                        whiteSpace: "nowrap",
+                        marginRight: "0.5rem",
+                      }}
+                      initial='hidden'
+                      animate={controls}
+                      variants={wordAnimation}
+                      transition={{
+                        delayChildren: index * 0.05,
+                        staggerChildren: 0.05,
+                      }}>
+                      {word.split("").map((character, index) => (
+                        <motion.p
+                          aria-hidden='true'
+                          key={index}
+                          style={{ display: "inline-block" }}
+                          variants={characterAnimation}>
+                          {character}
+                        </motion.p>
+                      ))}
+                    </motion.div>
+                  );
+                })}
               </p>
+            </div>
+            <div className={styles.interactions}>
+              <motion.button
+                className={styles.getStartedBtn}
+                initial={{
+                  opacity: 0,
+                  border: "none",
+                  scale: 0.3,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                  borderBottom: "7px solid #2e73f1",
+                  borderLeft: "1.4px solid #2e73f1",
+                  borderRight: "1.4px solid #2e73f1",
+                }}
+                whileHover={{
+                  borderBottom: "3px solid #315dae",
+                }}
+                transition={{ duration: 0.2 }}
+                onClick={() => {
+                  navigate("/auth");
+                }}>
+                {langComp.start}
+              </motion.button>
+              <div className={styles.mobileDownload}>
+                <p>
+                  {langComp.mobile}
+                  <br />
+                  <span className={styles.platformSelection}>
+                    <b>Android</b>
+                  </span>
+                  {langComp.and}
+                  <span className={styles.platformSelection}>
+                    <b>IOS</b>
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Info section */}
-      <div className={styles.bottomContent}>
-        {/* Stars background */}
-        <Particles
-          options={starsOptions}
-          id='tsparticles2'
-          init={initEngine}
-          className='h-full absolute mt-60 w-full pointer-events-none'
-        />
-        <div className={styles.editorPreviewSection}>
-          <EditorPreview className='h-full' /> {/* Extracted svg */}
+        {/* Info section */}
+        <div className={styles.bottomContent}>
+          {/* Stars background */}
+          <Particles
+            options={starsOptions}
+            id='tsparticles2'
+            init={initEngine}
+            className='h-full absolute mt-60 w-full pointer-events-none'
+          />
+          <div className={styles.editorPreviewSection}>
+            <EditorPreview className='h-full' /> {/* Extracted svg */}
+          </div>
+          <div className={styles.idePowers}>
+            <IdeInfo /> {/* Github + collaboration divs */}
+          </div>
+          <hr
+            className='mb-10 opacity-0 pointer-events-none'
+            ref={contactRef}
+          />{" "}
+          {/* Contact form reference */}
+          <div className={styles.contactFormContainer}>
+            <ContactForm /> {/* Contact form */}
+          </div>
         </div>
-        <div className={styles.idePowers}>
-          <IdeInfo /> {/* Github + collaboration divs */}
-        </div>
-        <hr className='mb-10 opacity-0 pointer-events-none' ref={contactRef} />{" "}
-        {/* Contact form reference */}
-        <div className={styles.contactFormContainer}>
-          <ContactForm /> {/* Contact form */}
-        </div>
-      </div>
-      {/* Footer section */}
-      <footer className={styles.footerContainer}>
-        <Footer contact={scrollToContact} />
-      </footer>
-    </main>
+        {/* Footer section */}
+        <footer className={styles.footerContainer}>
+          <Footer contact={scrollToContact} />
+        </footer>
+      </main>
+    </Transitions>
   );
 };
 
