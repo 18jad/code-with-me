@@ -24,7 +24,7 @@ const starsOptions = {
     move: {
       directions: "none",
       enable: true,
-      random: false,
+      random: true,
       speed: 0.5,
       straight: false,
     },
@@ -33,16 +33,28 @@ const starsOptions = {
         enable: true,
         area: 800,
       },
-      value: 70,
+      value: 85,
     },
     opacity: {
       value: 0.3,
+      anim: {
+        enable: true,
+        speed: 0.5,
+        opacity_min: 0.1,
+        sync: false,
+      },
     },
     shape: {
       type: "circle",
     },
     size: {
       value: { min: 0.5, max: 3 },
+      anim: {
+        enable: true,
+        speed: 4,
+        size_min: 0.3,
+        sync: false,
+      },
     },
   },
 };
