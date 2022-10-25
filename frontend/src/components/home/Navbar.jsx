@@ -33,7 +33,7 @@ const Navbar = ({ contact, fn }) => {
   `;
 
   window.addEventListener("scroll", () => {
-    if (window.scrollY > 10) {
+    if (window.scrollY > 50) {
       setNav(true);
     } else {
       setNav(false);
@@ -42,10 +42,10 @@ const Navbar = ({ contact, fn }) => {
 
   return (
     <div
-      className={`flex items-center justify-between border-b px-10 py-2 w-screen fixed top-0 z-50 transition duration-200 ${
+      className={`flex items-center justify-between border-b px-10 w-screen fixed top-0 z-50 transition-all duration-200 ${
         nav
-          ? "bg-black/20 backdrop-blur-md border-white/10"
-          : "bg-transparent border-transparent"
+          ? "bg-black/20 backdrop-blur-md border-white/10 py-2"
+          : "bg-transparent border-transparent py-5"
       }`}>
       <Link to='/'>
         <div className='flex items-center justify-center gap-5 select-none hover:drop-shadow-wmd transition duration-200'>
