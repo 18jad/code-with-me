@@ -1,6 +1,7 @@
 import TextLogo from "components/TextLogo";
 import Transitions from "components/Transition";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Particles from "react-tsparticles";
 import { tw } from "utils/TailwindComponent";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
@@ -88,9 +89,9 @@ const Authentication = () => {
           className='h-full absolute w-full pointer-events-none'
         />
         {/* Authentication Logo */}
-        <div className='py-10'>
+        <Link to='/' className='py-10'>
           <TextLogo text='Authentication' width={65} />
-        </div>
+        </Link>
         {/* Seperator */}
         <div className='h-32'></div>
         {/* Sign in/up form wrapper */}
