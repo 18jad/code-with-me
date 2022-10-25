@@ -96,17 +96,16 @@ const Authentication = () => {
           <TextLogo text='Authentication' width={65} />
         </Link>
         {/* Seperator */}
-        <div className='h-32'></div>
         {/* Sign in/up form wrapper */}
         <div className={styles.formsWrapper}>
           <div
-            className='relative h-full w-full transition duration-1000'
+            className='relative h-full w-full transition duration-1000 flex items-center justify-center'
             style={{
               transformStyle: "preserve-3d",
               transform: `rotateY(${isLogin ? "0deg" : "180deg"})`,
             }}>
             {/* Sign in form */}
-            <Form style={{ backfaceVisibility: "hidden", marginTop: "-40px" }}>
+            <Form style={{ backfaceVisibility: "hidden", marginTop: "-100px" }}>
               <h1 className='text-white text-4xl'>Sign in</h1>
               <div className='flex flex-col gap-4 w-full'>
                 <Input placeholder='Email address' type='email' required />
@@ -141,9 +140,9 @@ const Authentication = () => {
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
-                  marginTop: "-40px",
-                }}
-                className='ml-0 md:-ml-11'>
+                  justifyContent: "space-between",
+                  marginTop: "-100px",
+                }}>
                 <h1 className='text-white text-4xl'>Reset password</h1>
                 <div className='flex flex-col gap-2 w-full'>
                   <Input placeholder='Email address' type='email' required />
@@ -172,8 +171,7 @@ const Authentication = () => {
                   transform: "rotateY(180deg)",
                   height: "480px",
                   marginTop: "-80px",
-                }}
-                className='ml-0 md:-ml-10'>
+                }}>
                 <h1 className='text-white text-4xl'>Register</h1>
                 <div className='flex flex-col gap-4 w-full'>
                   <Input placeholder='Email address' type='email' required />
