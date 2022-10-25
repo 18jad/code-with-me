@@ -103,7 +103,7 @@ const Home = () => {
               options={starsOptions}
               id='tsparticles'
               init={initEngine}
-              className='h-full absolute mt-60 w-full pointer-events-none'
+              className='h-full absolute w-full top-0 left-0 pointer-events-none'
             />
             <div className={styles.introduction}>
               <div>
