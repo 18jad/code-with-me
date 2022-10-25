@@ -13,6 +13,7 @@ body {
   margin: 0;
   font-family: "Josefin Sans";
   overflow-x: hidden;
+  background: black;
 }
 
 input,
