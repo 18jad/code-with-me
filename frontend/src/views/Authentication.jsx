@@ -10,6 +10,7 @@ import styles from "./styles/Authentication.module.scss";
 const Authentication = () => {
   // Login and sign up state (for switching between the two)
   const [isLogin, setIsLogin] = useState(true);
+  const [forget, setForget] = useState(false);
 
   // Edit page title
   useEffect(() => {
@@ -19,6 +20,7 @@ const Authentication = () => {
   // Handle form switching
   const handleFormSwitch = () => {
     setIsLogin(!isLogin);
+    setForget(false); // set forget state to false if switching between login and sign up
   };
 
   // Form tailwind styled component
@@ -26,6 +28,7 @@ const Authentication = () => {
     flex 
     flex-col 
     items-center 
+    justify-center
     gap-10
     border
     w-[340px]
@@ -109,7 +112,12 @@ const Authentication = () => {
                 <Input placeholder='Email address' type='email' required />
                 <div className='w-full flex flex-col items-end'>
                   <Input placeholder='Password' type='password' required />
-                  <span className='text-gray text-xs mt-2  hover:text-white duration-200 transition cursor-pointer'>
+                  <span
+                    className='text-gray text-xs mt-2  hover:text-white duration-200 transition cursor-pointer'
+                    onClick={() => {
+                      setForget(true);
+                      setIsLogin(!isLogin);
+                    }}>
                     Forget password?
                   </span>
                 </div>
@@ -128,37 +136,68 @@ const Authentication = () => {
             </Form>
 
             {/* Register form */}
-            <Form
-              style={{
-                backfaceVisibility: "hidden",
-                transform: "rotateY(180deg)",
-                height: "480px",
-                marginTop: "-80px",
-              }}
-              className='ml-0 md:-ml-10'>
-              <h1 className='text-white text-4xl'>Register</h1>
-              <div className='flex flex-col gap-4 w-full'>
-                <Input placeholder='Email address' type='email' required />
-                <Input placeholder='Username' type='text' required />
-                <Input placeholder='Password' type='password' required />
-                <Input
-                  placeholder='Confirm password'
-                  type='password'
-                  required
-                />
-              </div>
-              <div className='w-full text-center flex flex-col gap-5'>
-                <Submit type='submit'>Register</Submit>
-                <p className='text-white font-light text-sm '>
-                  Already a member?{" "}
-                  <span
-                    className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'
-                    onClick={handleFormSwitch}>
-                    Sign in
-                  </span>
-                </p>
-              </div>
-            </Form>
+            {forget ? (
+              <Form
+                style={{
+                  backfaceVisibility: "hidden",
+                  transform: "rotateY(180deg)",
+                  marginTop: "-40px",
+                }}
+                className='ml-0 md:-ml-11'>
+                <h1 className='text-white text-4xl'>Reset password</h1>
+                <div className='flex flex-col gap-2 w-full'>
+                  <Input placeholder='Email address' type='email' required />
+                  <p className='text-gray text-xs select-none'>
+                    *A reset link will be sent to this email if it's found
+                  </p>
+                </div>
+
+                <div className='w-full text-center flex flex-col gap-5'>
+                  <Submit type='submit'>Reset</Submit>
+                  <p className='text-white font-light text-sm '>
+                    <span
+                      className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'
+                      onClick={() => {
+                        setIsLogin(true);
+                      }}>
+                      Go back
+                    </span>
+                  </p>
+                </div>
+              </Form>
+            ) : (
+              <Form
+                style={{
+                  backfaceVisibility: "hidden",
+                  transform: "rotateY(180deg)",
+                  height: "480px",
+                  marginTop: "-80px",
+                }}
+                className='ml-0 md:-ml-10'>
+                <h1 className='text-white text-4xl'>Register</h1>
+                <div className='flex flex-col gap-4 w-full'>
+                  <Input placeholder='Email address' type='email' required />
+                  <Input placeholder='Username' type='text' required />
+                  <Input placeholder='Password' type='password' required />
+                  <Input
+                    placeholder='Confirm password'
+                    type='password'
+                    required
+                  />
+                </div>
+                <div className='w-full text-center flex flex-col gap-5'>
+                  <Submit type='submit'>Register</Submit>
+                  <p className='text-white font-light text-sm '>
+                    Already a member?{" "}
+                    <span
+                      className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'
+                      onClick={handleFormSwitch}>
+                      Sign in
+                    </span>
+                  </p>
+                </div>
+              </Form>
+            )}
           </div>
         </div>
       </div>
