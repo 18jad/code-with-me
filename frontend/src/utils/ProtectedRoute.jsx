@@ -10,4 +10,4 @@ const ProtectedRoute = ({ condition, access, redirect }) => {
   );
 };
 
-export { ProtectedRoute };
+export default ProtectedRoute;
