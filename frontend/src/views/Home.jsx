@@ -259,7 +259,7 @@ const Home = () => {
             <IdeInfo /> {/* Github + collaboration divs */}
           </div>
           <hr
-            className='mb-10 opacity-0 pointer-events-none'
+            className='mb-20 opacity-0 pointer-events-none'
             ref={contactRef}
           />{" "}
           {/* Contact form reference */}
