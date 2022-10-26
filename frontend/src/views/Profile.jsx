@@ -76,6 +76,7 @@ const Profile = () => {
               name='sectionSwitcher'
               className={styles.radioSelection}
               hidden
+              checked
             />
             <div className={styles.selectLine}></div>
             <label htmlFor='overview' className={styles.switcherTitle}>
