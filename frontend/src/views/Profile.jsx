@@ -1,6 +1,6 @@
 import SearchUser from "components/profile/SearchUser";
 import TextLogo from "components/TextLogo";
-import { MagnifyingGlass, SignOut } from "phosphor-react";
+import { MagnifyingGlass, Plus, SignOut } from "phosphor-react";
 import { useState } from "react";
 import styles from "./styles/Profile.module.scss";
 
@@ -67,6 +67,7 @@ const Profile = () => {
 
         {/* Section Switcher */}
         <div className={styles.sectionSwitcher}>
+          {/* Overview tab switcher */}
           <button className={styles.sectionSwitcherBtn}>
             <input
               type='radio'
@@ -80,6 +81,7 @@ const Profile = () => {
               Overview
             </label>
           </button>
+          {/* Favorties tab switcher */}
           <button className={styles.sectionSwitcherBtn}>
             <input
               type='radio'
@@ -93,6 +95,20 @@ const Profile = () => {
               Favorites
             </label>
           </button>
+        </div>
+
+        {/* Projects overview */}
+        <div className={styles.projectsOverview}>
+          {/* Toolbar */}
+          <div className={styles.interBar}>
+            <h1 className={styles.sectionTitle}>Your projects</h1>
+            <button className={styles.createProjectBtn}>
+              <Plus size={18} color='#fff' weight='bold' />
+              <span>Create new project</span>
+            </button>
+          </div>
+
+          {/* Projects */}
         </div>
       </div>
 
