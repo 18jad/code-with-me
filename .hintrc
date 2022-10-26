@@ -10,5 +10,15 @@
     "not edge <= 106",
     "not opera <= 91",
     "not samsung <= 18"
-  ]
+  ],
+  "hints": {
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "user-select"
+        ]
+      }
+    ]
+  }
 }
