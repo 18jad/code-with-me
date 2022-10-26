@@ -64,6 +64,36 @@ const Profile = () => {
           <StatsCard count={42} text='likes' />
           <StatsCard count={21} text='favorited' />
         </div>
+
+        {/* Section Switcher */}
+        <div className={styles.sectionSwitcher}>
+          <button className={styles.sectionSwitcherBtn}>
+            <input
+              type='radio'
+              id='overview'
+              name='sectionSwitcher'
+              className={styles.radioSelection}
+              hidden
+            />
+            <div className={styles.selectLine}></div>
+            <label htmlFor='overview' className={styles.switcherTitle}>
+              Overview
+            </label>
+          </button>
+          <button className={styles.sectionSwitcherBtn}>
+            <input
+              type='radio'
+              id='favorites'
+              name='sectionSwitcher'
+              className={styles.radioSelection}
+              hidden
+            />
+            <div className={styles.selectLine}></div>
+            <label htmlFor='favorites' className={styles.switcherTitle}>
+              Favorites
+            </label>
+          </button>
+        </div>
       </div>
 
       {/* Search section */}
