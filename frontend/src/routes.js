@@ -1,5 +1,6 @@
 import Authentication from "views/Authentication";
 import Home from "views/Home";
+import Profile from "views/Profile";
 
 /**
  * @type {Array}
@@ -29,6 +30,9 @@ import Home from "views/Home";
  *
  */
 
+// TODO: Modify condition when authentication is implemented
+const isAuthenticated = true;
+
 const routes = [
   {
     path: "/",
@@ -36,9 +40,16 @@ const routes = [
     isProtected: false,
   },
   {
-    path: "/auth",
+    path: "/auth", // TODO: Make the route protected and redirect to /.. if the user is authenticated
     component: <Authentication />,
     isProtected: false,
+  },
+  {
+    path: "/profile",
+    isProtected: true,
+    condition: isAuthenticated,
+    access: <Profile />,
+    redirect: "/login",
   },
 ];
 
