@@ -71,6 +71,21 @@ $dark-bg: #3e3e3e;
   .searchSection {
     background: transparent;
     height: 100%;
-    flex-grow: 1;
+    flex-grow: 0.4;
+    padding: 20px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .searchInput {
+      position: relative;
+
+      .searchIcon {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translate(0, -50%);
+      }
+    }
   }
 }
