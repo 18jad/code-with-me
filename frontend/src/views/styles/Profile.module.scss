@@ -121,6 +121,31 @@ $dark-bg: #3e3e3e;
         }
       }
     }
+
+    .statsWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 30px 0;
+
+      .statsCard {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        flex-direction: column;
+
+        .cardCount {
+          font-size: 3rem;
+        }
+
+        .cardText {
+          font-size: 1.5rem;
+          font-weight: 100;
+          color: #9c9c9c;
+        }
+      }
+    }
   }
 
   .searchSection {
