@@ -125,6 +125,41 @@ const Profile = () => {
               updated='Updated 2 days ago'
               link='/sdadsads'
             />
+            <ProjectCard
+              title='Project name'
+              description="Porject description, what's the project about"
+              likes={21}
+              updated='Updated 2 days ago'
+              link='/sdadsads'
+            />
+            <ProjectCard
+              title='Project name'
+              description="Porject description, what's the project about"
+              likes={21}
+              updated='Updated 2 days ago'
+              link='/sdadsads'
+            />
+            <ProjectCard
+              title='Project name'
+              description="Porject description, what's the project about"
+              likes={21}
+              updated='Updated 2 days ago'
+              link='/sdadsads'
+            />
+            <ProjectCard
+              title='Project name'
+              description="Porject description, what's the project about"
+              likes={21}
+              updated='Updated 2 days ago'
+              link='/sdadsads'
+            />
+            <ProjectCard
+              title='Project name'
+              description="Porject description, what's the project about"
+              likes={21}
+              updated='Updated 2 days ago'
+              link='/sdadsads'
+            />
           </div>
         </div>
       </div>

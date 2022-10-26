@@ -8,18 +8,21 @@ $dark-bg: #3e3e3e;
   align-items: center;
   justify-content: center;
   width: 100vw;
-  height: 100vh;
   background: #1e1e1e;
 
   .interactionsSection {
     background: transparent;
-    height: 100%;
     flex-grow: 0.5;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     flex-direction: column;
     padding: 20px 40px 20px 0;
+    position: sticky;
+    align-self: stretch;
+    border-right: 1.4px solid $border;
+    height: 100vh;
+    top: 0;
 
     .logo {
       width: -moz-fit-content;
@@ -63,9 +66,9 @@ $dark-bg: #3e3e3e;
     background: transparent;
     height: 100%;
     flex-grow: 1;
-    border: 1.4px solid $border;
     border-top: none;
     border-bottom: none;
+    align-self: stretch;
 
     .profileContainer {
       display: flex;
@@ -242,6 +245,11 @@ $dark-bg: #3e3e3e;
     display: flex;
     flex-direction: column;
     gap: 13px;
+    position: sticky;
+    height: 100vh;
+    border-left: 1.4px solid $border;
+    align-self: stretch;
+    top: 0;
 
     .searchInput {
       position: relative;
@@ -304,4 +312,18 @@ $dark-bg: #3e3e3e;
       }
     }
   }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e1e1e;
 }
