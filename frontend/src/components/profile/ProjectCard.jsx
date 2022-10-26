@@ -14,7 +14,7 @@ const ProjectCard = ({ title, description, likes, updated, link }) => {
       </div>
       <div className='bottom-bar flex flex-row justify-between items-center'>
         <div className='likes flex flex-row gap-1'>
-          <Heart size={20} color='#D1D1D1' />
+          <Heart size={20} color='#D1D1D1' weight='fill' />
           <span className='text-[#D1D1D1] text-base'>{likes}</span>
         </div>
         <div className='updated'>
