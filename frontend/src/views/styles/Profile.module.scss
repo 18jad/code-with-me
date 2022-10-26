@@ -1,0 +1,26 @@
+@import "global.scss";
+
+.pageWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+
+  .interactionsSection {
+    background: #333;
+    height: 100%;
+    flex-grow: 1;
+  }
+
+  .profileFeedSection {
+    height: 100%;
+    flex-grow: 1.5;
+  }
+
+  .searchSection {
+    background: #333;
+    height: 100%;
+    flex-grow: 1;
+  }
+}
