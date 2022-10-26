@@ -7,7 +7,7 @@ function App() {
   const location = useLocation();
 
   return (
-    <AnimatePresence exitBeforeEnter>
+    <AnimatePresence mode='wait'>
       {/* Key is passed to help animate presence know what component mounted */}
       <Routes location={location} key={location.pathname}>
         {routes.map((route, index) => {
