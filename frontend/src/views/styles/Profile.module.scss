@@ -1,25 +1,75 @@
 @import "global.scss";
 
+$border: #535353;
+$dark-bg: #3e3e3e;
+
 .pageWrapper {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100vw;
   height: 100vh;
+  background: #1e1e1e;
 
   .interactionsSection {
-    background: #333;
+    background: transparent;
     height: 100%;
-    flex-grow: 1;
+    flex-grow: 0.5;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 20px 40px 20px 0;
+
+    .logo {
+      width: -moz-fit-content;
+      width: fit-content;
+      display: inline-block;
+    }
+
+    .interactionsButtons {
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-direction: column;
+
+      .signOutBtn {
+        background: $dark-bg;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 10px;
+        padding: 5px 15px;
+        width: 40%;
+        border-radius: 4px;
+        transition-property: gap, background;
+        transition-duration: 200ms;
+        transition-timing-function: ease-in-out;
+
+        &:hover {
+          gap: 15px;
+          background: lighten($dark-bg, 3%);
+        }
+
+        span {
+          color: white;
+        }
+      }
+    }
   }
 
   .profileFeedSection {
+    background: transparent;
     height: 100%;
     flex-grow: 1.5;
+    border: 1.4px solid $border;
+    border-top: none;
+    border-bottom: none;
   }
 
   .searchSection {
-    background: #333;
+    background: transparent;
     height: 100%;
     flex-grow: 1;
   }
