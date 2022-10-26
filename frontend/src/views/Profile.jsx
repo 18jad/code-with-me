@@ -4,6 +4,15 @@ import { MagnifyingGlass, SignOut } from "phosphor-react";
 import { useState } from "react";
 import styles from "./styles/Profile.module.scss";
 
+const StatsCard = ({ count, text }) => {
+  return (
+    <div class={styles.statsCard}>
+      <span className={styles.cardCount}>{count}</span>
+      <span className={styles.cardText}>{text}</span>
+    </div>
+  );
+};
+
 const Profile = () => {
   // TODO: use state and store searched user data inside it
   let usersList = false;
@@ -29,6 +38,7 @@ const Profile = () => {
 
       {/* Profile feed section */}
       <div className={styles.profileFeedSection}>
+        {/* Profile Card */}
         <div className={styles.profileContainer}>
           <div className={styles.profileAvatar}>
             <img
@@ -46,6 +56,13 @@ const Profile = () => {
               Talk is cheap. Show me the code.
             </span>
           </div>
+        </div>
+
+        {/* Stats Info */}
+        <div className={styles.statsWrapper}>
+          <StatsCard count={201} text='projects' />
+          <StatsCard count={42} text='likes' />
+          <StatsCard count={21} text='favorited' />
         </div>
       </div>
 
