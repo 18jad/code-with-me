@@ -152,7 +152,7 @@ const Authentication = () => {
                   justifyContent: "space-between",
                   marginTop: "-100px",
                 }}>
-                <h1 className='text-white text-4xl'>
+                <h1 className='text-white text-4xl text-center'>
                   {langComp.resetPassword}
                 </h1>
                 <div className='flex flex-col gap-2 w-full'>
