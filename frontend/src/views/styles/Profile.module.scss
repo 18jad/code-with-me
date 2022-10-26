@@ -190,6 +190,41 @@ $dark-bg: #3e3e3e;
         }
       }
     }
+
+    .projectsOverview {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 25px 40px;
+
+      .interBar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+
+        .sectionTitle {
+          font-size: 1.3rem;
+        }
+
+        .createProjectBtn {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 5px;
+          background: $dark-bg;
+          padding: 4px 10px;
+          border-radius: 5px;
+          border: 1.5px solid $border;
+          font-size: 0.9rem;
+          transition: background 200ms ease-in-out;
+
+          &:hover {
+            background: lighten($dark-bg, 3%);
+          }
+        }
+      }
+    }
   }
 
   .searchSection {
