@@ -28,7 +28,26 @@ const Profile = () => {
       </div>
 
       {/* Profile feed section */}
-      <div className={styles.profileFeedSection}></div>
+      <div className={styles.profileFeedSection}>
+        <div className={styles.profileContainer}>
+          <div className={styles.profileAvatar}>
+            <img
+              src={require("assets/images/empty_profile.png")}
+              alt='profile avatar'
+            />
+          </div>
+          <div className={styles.profileInfo}>
+            <div className={styles.userNames}>
+              <span className={styles.name}>John Doe</span>
+              <span className={styles.username}>@johndoe</span>
+            </div>
+            <span className={styles.headline}>
+              Talk is cheap. Show me the code. Talk is cheap. Show me the code.
+              Talk is cheap. Show me the code.
+            </span>
+          </div>
+        </div>
+      </div>
 
       {/* Search section */}
       <div className={styles.searchSection}>
