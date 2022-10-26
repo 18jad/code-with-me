@@ -1,4 +1,4 @@
-import EmptyProfile from "assets/empty_profile.png";
+import EmptyProfile from "assets/images/empty_profile.png";
 import styles from "views/styles/Profile.module.scss";
 
 const SearchUser = ({ name, username, profile }) => {

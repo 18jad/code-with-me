@@ -1,4 +1,4 @@
-import EditorPreview from "assets/EditorPreview.jsx";
+import EditorPreview from "assets/images/EditorPreview.jsx";
 import ContactForm from "components/home/ContactForm";
 import Footer from "components/home/Footer";
 import IdeInfo from "components/home/IdeInfo";
