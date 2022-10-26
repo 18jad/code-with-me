@@ -146,6 +146,50 @@ $dark-bg: #3e3e3e;
         }
       }
     }
+
+    .sectionSwitcher {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 100%;
+      border-bottom: 1.4px solid #535353;
+
+      .sectionSwitcherBtn {
+        width: -moz-fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column-reverse;
+        user-select: none;
+        cursor: pointer;
+
+        .switcherTitle {
+          color: white;
+          font-size: 1.2rem;
+          padding: 5px;
+          width: 100%;
+          cursor: pointer;
+        }
+
+        .radioSelection {
+          &:checked {
+            & + .selectLine {
+              background: $blue;
+
+              & + .switcherTitle {
+                color: $blue;
+              }
+            }
+          }
+        }
+
+        .selectLine {
+          width: 130px;
+          height: 2.6px;
+          border-radius: 10px 10px 0 0;
+        }
+      }
+    }
   }
 
   .searchSection {
