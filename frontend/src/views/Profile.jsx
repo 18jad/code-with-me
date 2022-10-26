@@ -7,7 +7,7 @@ import styles from "./styles/Profile.module.scss";
 
 const StatsCard = ({ count, text }) => {
   return (
-    <div class={styles.statsCard}>
+    <div className={styles.statsCard}>
       <span className={styles.cardCount}>{count}</span>
       <span className={styles.cardText}>{text}</span>
     </div>
@@ -76,7 +76,7 @@ const Profile = () => {
               name='sectionSwitcher'
               className={styles.radioSelection}
               hidden
-              checked
+              defaultChecked
             />
             <div className={styles.selectLine}></div>
             <label htmlFor='overview' className={styles.switcherTitle}>
