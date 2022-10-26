@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Particles from "react-tsparticles";
 import { tw } from "utils/TailwindComponent";
+import authStore from "./lang/authStore";
 import { initEngine, starsOptions } from "./particles/StarsParticles";
 import styles from "./styles/Authentication.module.scss";
 
@@ -22,6 +23,10 @@ const Authentication = () => {
     setIsLogin(!isLogin);
     setForget(false); // set forget state to false if switching between login and sign up
   };
+
+  // Multi lang
+  const lang = localStorage.getItem("lang-preference") || "english";
+  const langComp = authStore[lang];
 
   // Form tailwind styled component
   const Form = tw.form`
@@ -93,7 +98,7 @@ const Authentication = () => {
         />
         {/* Authentication Logo */}
         <Link to='/' className='py-10'>
-          <TextLogo text='Authentication' width={65} />
+          <TextLogo text={langComp.authentication} width={65} />
         </Link>
         {/* Seperator */}
         {/* Sign in/up form wrapper */}
@@ -106,35 +111,39 @@ const Authentication = () => {
             }}>
             {/* Sign in form */}
             <Form style={{ backfaceVisibility: "hidden", marginTop: "-100px" }}>
-              <h1 className='text-white text-4xl'>Sign in</h1>
+              <h1 className='text-white text-4xl'>{langComp.login}</h1>
               <div className='flex flex-col gap-4 w-full'>
-                <Input placeholder='Email address' type='email' required />
+                <Input placeholder={langComp.email} type='email' required />
                 <div className='w-full flex flex-col items-end'>
-                  <Input placeholder='Password' type='password' required />
+                  <Input
+                    placeholder={langComp.password}
+                    type='password'
+                    required
+                  />
                   <span
                     className='text-gray text-xs mt-2  hover:text-white duration-200 transition cursor-pointer'
                     onClick={() => {
                       setForget(true);
                       setIsLogin(!isLogin);
                     }}>
-                    Forget password?
+                    {langComp.forget}
                   </span>
                 </div>
               </div>
               <div className='w-full text-center flex flex-col gap-5'>
-                <Submit type='submit'>Sign in</Submit>
+                <Submit type='submit'>{langComp.login}</Submit>
                 <p className='text-white font-light text-sm '>
-                  New here?{" "}
+                  {langComp.newHere}{" "}
                   <span
                     className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'
                     onClick={handleFormSwitch}>
-                    Sign up
+                    {langComp.register}
                   </span>
                 </p>
               </div>
             </Form>
 
-            {/* Register form */}
+            {/* Reset password form */}
             {forget ? (
               <Form
                 style={{
@@ -143,28 +152,31 @@ const Authentication = () => {
                   justifyContent: "space-between",
                   marginTop: "-100px",
                 }}>
-                <h1 className='text-white text-4xl'>Reset password</h1>
+                <h1 className='text-white text-4xl'>
+                  {langComp.resetPassword}
+                </h1>
                 <div className='flex flex-col gap-2 w-full'>
-                  <Input placeholder='Email address' type='email' required />
+                  <Input placeholder={langComp.email} type='email' required />
                   <p className='text-gray text-xs select-none'>
-                    *A reset link will be sent to this email if it's found
+                    {langComp.resetInfo}
                   </p>
                 </div>
 
                 <div className='w-full text-center flex flex-col gap-5'>
-                  <Submit type='submit'>Reset</Submit>
+                  <Submit type='submit'>{langComp.reset}</Submit>
                   <p className='text-white font-light text-sm '>
                     <span
                       className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'
                       onClick={() => {
                         setIsLogin(true);
                       }}>
-                      Go back
+                      {langComp.back}
                     </span>
                   </p>
                 </div>
               </Form>
             ) : (
+              // Sign up form
               <Form
                 style={{
                   backfaceVisibility: "hidden",
@@ -172,25 +184,29 @@ const Authentication = () => {
                   height: "480px",
                   marginTop: "-80px",
                 }}>
-                <h1 className='text-white text-4xl'>Register</h1>
+                <h1 className='text-white text-4xl'>{langComp.register}</h1>
                 <div className='flex flex-col gap-4 w-full'>
-                  <Input placeholder='Email address' type='email' required />
-                  <Input placeholder='Username' type='text' required />
-                  <Input placeholder='Password' type='password' required />
+                  <Input placeholder={langComp.email} type='email' required />
+                  <Input placeholder={langComp.username} type='text' required />
                   <Input
-                    placeholder='Confirm password'
+                    placeholder={langComp.password}
+                    type='password'
+                    required
+                  />
+                  <Input
+                    placeholder={langComp.passwordConfirm}
                     type='password'
                     required
                   />
                 </div>
                 <div className='w-full text-center flex flex-col gap-5'>
-                  <Submit type='submit'>Register</Submit>
+                  <Submit type='submit'>{langComp.register}</Submit>
                   <p className='text-white font-light text-sm '>
-                    Already a member?{" "}
+                    {langComp.alreadyMember}{" "}
                     <span
                       className='font-semibold hover:drop-shadow-wmd cursor-pointer transition duration-150'
                       onClick={handleFormSwitch}>
-                      Sign in
+                      {langComp.login}
                     </span>
                   </p>
                 </div>
