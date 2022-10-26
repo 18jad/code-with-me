@@ -1,3 +1,4 @@
+import ProjectCard from "components/profile/ProjectCard";
 import SearchUser from "components/profile/SearchUser";
 import TextLogo from "components/TextLogo";
 import { MagnifyingGlass, Plus, SignOut } from "phosphor-react";
@@ -109,6 +110,22 @@ const Profile = () => {
           </div>
 
           {/* Projects */}
+          <div className={styles.projectsContainer}>
+            <ProjectCard
+              title='Project name'
+              description="Porject description, what's the project about"
+              likes={21}
+              updated='Updated 2 days ago'
+              link='/sdadsads'
+            />
+            <ProjectCard
+              title='Project name'
+              description="Porject description, what's the project about"
+              likes={21}
+              updated='Updated 2 days ago'
+              link='/sdadsads'
+            />
+          </div>
         </div>
       </div>
 
