@@ -17,7 +17,9 @@ specifiers:
   react-scripts: 5.0.1
   react-tsparticles: ^2.3.3
   tailwindcss: ^3.2.0
+  tsparticles-engine: ^2.3.3
   tsparticles-preset-stars: ^2.3.3
+  tsparticles-shape-image: ^2.3.3
   web-vitals: ^2.1.4
 
 dependencies:
@@ -34,7 +36,9 @@ dependencies:
   react-router-dom: 6.4.2_biqbaboplfbrettd7655fr4n2y
   react-scripts: 5.0.1_xuoaqsm7nopglivb2rynqbguqi
   react-tsparticles: 2.3.3_react@18.2.0
+  tsparticles-engine: 2.3.3
   tsparticles-preset-stars: 2.3.3
+  tsparticles-shape-image: 2.3.3
   web-vitals: 2.1.4
 
 devDependencies:
@@ -10273,6 +10277,12 @@ packages:
 
   /tsparticles-shape-circle/2.3.3:
     resolution: {integrity: sha512-oWiF8WUSBailuqIYu9EXtzMRzix+KnsWRLgF5FRWsXgNcnzNEe8yfCMFRHTUg/VpLzhs8ZKEf88Wm1MFywEa+A==}
+    dependencies:
+      tsparticles-engine: 2.3.3
+    dev: false
+
+  /tsparticles-shape-image/2.3.3:
+    resolution: {integrity: sha512-8txrkUEQKmcuQ2q7AdjSoz4pN8HDEMAbqwn1LEu9VqDH1qbs1sFV33viU0ydLmQcx1IM1d9ZHRwjU0IJf/DI5A==}
     dependencies:
       tsparticles-engine: 2.3.3
     dev: false

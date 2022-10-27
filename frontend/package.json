@@ -16,7 +16,9 @@
     "react-router-dom": "6",
     "react-scripts": "5.0.1",
     "react-tsparticles": "^2.3.3",
+    "tsparticles-engine": "^2.3.3",
     "tsparticles-preset-stars": "^2.3.3",
+    "tsparticles-shape-image": "^2.3.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
