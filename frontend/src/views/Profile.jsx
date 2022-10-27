@@ -33,6 +33,29 @@ const ModalInput = tw.input`
     text-white
     w-full
 `;
+
+const ModalTextarea = tw.textarea`
+    bg-white/10
+    border
+    shadow-sm
+    px-4
+    py-2
+    placeholder-gray-300
+    border-gray-500
+    focus:border-gray-800 
+    focus:ring-2
+    focus:bg-black/10
+    focus:ring-gray-500
+    outline-none
+    rounded-sm
+    transition
+    duration-150
+    text-white
+    h-[130px]
+    resize-none
+    w-full
+`;
+
 const StatsCard = ({ count, text }) => {
   return (
     <div className={styles.statsCard}>
@@ -47,7 +70,8 @@ const Profile = () => {
   let usersList = false;
 
   const [searchState, setSearchState] = useState(false);
-  const [modalStatus, setModalStatus] = useState(false);
+  const [editModalStatus, setEditModalStatus] = useState(false);
+  const [projectModalStatus, setProjectModalStatus] = useState(false);
 
   // Modal change image functionality
   const [modalProfile, setModalProfile] = useState(null);
@@ -69,7 +93,9 @@ const Profile = () => {
     }
   };
 
-  document.body.style.overflow = modalStatus ? "hidden" : "auto";
+  // Make body unscrollable if any modal is open
+  document.body.style.overflow =
+    editModalStatus || projectModalStatus ? "hidden" : "auto";
 
   return (
     <div className={styles.pageWrapper}>
@@ -95,7 +121,7 @@ const Profile = () => {
           <button
             className='absolute top-4 right-4'
             onClick={() => {
-              setModalStatus(true);
+              setEditModalStatus(true);
             }}>
             <span>
               <NotePencil size={20} color='#fff' mirrored={true} />
@@ -164,7 +190,11 @@ const Profile = () => {
           {/* Toolbar */}
           <div className={styles.interBar}>
             <h1 className={styles.sectionTitle}>Your projects</h1>
-            <button className={styles.createProjectBtn}>
+            <button
+              className={styles.createProjectBtn}
+              onClick={() => {
+                setProjectModalStatus(true);
+              }}>
               <Plus size={18} color='#fff' weight='bold' />
               <span>Create new project</span>
             </button>
@@ -274,9 +304,9 @@ const Profile = () => {
       {/* Edit profile modal */}
       <Modal
         title='Edit profile'
-        isOpen={modalStatus}
+        isOpen={editModalStatus}
         onClick={() => {
-          setModalStatus(false);
+          setEditModalStatus(false);
         }}>
         <div className='content flex flex-row gap-14 items-center'>
           <div
@@ -318,6 +348,29 @@ const Profile = () => {
             </div>
           </form>
         </div>
+      </Modal>
+
+      {/* Create a new project modal */}
+      <Modal
+        title='Create new project'
+        isOpen={projectModalStatus}
+        className='w-[400px]'
+        onClick={() => {
+          setProjectModalStatus(false);
+        }}>
+        <form className='inputs flex flex-col gap-4 w-full'>
+          <div className='flex flex-col gap-3'>
+            <ModalInput type='text' placeholder='Project title' required />
+            <ModalTextarea
+              type='text'
+              placeholder='Project description'
+              required
+            />
+            <button className='bg-white/10 border-gray-500 border p-2 flex items-center justify-center text-white hover:bg-white/5 transition duration-200'>
+              Create
+            </button>
+          </div>
+        </form>
       </Modal>
     </div>
   );
