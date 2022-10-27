@@ -20,7 +20,7 @@ const Modal = ({
         className={
           `modal bg-[${
             bg ? bg : " bg-gray-800 "
-          }] flex flex-col items-center justify-center h-fit transition duration-500 gap-10 p-10 rounded relative ${
+          }] flex flex-col shadow-lg border-2 border-white/20 items-center justify-center h-fit transition duration-500 gap-10 p-10 rounded relative ${
             isOpen ? "opacity-1" : "opacity-0"
           }` +
           " " +
@@ -30,9 +30,10 @@ const Modal = ({
           e.stopPropagation();
         }}>
         <X
-          className='close_modal text-white absolute top-4 left-4 cursor-pointer'
+          className='close_modal text-white absolute top-4 left-4 cursor-pointer hover:text-white/60 transition duration-200'
           weight='bold'
-          color='#fff'
+          color='currentColor'
+          size={20}
           onClick={onClick}
         />
         <h1 className='text-white text-3xl'>{title}</h1>
