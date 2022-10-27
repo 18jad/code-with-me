@@ -408,6 +408,10 @@ const Profile = () => {
               placeholder='Project description'
               required
             />
+            <p className='text-xs text-gray'>
+              *Project title should be unique and alphanumeric, it can contains
+              dashes (-), no spaces allowed.
+            </p>
             <button className='bg-white/10 border-gray-500 border p-2 flex items-center justify-center text-white hover:bg-white/5 transition duration-200'>
               Create
             </button>
