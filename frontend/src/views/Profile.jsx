@@ -14,6 +14,7 @@ import { useState } from "react";
 import { tw } from "utils/TailwindComponent";
 import styles from "./styles/Profile.module.scss";
 
+// Modal input element tailwind styled component
 const ModalInput = tw.input`
     bg-white/10
     border
@@ -34,6 +35,7 @@ const ModalInput = tw.input`
     w-full
 `;
 
+// Modal textarea element tailwind styled component
 const ModalTextarea = tw.textarea`
     bg-white/10
     border
@@ -56,6 +58,7 @@ const ModalTextarea = tw.textarea`
     w-full
 `;
 
+// Stats card component for profile stats
 const StatsCard = ({ count, text }) => {
   return (
     <div className={styles.statsCard}>
@@ -69,27 +72,44 @@ const Profile = () => {
   // TODO: use state and store searched user data inside it
   let usersList = false;
 
+  // Search bar value setter and state
   const [searchState, setSearchState] = useState(false);
+
+  // To set edit profile modal status (open or close)
   const [editModalStatus, setEditModalStatus] = useState(false);
+
+  // To set create project modal status (open or close)
   const [projectModalStatus, setProjectModalStatus] = useState(false);
+
+  // To switch between tabs
+  const [isOverview, setIsOverview] = useState(true);
+
+  // Hold the data of user favorites projects
+  const [favorites, setFavorites] = useState([]);
+
+  // Hold the data of user created projects
+  const [projects, setProjects] = useState([0]);
 
   // Modal change image functionality
   const [modalProfile, setModalProfile] = useState(null);
 
+  // Change image functionality to show image preview when image change
   const changeImage = (e) => {
-    const URL = window.URL || window.webkitURL;
-    const file = e.target.files[0];
+    const URL = window.URL || window.webkitURL; // create a url
+    const file = e.target.files[0]; // get the uploaded file
 
     if (file) {
-      const image = new Image();
+      const image = new Image(); // create a new image object
 
+      // check if image loads and wait for it to load
       image.onload = function () {
         if (this.width) {
-          setModalProfile(URL.createObjectURL(file));
+          // check if the image has a width if yes then it's most likely a valid image not a broken one
+          setModalProfile(URL.createObjectURL(file)); // set the image preview to image blob url
         }
       };
 
-      image.src = URL.createObjectURL(file);
+      image.src = URL.createObjectURL(file); // set the image object source to image blob
     }
   };
 
@@ -161,6 +181,7 @@ const Profile = () => {
               id='overview'
               name='sectionSwitcher'
               className={styles.radioSelection}
+              onClick={() => setIsOverview(true)}
               hidden
               defaultChecked
             />
@@ -176,6 +197,7 @@ const Profile = () => {
               id='favorites'
               name='sectionSwitcher'
               className={styles.radioSelection}
+              onClick={() => setIsOverview(false)}
               hidden
             />
             <div className={styles.selectLine}></div>
@@ -186,76 +208,96 @@ const Profile = () => {
         </div>
 
         {/* Projects overview */}
-        <div className={styles.projectsOverview}>
-          {/* Toolbar */}
-          <div className={styles.interBar}>
-            <h1 className={styles.sectionTitle}>Your projects</h1>
-            <button
-              className={styles.createProjectBtn}
-              onClick={() => {
-                setProjectModalStatus(true);
-              }}>
-              <Plus size={18} color='#fff' weight='bold' />
-              <span>Create new project</span>
-            </button>
-          </div>
+        {isOverview ? (
+          <div className={styles.projectsOverview}>
+            {/* Toolbar */}
+            <div className={styles.interBar}>
+              <h1 className={styles.sectionTitle}>Your projects</h1>
+              <button
+                className={styles.createProjectBtn}
+                onClick={() => {
+                  setProjectModalStatus(true);
+                }}>
+                <Plus size={18} color='#fff' weight='bold' />
+                <span>Create new project</span>
+              </button>
+            </div>
 
-          {/* TODO: Fix profile feed width if it contains no cards */}
+            {/* TODO: Fix profile feed width if it contains no cards */}
 
-          {/* Projects */}
-          <div className={styles.projectsContainer}>
-            {/* TODO: Add message if no project found */}
-            <ProjectCard
-              title='Project name'
-              description="Porject description, what's the project about"
-              likes={21}
-              updated='Updated 2 days ago'
-              link='/sdadsads'
-            />
-            <ProjectCard
-              title='Project name'
-              description="Porject description, what's the project about"
-              likes={21}
-              updated='Updated 2 days ago'
-              link='/sdadsads'
-            />
-            <ProjectCard
-              title='Project name'
-              description="Porject description, what's the project about"
-              likes={21}
-              updated='Updated 2 days ago'
-              link='/sdadsads'
-            />
-            <ProjectCard
-              title='Project name'
-              description="Porject description, what's the project about"
-              likes={21}
-              updated='Updated 2 days ago'
-              link='/sdadsads'
-            />
-            <ProjectCard
-              title='Project name'
-              description="Porject description, what's the project about"
-              likes={21}
-              updated='Updated 2 days ago'
-              link='/sdadsads'
-            />
-            <ProjectCard
-              title='Project name'
-              description="Porject description, what's the project about"
-              likes={21}
-              updated='Updated 2 days ago'
-              link='/sdadsads'
-            />
-            <ProjectCard
-              title='Project name'
-              description="Porject description, what's the project about"
-              likes={21}
-              updated='Updated 2 days ago'
-              link='/sdadsads'
-            />
+            {/* Projects */}
+            {projects.length ? (
+              <div className={styles.projectsContainer}>
+                {/* TODO: Add message if no project found */}
+                <>
+                  <ProjectCard
+                    title='Project name'
+                    description="Porject description, what's the project about"
+                    likes={21}
+                    updated='Updated 2 days ago'
+                    link='/sdadsads'
+                  />
+                  <ProjectCard
+                    title='Project name'
+                    description="Porject description, what's the project about"
+                    likes={21}
+                    updated='Updated 2 days ago'
+                    link='/sdadsads'
+                  />
+                  <ProjectCard
+                    title='Project name'
+                    description="Porject description, what's the project about"
+                    likes={21}
+                    updated='Updated 2 days ago'
+                    link='/sdadsads'
+                  />
+                  <ProjectCard
+                    title='Project name'
+                    description="Porject description, what's the project about"
+                    likes={21}
+                    updated='Updated 2 days ago'
+                    link='/sdadsads'
+                  />
+                  <ProjectCard
+                    title='Project name'
+                    description="Porject description, what's the project about"
+                    likes={21}
+                    updated='Updated 2 days ago'
+                    link='/sdadsads'
+                  />
+                  <ProjectCard
+                    title='Project name'
+                    description="Porject description, what's the project about"
+                    likes={21}
+                    updated='Updated 2 days ago'
+                    link='/sdadsads'
+                  />
+                  <ProjectCard
+                    title='Project name'
+                    description="Porject description, what's the project about"
+                    likes={21}
+                    updated='Updated 2 days ago'
+                    link='/sdadsads'
+                  />
+                </>
+              </div>
+            ) : (
+              <p className='text-white text-3xl text-center mt-20 px-48'>
+                No projects created :(
+              </p>
+            )}
           </div>
-        </div>
+        ) : (
+          <div>
+            {favorites.length ? (
+              <>{/* TODO: Add favorites cards */}</>
+            ) : (
+              <p className='text-white text-3xl text-center mt-20 px-60'>
+                No favorites found :(
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Search section */}
