@@ -11,6 +11,7 @@ import {
   UserFocus,
 } from "phosphor-react";
 import { useState } from "react";
+import formatNumber from "utils/FormatNumber";
 import { tw } from "utils/TailwindComponent";
 import styles from "./styles/Profile.module.scss";
 
@@ -167,9 +168,9 @@ const Profile = () => {
 
         {/* Stats Info */}
         <div className={styles.statsWrapper}>
-          <StatsCard count={201} text='projects' />
-          <StatsCard count={42} text='likes' />
-          <StatsCard count={21} text='favorited' />
+          <StatsCard count={formatNumber(1304324, 1)} text='projects' />
+          <StatsCard count={formatNumber(239183, 1)} text='likes' />
+          <StatsCard count={formatNumber(2193, 1)} text='favorited' />
         </div>
 
         {/* Section Switcher */}
