@@ -1,6 +1,7 @@
 import Authentication from "views/Authentication";
 import Home from "views/Home";
 import Profile from "views/Profile";
+import User from "views/User";
 
 /**
  * @type {Array}
@@ -49,6 +50,13 @@ const routes = [
     isProtected: true,
     condition: isAuthenticated,
     access: <Profile />,
+    redirect: "/login",
+  },
+  {
+    path: "/user/:id",
+    isProtected: true,
+    condition: isAuthenticated,
+    access: <User />,
     redirect: "/login",
   },
 ];
