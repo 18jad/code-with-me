@@ -49,6 +49,26 @@ const Profile = () => {
   const [searchState, setSearchState] = useState(false);
   const [modalStatus, setModalStatus] = useState(false);
 
+  // Modal change image functionality
+  const [modalProfile, setModalProfile] = useState(null);
+
+  const changeImage = (e) => {
+    const URL = window.URL || window.webkitURL;
+    const file = e.target.files[0];
+
+    if (file) {
+      const image = new Image();
+
+      image.onload = function () {
+        if (this.width) {
+          setModalProfile(URL.createObjectURL(file));
+        }
+      };
+
+      image.src = URL.createObjectURL(file);
+    }
+  };
+
   document.body.style.overflow = modalStatus ? "hidden" : "auto";
 
   return (
@@ -258,12 +278,29 @@ const Profile = () => {
         onClick={() => {
           setModalStatus(false);
         }}>
-        <div className='content flex flex-row gap-14'>
-          <div className='profile text-center'>
-            <input type='file' id='changedProfile' hidden />
+        <div className='content flex flex-row gap-14 items-center'>
+          <div
+            className='profile text-center h-fit  bg-center bg-cover object-cover rounded'
+            style={{
+              backgroundImage: modalProfile ? `url(${modalProfile})` : "",
+            }}>
+            <input
+              type='file'
+              id='changedProfile'
+              hidden
+              onChange={(e) => changeImage(e)}
+            />
             <label htmlFor='changedProfile' className='cursor-pointer'>
-              <UserFocus size={100} color='#fff' weight='fill' />
-              <span className='text-sm text-center text-white'>
+              <UserFocus
+                size={100}
+                color='#fff'
+                weight='fill'
+                className={`${modalProfile ? "opacity-0" : "opacity-1"}`}
+              />
+              <span
+                className={`text-sm text-center text-white ${
+                  modalProfile ? "hidden" : "block"
+                }`}>
                 Change profile picture
               </span>
             </label>
