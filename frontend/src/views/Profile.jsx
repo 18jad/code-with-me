@@ -1,10 +1,38 @@
+import Modal from "components/Modal";
 import ProjectCard from "components/profile/ProjectCard";
 import SearchUser from "components/profile/SearchUser";
 import TextLogo from "components/TextLogo";
-import { MagnifyingGlass, Plus, SignOut } from "phosphor-react";
+import {
+  Check,
+  MagnifyingGlass,
+  NotePencil,
+  Plus,
+  SignOut,
+  UserFocus,
+} from "phosphor-react";
 import { useState } from "react";
+import { tw } from "utils/TailwindComponent";
 import styles from "./styles/Profile.module.scss";
 
+const ModalInput = tw.input`
+    bg-white/10
+    border
+    shadow-sm
+    px-4
+    py-2
+    placeholder-gray-300
+    border-gray-500
+    focus:border-gray-800 
+    focus:ring-2
+    focus:bg-black/10
+    focus:ring-gray-500
+    outline-none
+    rounded-sm
+    transition
+    duration-150
+    text-white
+    w-full
+`;
 const StatsCard = ({ count, text }) => {
   return (
     <div className={styles.statsCard}>
@@ -19,6 +47,9 @@ const Profile = () => {
   let usersList = false;
 
   const [searchState, setSearchState] = useState(false);
+  const [modalStatus, setModalStatus] = useState(false);
+
+  document.body.style.overflow = modalStatus ? "hidden" : "auto";
 
   return (
     <div className={styles.pageWrapper}>
@@ -41,6 +72,15 @@ const Profile = () => {
       <div className={styles.profileFeedSection}>
         {/* Profile Card */}
         <div className={styles.profileContainer}>
+          <button
+            className='absolute top-4 right-4'
+            onClick={() => {
+              setModalStatus(true);
+            }}>
+            <span>
+              <NotePencil size={20} color='#fff' mirrored={true} />
+            </span>
+          </button>
           <div className={styles.profileAvatar}>
             <img
               src={require("assets/images/empty_profile.png")}
@@ -110,8 +150,11 @@ const Profile = () => {
             </button>
           </div>
 
+          {/* TODO: Fix profile feed width if it contains no cards */}
+
           {/* Projects */}
           <div className={styles.projectsContainer}>
+            {/* TODO: Add message if no project found */}
             <ProjectCard
               title='Project name'
               description="Porject description, what's the project about"
@@ -207,6 +250,38 @@ const Profile = () => {
           )}
         </div>
       </div>
+
+      {/* Edit profile modal */}
+      <Modal
+        title='Edit profile'
+        isOpen={modalStatus}
+        onClick={() => {
+          setModalStatus(false);
+        }}>
+        <div className='content flex flex-row gap-14'>
+          <div className='profile text-center'>
+            <input type='file' id='changedProfile' hidden />
+            <label htmlFor='changedProfile' className='cursor-pointer'>
+              <UserFocus size={100} color='#fff' weight='fill' />
+              <span className='text-sm text-center text-white'>
+                Change profile picture
+              </span>
+            </label>
+          </div>
+          <form className='inputs flex flex-col gap-4 w-full'>
+            <div className='flex flex-row gap-3'>
+              <div className='flex flex-col gap-4 w-full'>
+                <ModalInput type='text' placeholder='Full name' required />
+                <ModalInput type='text' placeholder='Username' required />
+                <ModalInput type='text' placeholder='Headline' required />
+              </div>
+              <button className='bg-white/10 border-gray-500 border px-1'>
+                <Check size={23} color='#fff' weight='bold' />
+              </button>
+            </div>
+          </form>
+        </div>
+      </Modal>
     </div>
   );
 };
