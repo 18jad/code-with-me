@@ -348,6 +348,7 @@ const Profile = () => {
       <Modal
         title='Edit profile'
         isOpen={editModalStatus}
+        className='bg-[#333]'
         onClick={() => {
           setEditModalStatus(false);
         }}>
