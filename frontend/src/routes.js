@@ -1,5 +1,6 @@
 import Authentication from "views/Authentication";
 import Home from "views/Home";
+import NotFound from "views/NotFound";
 import Profile from "views/Profile";
 import User from "views/User";
 
@@ -58,6 +59,11 @@ const routes = [
     condition: isAuthenticated,
     access: <User />,
     redirect: "/login",
+  },
+  {
+    path: "*",
+    component: <NotFound />,
+    isProtected: false,
   },
 ];
 
