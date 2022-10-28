@@ -1,4 +1,5 @@
 import Authentication from "views/Authentication";
+import Editor from "views/Editor";
 import Home from "views/Home";
 import NotFound from "views/NotFound";
 import Profile from "views/Profile";
@@ -64,6 +65,13 @@ const routes = [
     path: "*",
     component: <NotFound />,
     isProtected: false,
+  },
+  {
+    path: "/project/:id",
+    isProtected: true,
+    condition: isAuthenticated,
+    access: <Editor />,
+    redirect: "/login",
   },
 ];
 
