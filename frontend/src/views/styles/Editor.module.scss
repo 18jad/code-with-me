@@ -40,4 +40,88 @@ $seperator: #232526;
       }
     }
   }
+
+  .sidebar {
+    height: 100%;
+    width: -moz-fit-content;
+    width: fit-content;
+    background: $dark-bg;
+    border-right: 2px solid $seperator;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 15px 25px;
+
+    &_tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-direction: column;
+      height: 90%;
+
+      &_upper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      &_tool {
+        width: -moz-fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        user-select: none;
+        cursor: pointer;
+
+        .toolIcon {
+          color: darken($white, 50%);
+          transition: color 200ms ease-in-out;
+          cursor: pointer;
+        }
+
+        .radioSelection {
+          position: absolute;
+          height: 30px;
+          width: 30px;
+          cursor: pointer;
+          opacity: 0;
+
+          &:checked {
+            & + .selectLine {
+              background: $blue;
+
+              & + .toolIcon {
+                color: $white;
+              }
+            }
+          }
+
+          &:hover {
+            & ~ .toolIcon {
+              color: darken($white, 30%);
+            }
+          }
+        }
+
+        .selectLine {
+          position: absolute;
+          left: 0;
+          width: 3px;
+          height: 20px;
+          border-radius: 0 100px 100px 0;
+        }
+      }
+    }
+
+    .settingsIcon {
+      color: darken($white, 50%);
+      transition: color 200ms ease-in-out;
+
+      &:hover {
+        color: darken($white, 30%);
+      }
+    }
+  }
 }
