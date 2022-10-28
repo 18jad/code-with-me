@@ -46,10 +46,10 @@ $seperator: #232526;
     width: -moz-fit-content;
     width: fit-content;
     background: $dark-bg;
-    border-right: 2px solid $seperator;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 15px 25px;
+    display: flex;
+    justify-content: center;
 
     &_tools {
       display: flex;
@@ -57,6 +57,8 @@ $seperator: #232526;
       justify-content: space-between;
       flex-direction: column;
       height: 90%;
+      padding: 15px 25px;
+      border-right: 2px solid $seperator;
 
       &_upper {
         display: flex;
@@ -122,6 +124,12 @@ $seperator: #232526;
       &:hover {
         color: darken($white, 30%);
       }
+    }
+
+    &_content {
+      border-right: 2px solid $seperator;
+      width: 100%;
+      color: white;
     }
   }
 }

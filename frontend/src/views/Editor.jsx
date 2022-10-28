@@ -1,6 +1,7 @@
 import GithubTool from "assets/icons/GithubTool";
 import ShareIcon from "assets/icons/ShareIcon";
 import Voice from "assets/icons/Voice";
+import SidebarContent from "components/editor/SidebarContent";
 import TextLogo from "components/TextLogo";
 import { Chats, GearSix, Stack } from "phosphor-react";
 import { tw } from "utils/TailwindComponent";
@@ -122,7 +123,9 @@ const Editor = () => {
           </div>
         </div>
         {/* Sidebar content */}
-        <div className={styles._content}></div>
+        <div className={styles.sidebar_content}>
+          <SidebarContent />
+        </div>
       </div>
 
       {/* Editor */}
