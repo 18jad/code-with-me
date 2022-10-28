@@ -1,11 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineFile } from "react-icons/ai";
+import { tw } from "utils/TailwindComponent";
 import { v4 } from "uuid";
 
 import { StyledFile } from "./File/TreeFile.style";
 import FILE_ICONS from "./FileIcons";
 import { FolderName } from "./Folder/TreeFolder";
 import { StyledFolder } from "./Folder/TreeFolder.style";
+
+const Input = tw.input`
+  w-full
+  border-0
+  outline-none
+  bg-gray-600/10
+  text-gray-700
+  text-sm
+  font-medium
+`;
 
 const FileEdit = ({ ext, inputRef, updateExt, defaultValue, style }) => {
   const extension = FILE_ICONS[ext] ? FILE_ICONS[ext] : <AiOutlineFile />;
@@ -14,7 +25,7 @@ const FileEdit = ({ ext, inputRef, updateExt, defaultValue, style }) => {
     <StyledFile className='tree__file' style={style}>
       {extension}
       &nbsp;&nbsp;
-      <input
+      <Input
         ref={inputRef}
         onChange={updateExt}
         defaultValue={defaultValue}
@@ -31,7 +42,7 @@ const FolderEdit = ({ name, inputRef, defaultValue, style }) => {
         isOpen={true}
         handleClick={() => {}}
         name={
-          <input
+          <Input
             ref={inputRef}
             className='tree__input'
             defaultValue={defaultValue}
