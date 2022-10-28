@@ -3,9 +3,7 @@ import {
   AiOutlineDelete,
   AiOutlineEdit,
   AiOutlineFileAdd,
-  AiOutlineFolder,
   AiOutlineFolderAdd,
-  AiOutlineFolderOpen,
 } from "react-icons/ai";
 
 import {
@@ -16,13 +14,15 @@ import {
 } from "../Tree.style";
 import { StyledFolder } from "./TreeFolder.style";
 
+import FolderClosed from "assets/icons/FolderClosed";
+import FolderOpened from "assets/icons/FolderOpened";
 import { FILE, FOLDER } from "../state/constants";
 import { useTreeContext } from "../state/TreeContext";
 import { PlaceholderInput } from "../TreePlaceholderInput";
 
 const FolderName = ({ isOpen, name, handleClick }) => (
   <StyledName onClick={handleClick}>
-    {isOpen ? <AiOutlineFolderOpen /> : <AiOutlineFolder />}
+    {isOpen ? <FolderOpened width={18} /> : <FolderClosed width={18} />}
     &nbsp;&nbsp;{name}
   </StyledName>
 );
