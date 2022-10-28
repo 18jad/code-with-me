@@ -1,5 +1,8 @@
+import GithubTool from "assets/icons/GithubTool";
 import ShareIcon from "assets/icons/ShareIcon";
+import Voice from "assets/icons/Voice";
 import TextLogo from "components/TextLogo";
+import { Chats, GearSix, Stack } from "phosphor-react";
 import { tw } from "utils/TailwindComponent";
 import styles from "./styles/Editor.module.scss";
 
@@ -57,7 +60,67 @@ const Editor = () => {
       {/* Sidebar */}
       <div className={styles.sidebar}>
         {/* Sidebar tools */}
-        <div className={styles._tools}> </div>
+        <div className={styles.sidebar_tools}>
+          <div className={styles.sidebar_tools_upper}>
+            <button className={styles.sidebar_tools_tool}>
+              <input
+                type='radio'
+                id='overview'
+                name='sectionSwitcher'
+                className={styles.radioSelection}
+                defaultChecked
+              />
+              <div className={styles.selectLine}></div>
+              <label htmlFor='overview' className={styles.toolIcon}>
+                <Stack size={28} color='currentColor' />
+              </label>
+            </button>
+            <button className={styles.sidebar_tools_tool}>
+              <input
+                type='radio'
+                id='overview'
+                name='sectionSwitcher'
+                className={styles.radioSelection}
+                defaultChecked
+              />
+              <div className={styles.selectLine}></div>
+              <label htmlFor='overview' className={styles.toolIcon}>
+                <GithubTool width={22} />
+              </label>
+            </button>
+            <button className={styles.sidebar_tools_tool}>
+              <input
+                type='radio'
+                id='overview'
+                name='sectionSwitcher'
+                className={styles.radioSelection}
+                defaultChecked
+              />
+              <div className={styles.selectLine}></div>
+              <label htmlFor='overview' className={styles.toolIcon}>
+                <Chats size={28} color='currentColor' />
+              </label>
+            </button>
+            <button className={styles.sidebar_tools_tool}>
+              <input
+                type='radio'
+                id='overview'
+                name='sectionSwitcher'
+                className={styles.radioSelection}
+                defaultChecked
+              />
+              <div className={styles.selectLine}></div>
+              <label htmlFor='overview' className={styles.toolIcon}>
+                <Voice width={22} />
+              </label>
+            </button>
+          </div>
+          <div className={styles.sidebar_tools_bottom}>
+            <button className={styles.settingsIcon}>
+              <GearSix size={28} color='currentColor' />
+            </button>
+          </div>
+        </div>
         {/* Sidebar content */}
         <div className={styles._content}></div>
       </div>
