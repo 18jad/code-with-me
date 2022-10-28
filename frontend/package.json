@@ -21,6 +21,7 @@
     "tsparticles-engine": "^2.3.3",
     "tsparticles-preset-stars": "^2.3.3",
     "tsparticles-shape-image": "^2.3.3",
+    "uuid": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
