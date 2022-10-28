@@ -22,7 +22,11 @@ import { PlaceholderInput } from "../TreePlaceholderInput";
 
 const FolderName = ({ isOpen, name, handleClick }) => (
   <StyledName onClick={handleClick}>
-    {isOpen ? <FolderOpened width={18} /> : <FolderClosed width={18} />}
+    {isOpen ? (
+      <FolderOpened width={30} className='-ml-1' />
+    ) : (
+      <FolderClosed width={30} className='-ml-1' />
+    )}
     &nbsp;&nbsp;{name}
   </StyledName>
 );
