@@ -1,0 +1,43 @@
+@import "../../global.scss";
+$dark-bg: #1e1e1e;
+$seperator: #232526;
+
+.editorWrapper {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: $dark-bg;
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 25px;
+    border-bottom: 2px solid $seperator;
+
+    .navbarTools {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+
+      .share_btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        background: $blue;
+        border: 1px solid $blue;
+        color: $white;
+        padding: 5px 25px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 200ms ease-in-out;
+
+        &:hover {
+          background: darken($blue, 5%);
+        }
+      }
+    }
+  }
+}
