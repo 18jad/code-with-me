@@ -50,6 +50,7 @@ export const StyledName = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  user-select: none;
 `;
 
 export const Collapse = styled.div`
