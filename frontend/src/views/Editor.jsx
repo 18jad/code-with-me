@@ -6,6 +6,7 @@ import SidebarContent from "components/editor/SidebarContent";
 import EditorTab from "components/editor/Tab";
 import TextLogo from "components/TextLogo";
 import { Chats, GearSix, Stack } from "phosphor-react";
+import { useState } from "react";
 import { tw } from "utils/TailwindComponent";
 import styles from "./styles/Editor.module.scss";
 
@@ -21,6 +22,8 @@ const VoiceChatCircle = tw.img`
 `;
 
 const Editor = () => {
+  const [sidebarContent, setSidebarContent] = useState("fileTree");
+
   return (
     <div className={styles.editorWrapper}>
       {/* Navbar */}
@@ -71,6 +74,10 @@ const Editor = () => {
                   type='radio'
                   id='overview'
                   name='sectionSwitcher'
+                  onClick={() => {
+                    if (sidebarContent !== "fileTree")
+                      setSidebarContent("fileTree");
+                  }}
                   className={styles.radioSelection}
                   defaultChecked
                 />
@@ -84,6 +91,10 @@ const Editor = () => {
                   type='radio'
                   id='overview'
                   name='sectionSwitcher'
+                  onClick={() => {
+                    if (sidebarContent !== "github")
+                      setSidebarContent("github");
+                  }}
                   className={styles.radioSelection}
                 />
                 <div className={styles.selectLine}></div>
@@ -124,7 +135,7 @@ const Editor = () => {
           </div>
           {/* Sidebar content */}
           <div className={styles.sidebar_content}>
-            <SidebarContent />
+            <SidebarContent content={sidebarContent} />
           </div>
         </div>
 
