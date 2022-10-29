@@ -1,3 +1,4 @@
+import { default as IDE } from "@monaco-editor/react";
 import GithubTool from "assets/icons/GithubTool";
 import ShareIcon from "assets/icons/ShareIcon";
 import Voice from "assets/icons/Voice";
@@ -58,78 +59,98 @@ const Editor = () => {
         </div>
       </div>
 
-      {/* Sidebar */}
-      <div className={styles.sidebar}>
-        {/* Sidebar tools */}
-        <div className={styles.sidebar_tools}>
-          <div className={styles.sidebar_tools_upper}>
-            <button className={styles.sidebar_tools_tool}>
-              <input
-                type='radio'
-                id='overview'
-                name='sectionSwitcher'
-                className={styles.radioSelection}
-                defaultChecked
-              />
-              <div className={styles.selectLine}></div>
-              <label htmlFor='overview' className={styles.toolIcon}>
-                <Stack size={28} color='currentColor' />
-              </label>
-            </button>
-            <button className={styles.sidebar_tools_tool}>
-              <input
-                type='radio'
-                id='overview'
-                name='sectionSwitcher'
-                className={styles.radioSelection}
-                defaultChecked
-              />
-              <div className={styles.selectLine}></div>
-              <label htmlFor='overview' className={styles.toolIcon}>
-                <GithubTool width={22} />
-              </label>
-            </button>
-            <button className={styles.sidebar_tools_tool}>
-              <input
-                type='radio'
-                id='overview'
-                name='sectionSwitcher'
-                className={styles.radioSelection}
-                defaultChecked
-              />
-              <div className={styles.selectLine}></div>
-              <label htmlFor='overview' className={styles.toolIcon}>
-                <Chats size={28} color='currentColor' />
-              </label>
-            </button>
-            <button className={styles.sidebar_tools_tool}>
-              <input
-                type='radio'
-                id='overview'
-                name='sectionSwitcher'
-                className={styles.radioSelection}
-                defaultChecked
-              />
-              <div className={styles.selectLine}></div>
-              <label htmlFor='overview' className={styles.toolIcon}>
-                <Voice width={22} />
-              </label>
-            </button>
+      <div className='flex flex-row h-full'>
+        {/* Sidebar */}
+        <div className={styles.sidebar}>
+          {/* Sidebar tools */}
+          <div className={styles.sidebar_tools}>
+            <div className={styles.sidebar_tools_upper}>
+              <button className={styles.sidebar_tools_tool}>
+                <input
+                  type='radio'
+                  id='overview'
+                  name='sectionSwitcher'
+                  className={styles.radioSelection}
+                  defaultChecked
+                />
+                <div className={styles.selectLine}></div>
+                <label htmlFor='overview' className={styles.toolIcon}>
+                  <Stack size={28} color='currentColor' />
+                </label>
+              </button>
+              <button className={styles.sidebar_tools_tool}>
+                <input
+                  type='radio'
+                  id='overview'
+                  name='sectionSwitcher'
+                  className={styles.radioSelection}
+                  defaultChecked
+                />
+                <div className={styles.selectLine}></div>
+                <label htmlFor='overview' className={styles.toolIcon}>
+                  <GithubTool width={22} />
+                </label>
+              </button>
+              <button className={styles.sidebar_tools_tool}>
+                <input
+                  type='radio'
+                  id='overview'
+                  name='sectionSwitcher'
+                  className={styles.radioSelection}
+                  defaultChecked
+                />
+                <div className={styles.selectLine}></div>
+                <label htmlFor='overview' className={styles.toolIcon}>
+                  <Chats size={28} color='currentColor' />
+                </label>
+              </button>
+              <button className={styles.sidebar_tools_tool}>
+                <input
+                  type='radio'
+                  id='overview'
+                  name='sectionSwitcher'
+                  className={styles.radioSelection}
+                  defaultChecked
+                />
+                <div className={styles.selectLine}></div>
+                <label htmlFor='overview' className={styles.toolIcon}>
+                  <Voice width={22} />
+                </label>
+              </button>
+            </div>
+            <div className={styles.sidebar_tools_bottom}>
+              <button className={styles.settingsIcon}>
+                <GearSix size={28} color='currentColor' />
+              </button>
+            </div>
           </div>
-          <div className={styles.sidebar_tools_bottom}>
-            <button className={styles.settingsIcon}>
-              <GearSix size={28} color='currentColor' />
-            </button>
+          {/* Sidebar content */}
+          <div className={styles.sidebar_content}>
+            <SidebarContent />
           </div>
         </div>
-        {/* Sidebar content */}
-        <div className={styles.sidebar_content}>
-          <SidebarContent />
+
+        {/* Editor */}
+        <div className={styles.editor}>
+          <IDE
+            height='100%'
+            width='100%'
+            theme='vs-dark'
+            options={{
+              wordWrap: "on",
+              showUnused: false,
+              folding: false,
+              lineNumbersMinChars: 3,
+              fontSize: 16,
+              scrollBeyondLastLine: false,
+              automaticLayout: true,
+              tabCompletion: "on",
+            }}
+            defaultLanguage='javascript'
+            defaultValue='// some comment'
+          />
         </div>
       </div>
-
-      {/* Editor */}
-      <div className={styles.editor}></div>
     </div>
   );
 };
