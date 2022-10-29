@@ -44,12 +44,13 @@ $seperator: #232526;
   .sidebar {
     height: 100%;
     width: -moz-fit-content;
-    width: fit-content;
+    width: 20%;
     background: $dark-bg;
     overflow-y: auto;
     overflow-x: hidden;
     display: flex;
     justify-content: center;
+    border-right: 2px solid $seperator;
 
     &_tools {
       display: flex;
@@ -133,6 +134,16 @@ $seperator: #232526;
     }
   }
   .editor {
-    width: 82.5%;
+    flex: 1;
+    height: 83.5vh;
+
+    .tabs {
+      border-bottom: 2px solid $seperator;
+      padding: 11px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
   }
 }
