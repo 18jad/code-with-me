@@ -85,7 +85,6 @@ const Editor = () => {
                   id='overview'
                   name='sectionSwitcher'
                   className={styles.radioSelection}
-                  defaultChecked
                 />
                 <div className={styles.selectLine}></div>
                 <label htmlFor='overview' className={styles.toolIcon}>
@@ -98,7 +97,6 @@ const Editor = () => {
                   id='overview'
                   name='sectionSwitcher'
                   className={styles.radioSelection}
-                  defaultChecked
                 />
                 <div className={styles.selectLine}></div>
                 <label htmlFor='overview' className={styles.toolIcon}>
@@ -111,7 +109,6 @@ const Editor = () => {
                   id='overview'
                   name='sectionSwitcher'
                   className={styles.radioSelection}
-                  defaultChecked
                 />
                 <div className={styles.selectLine}></div>
                 <label htmlFor='overview' className={styles.toolIcon}>
