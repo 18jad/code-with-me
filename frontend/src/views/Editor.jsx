@@ -3,6 +3,7 @@ import GithubTool from "assets/icons/GithubTool";
 import ShareIcon from "assets/icons/ShareIcon";
 import Voice from "assets/icons/Voice";
 import SidebarContent from "components/editor/SidebarContent";
+import EditorTab from "components/editor/Tab";
 import TextLogo from "components/TextLogo";
 import { Chats, GearSix, Stack } from "phosphor-react";
 import { tw } from "utils/TailwindComponent";
@@ -130,8 +131,19 @@ const Editor = () => {
           </div>
         </div>
 
-        {/* Editor */}
+        {/* Editor and tabs */}
         <div className={styles.editor}>
+          <div className={styles.tabs}>
+            <EditorTab
+              name='index.html'
+              isSelected={true}
+              onClick={(e) => {
+                console.log(e.target);
+              }}
+            />
+            <EditorTab name='script.js' isSelected={false} />
+            <EditorTab name='styles.csss' isSelected={false} />
+          </div>
           <IDE
             height='100%'
             width='100%'
