@@ -5,12 +5,16 @@ const Modal = ({
   title,
   children,
   onClick,
+  bgDrop,
   bg = "#333",
   className = [],
 }) => {
   return (
     <div
-      className={`background_modal fixed bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#333]/10 via-black/30 to-black/40 w-screen h-screen ${
+      className={`${
+        bgDrop ||
+        " bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#333]/10 via-black/30 to-black/40"
+      } w-screen h-screen background_modal fixed ${
         isOpen
           ? "opacity-1 pointer-events-auto"
           : "opacity-0 pointer-events-none"
