@@ -141,3 +141,11 @@ textarea {
       url("./assets/fonts/josefin-sans-v25-latin-700.svg#JosefinSans")
       format("svg"); /* Legacy iOS */
 }
+
+/* Remove arrow from number input */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
