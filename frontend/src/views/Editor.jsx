@@ -210,6 +210,9 @@ const Editor = () => {
               scrollBeyondLastLine: false,
               automaticLayout: true,
               tabCompletion: "on",
+              padding: {
+                top: 5,
+              },
             }}
             defaultLanguage='javascript'
             defaultValue='console.log("Hello World")'
