@@ -55,9 +55,11 @@ $seperator: #232526;
     &_tools {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      align-self: stretch;
       flex-direction: column;
-      height: 90%;
+      flex-grow: 1;
       padding: 15px 25px;
       border-right: 2px solid $seperator;
 
@@ -67,6 +69,11 @@ $seperator: #232526;
         justify-content: center;
         flex-direction: column;
         gap: 30px;
+      }
+
+      &_bottom {
+        position: absolute;
+        bottom: 100px;
       }
 
       &_tool {
