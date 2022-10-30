@@ -29,28 +29,35 @@ const Editor = () => {
   // Modal show/hide status
   const [settingModalStatus, setSettingModalStatus] = useState(false);
 
+  const storedSetting = localStorage.getItem("editor-setting");
+
   // Editor settings
   const [editorSettings, setEditorSetting] = useState({
-    fontSize: 16,
-    wordWrap: true,
+    fontSize: storedSetting ? JSON.parse(storedSetting).fontSize : 16,
+    wordWrap: storedSetting ? JSON.parse(storedSetting).wordWrap : true,
   });
+
+  const updateStoredSetting = (newSetting) => {
+    localStorage.setItem("editor-setting", JSON.stringify(newSetting));
+    setEditorSetting(newSetting);
+  };
 
   // Increase editor font size
   const increaseFontSize = () => {
-    setEditorSetting((prev) => ({
-      ...prev,
-      // Don't increase font size if it's already 20
-      fontSize: prev.fontSize < 20 ? prev.fontSize + 1 : prev.fontSize,
-    }));
+    updateStoredSetting({
+      ...editorSettings,
+      // Max font size is 20
+      fontSize: editorSettings.fontSize < 20 ? editorSettings.fontSize + 1 : 20,
+    });
   };
 
   // Decrease editor font size
   const decreaseFontSize = () => {
-    setEditorSetting((prev) => ({
-      ...prev,
-      // Don't decrease font size below 10
-      fontSize: prev.fontSize > 10 ? prev.fontSize - 1 : prev.fontSize,
-    }));
+    updateStoredSetting({
+      ...editorSettings,
+      // Min font size is 10
+      fontSize: editorSettings.fontSize > 10 ? editorSettings.fontSize - 1 : 10,
+    });
   };
 
   return (
@@ -257,7 +264,7 @@ const Editor = () => {
                 name='toggle'
                 id='toggle'
                 onClick={(e) => {
-                  setEditorSetting({
+                  updateStoredSetting({
                     ...editorSettings,
                     wordWrap: e.target.checked,
                   });
