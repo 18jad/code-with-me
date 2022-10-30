@@ -27,7 +27,7 @@ const VoiceChat = ({ className }) => {
             </button>
           </div>
         )}
-        <div className='border-t-2 border-[#232526]'>
+        <div className='flex flex-col border-t-2 w-full border-[#232526]'>
           <h2 className='px-4 pt-4 pb-2'>How it works?</h2>
           <div className='px-2'>
             {/* ordered list */}
