@@ -6,12 +6,7 @@ import {
   AiOutlineFolderAdd,
 } from "react-icons/ai";
 
-import {
-  ActionsWrapper,
-  Collapse,
-  StyledName,
-  VerticalLine,
-} from "../Tree.style";
+import { ActionsWrapper, Collapse, StyledName } from "../Tree.style";
 import { StyledFolder } from "./TreeFolder.style";
 
 import FolderClosed from "assets/icons/FolderClosed";
@@ -101,37 +96,35 @@ const Folder = ({ id, name, children, node }) => {
 
   return (
     <StyledFolder id={id} onClick={handleNodeClick} className='tree__folder'>
-      <VerticalLine>
-        <ActionsWrapper>
-          {isEditing ? (
-            <PlaceholderInput
-              type='folder'
-              style={{ paddingLeft: 0 }}
-              defaultValue={name}
-              onCancel={handleCancel}
-              onSubmit={commitFolderEdit}
-            />
-          ) : (
-            <FolderName
-              name={name}
-              isOpen={isOpen}
-              handleClick={() => setIsOpen(!isOpen)}
-            />
-          )}
+      <ActionsWrapper>
+        {isEditing ? (
+          <PlaceholderInput
+            type='folder'
+            style={{ paddingLeft: 0 }}
+            defaultValue={name}
+            onCancel={handleCancel}
+            onSubmit={commitFolderEdit}
+          />
+        ) : (
+          <FolderName
+            name={name}
+            isOpen={isOpen}
+            handleClick={() => setIsOpen(!isOpen)}
+          />
+        )}
 
-          {isImparative && (
-            <div className='actions'>
-              <AiOutlineEdit onClick={handleFolderRename} />
-              <AiOutlineFileAdd onClick={handleFileCreation} />
-              <AiOutlineFolderAdd onClick={handleFolderCreation} />
-              <AiOutlineDelete onClick={commitDeleteFolder} />
-            </div>
-          )}
-        </ActionsWrapper>
-        <Collapse className='tree__folder--collapsible' isOpen={isOpen}>
-          {childs}
-        </Collapse>
-      </VerticalLine>
+        {isImparative && (
+          <div className='actions'>
+            <AiOutlineEdit onClick={handleFolderRename} />
+            <AiOutlineFileAdd onClick={handleFileCreation} />
+            <AiOutlineFolderAdd onClick={handleFolderCreation} />
+            <AiOutlineDelete onClick={commitDeleteFolder} />
+          </div>
+        )}
+      </ActionsWrapper>
+      <Collapse className='tree__folder--collapsible' isOpen={isOpen}>
+        {childs}
+      </Collapse>
     </StyledFolder>
   );
 };
