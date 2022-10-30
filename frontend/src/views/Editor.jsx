@@ -4,6 +4,7 @@ import ShareIcon from "assets/icons/ShareIcon";
 import Voice from "assets/icons/Voice";
 import SidebarContent from "components/editor/SidebarContent";
 import EditorTab from "components/editor/Tab";
+import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import { Chats, GearSix, Stack } from "phosphor-react";
 import { useState } from "react";
@@ -22,7 +23,35 @@ const VoiceChatCircle = tw.img`
 `;
 
 const Editor = () => {
+  // Sidebar content switcher
   const [sidebarContent, setSidebarContent] = useState("files");
+
+  // Modal show/hide status
+  const [settingModalStatus, setSettingModalStatus] = useState(false);
+
+  // Editor settings
+  const [editorSettings, setEditorSetting] = useState({
+    fontSize: 16,
+    wordWrap: true,
+  });
+
+  // Increase editor font size
+  const increaseFontSize = () => {
+    setEditorSetting((prev) => ({
+      ...prev,
+      // Don't increase font size if it's already 20
+      fontSize: prev.fontSize < 20 ? prev.fontSize + 1 : prev.fontSize,
+    }));
+  };
+
+  // Decrease editor font size
+  const decreaseFontSize = () => {
+    setEditorSetting((prev) => ({
+      ...prev,
+      // Don't decrease font size below 10
+      fontSize: prev.fontSize > 10 ? prev.fontSize - 1 : prev.fontSize,
+    }));
+  };
 
   return (
     <div className={styles.editorWrapper}>
@@ -133,7 +162,11 @@ const Editor = () => {
               </button>
             </div>
             <div className={styles.sidebar_tools_bottom}>
-              <button className={styles.settingsIcon}>
+              <button
+                className={styles.settingsIcon}
+                onClick={() => {
+                  setSettingModalStatus(true);
+                }}>
                 <GearSix size={28} color='currentColor' />
               </button>
             </div>
@@ -162,11 +195,11 @@ const Editor = () => {
             width='100%'
             theme='vs-dark'
             options={{
-              wordWrap: "on",
+              wordWrap: editorSettings.wordWrap ? "on" : "off",
               showUnused: false,
               folding: false,
               lineNumbersMinChars: 3,
-              fontSize: 16,
+              fontSize: editorSettings.fontSize,
               scrollBeyondLastLine: false,
               automaticLayout: true,
               tabCompletion: "on",
@@ -176,6 +209,74 @@ const Editor = () => {
           />
         </div>
       </div>
+      <Modal
+        title='Editor Settings'
+        isOpen={settingModalStatus}
+        className='w-[400px]'
+        bgDrop='bg-black/30'
+        bg='#1e1e1e'
+        onClick={() => {
+          setSettingModalStatus(false);
+        }}>
+        <form className='inputs flex flex-col gap-4'>
+          <div className='flex flex-row gap-4 items-center'>
+            <label
+              for='custom-input-number'
+              className='whitespace-nowrap text-white text-lg font-semibold'>
+              Font Size :
+            </label>
+            <div className='flex flex-row h-10 w-1/2 rounded-lg relative bg-transparent'>
+              <button
+                onClick={decreaseFontSize}
+                type='button'
+                className=' bg-gray-700/20 text-gray-600 hover:text-gray-700 hover:bg-gray-700/40 text-white h-full w-20 rounded-l cursor-pointer outline-none'>
+                <span className='m-auto text-2xl font-thin'>−</span>
+              </button>
+              <input
+                type='number'
+                className='outline-none focus:outline-none text-center w-full bg-gray-700/20 font-semibold text-md text-white  md:text-basecursor-default flex items-center text-gray-700'
+                name='custom-input-number'
+                value={editorSettings.fontSize}></input>
+              <button
+                onClick={increaseFontSize}
+                type='button'
+                className='bg-gray-700/20 text-gray-600 hover:text-gray-700 hover:bg-gray-700/40 text-white h-full w-20 rounded-r cursor-pointer'>
+                <span className='m-auto text-2xl font-thin'>+</span>
+              </button>
+            </div>
+          </div>
+          <div className='flex flex-row gap-4 items-center'>
+            <label
+              for='custom-input-number'
+              className='whitespace-nowrap text-white text-lg font-semibold'>
+              Word Wrap :
+            </label>
+            <div className='relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in'>
+              <input
+                type='checkbox'
+                name='toggle'
+                id='toggle'
+                onClick={(e) => {
+                  setEditorSetting({
+                    ...editorSettings,
+                    wordWrap: e.target.checked,
+                  });
+                }}
+                className={`toggle-checkbox absolute  w-6 h-6 rounded-full  ${
+                  editorSettings.wordWrap
+                    ? "right-0 bg-black/80"
+                    : "left-0 bg-black/20"
+                } border-2 border-gray-300 appearance-none cursor-pointer  `}
+              />
+              <label
+                for='toggle'
+                className={`toggle-label block  overflow-hidden h-6 rounded-full ${
+                  editorSettings.wordWrap ? "bg-green-400" : "bg-gray-700/40"
+                } cursor-pointer`}></label>
+            </div>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
