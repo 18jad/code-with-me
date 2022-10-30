@@ -137,6 +137,7 @@ $seperator: #232526;
     &_content {
       border-right: 2px solid $seperator;
       width: 100%;
+      overflow: hidden;
       color: white;
     }
   }

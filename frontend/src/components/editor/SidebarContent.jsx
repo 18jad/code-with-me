@@ -2,6 +2,7 @@ import GithubTool from "assets/icons/GithubTool";
 import { useLayoutEffect, useState } from "react";
 import { tw } from "utils/TailwindComponent";
 import Tree from "./FileTree/Tree";
+import Message from "./Message";
 const structure = [
   {
     type: "folder",
@@ -169,6 +170,100 @@ const GithubRepo = ({ className }) => {
   );
 };
 
+const ChatConversation = ({ className }) => {
+  return (
+    <div className={className}>
+      <h2 className='p-4 border-b-2 border-[#232526] mb-2 sticky top-0 self-stretch bg-[#1e1e1e] overflow-hidden'>
+        Chat
+      </h2>
+      <div className='chat-section'>
+        <div className='messages-container p-2 overflow-auto h-[720px]'>
+          <Message
+            message='first message'
+            time='12:32'
+            isMe={false}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={true}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={true}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={true}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={false}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={true}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={false}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={true}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={false}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={true}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message="Hello it's me jad the beast jahaahhah"
+            time='12:32'
+            isMe={false}
+            senderName='Jad Yahya'
+          />
+          <Message
+            message='last message last messagelast messagelast messagelast messagelast messagelast messagelast messagelast messagelast messagelast messagelast messagelast messagelast messagelast messagelast message'
+            time='12:32'
+            isMe={true}
+            senderName='Jad Yahya'
+          />
+        </div>
+        <form action=''>
+          <input
+            type='text'
+            className='fixed bottom-0 w-[260px] px-3 bg-[#232526] py-3  border-t border-white/5 outline-none'
+            placeholder='Enter a message'
+            required
+          />
+        </form>
+      </div>
+    </div>
+  );
+};
+
 const SidebarContent = ({ content }) => {
   // Here we are hiding the element under the current active element
   // Instead of just rendering another component
@@ -180,11 +275,18 @@ const SidebarContent = ({ content }) => {
           content === "fileTree"
             ? "opacity-1"
             : "opacity-0 h-0 w-0 -z-50 pointer-events-none"
-        }`}
+        } sticky top-0 self-stretch`}
       />
       <GithubRepo
         className={`${
           content === "github"
+            ? "opacity-1"
+            : "opacity-0 h-0 w-0 -z-50 pointer-events-none"
+        } sticky top-0 self-stretch`}
+      />
+      <ChatConversation
+        className={`${
+          content === "chat"
             ? "opacity-1"
             : "opacity-0 h-0 w-0 -z-50 pointer-events-none"
         }`}

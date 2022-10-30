@@ -107,6 +107,9 @@ const Editor = () => {
                   type='radio'
                   id='overview'
                   name='sectionSwitcher'
+                  onClick={() => {
+                    if (sidebarContent !== "chat") setSidebarContent("chat");
+                  }}
                   className={styles.radioSelection}
                 />
                 <div className={styles.selectLine}></div>
