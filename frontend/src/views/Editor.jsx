@@ -75,8 +75,7 @@ const Editor = () => {
                   id='overview'
                   name='sectionSwitcher'
                   onClick={() => {
-                    if (sidebarContent !== "fileTree")
-                      setSidebarContent("fileTree");
+                    if (sidebarContent !== "files") setSidebarContent("files");
                   }}
                   className={styles.radioSelection}
                   defaultChecked
@@ -122,6 +121,9 @@ const Editor = () => {
                   type='radio'
                   id='overview'
                   name='sectionSwitcher'
+                  onClick={() => {
+                    if (sidebarContent !== "voice") setSidebarContent("voice");
+                  }}
                   className={styles.radioSelection}
                 />
                 <div className={styles.selectLine}></div>
@@ -170,7 +172,7 @@ const Editor = () => {
               tabCompletion: "on",
             }}
             defaultLanguage='javascript'
-            defaultValue='// some comment'
+            defaultValue='console.log("Hello World")'
           />
         </div>
       </div>
