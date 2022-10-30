@@ -7,10 +7,10 @@ import EditorTab from "components/editor/Tab";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import { Chats, GearSix, Stack } from "phosphor-react";
-import { useState } from "react";
+import { Resizable } from "re-resizable";
+import { useRef, useState } from "react";
 import { tw } from "utils/TailwindComponent";
 import styles from "./styles/Editor.module.scss";
-
 const VoiceChatCircle = tw.img`
     inline-block
     h-8
@@ -30,6 +30,12 @@ const Editor = () => {
   const [settingModalStatus, setSettingModalStatus] = useState(false);
 
   const storedSetting = localStorage.getItem("editor-setting");
+
+  const sideBarRef = useRef(null);
+
+  const handleMouseDown = (e) => {
+    console.log(sideBarRef.current.offsetWidth);
+  };
 
   // Editor settings
   const [editorSettings, setEditorSetting] = useState({
@@ -102,7 +108,24 @@ const Editor = () => {
 
       <div className='flex flex-row h-full'>
         {/* Sidebar */}
-        <div className={styles.sidebar}>
+        <Resizable
+          defaultSize={{
+            width: "20%",
+            height: "100%",
+          }}
+          maxWidth='25%'
+          minWidth='18%'
+          enable={{
+            top: false,
+            right: true,
+            bottom: false,
+            left: true,
+            topRight: false,
+            bottomRight: false,
+            bottomLeft: false,
+            topLeft: false,
+          }}
+          className={styles.sidebar}>
           {/* Sidebar tools */}
           <div className={styles.sidebar_tools}>
             <div className={styles.sidebar_tools_upper}>
@@ -183,7 +206,7 @@ const Editor = () => {
           <div className={styles.sidebar_content}>
             <SidebarContent content={sidebarContent} />
           </div>
-        </div>
+        </Resizable>
 
         {/* Editor and tabs */}
         <div className={styles.editor}>
@@ -200,7 +223,7 @@ const Editor = () => {
           </div>
           <IDE
             height='100%'
-            width='100%'
+            width='99.9%'
             theme={editorSettings.darkMode ? "vs-dark" : "light"}
             options={{
               wordWrap: editorSettings.wordWrap ? "on" : "off",
@@ -231,7 +254,7 @@ const Editor = () => {
         <form className='inputs flex flex-col gap-4'>
           <div className='flex flex-row gap-4 items-center'>
             <label
-              for='custom-input-number'
+              htmlFor='custom-input-number'
               className='whitespace-nowrap text-white text-lg font-semibold'>
               Font Size :
             </label>
@@ -246,7 +269,8 @@ const Editor = () => {
                 type='number'
                 className='outline-none focus:outline-none text-center w-full bg-gray-700/20 font-semibold text-md text-white  md:text-basecursor-default flex items-center text-gray-700 select-none pointer-events-none'
                 name='custom-input-number'
-                value={editorSettings.fontSize}></input>
+                value={editorSettings.fontSize}
+                readOnly></input>
               <button
                 onClick={increaseFontSize}
                 type='button'
@@ -257,7 +281,7 @@ const Editor = () => {
           </div>
           <div className='flex flex-row gap-4 items-center'>
             <label
-              for='custom-input-number'
+              htmlFor='custom-input-number'
               className='whitespace-nowrap text-white text-lg font-semibold'>
               Word Wrap :
             </label>
@@ -278,7 +302,7 @@ const Editor = () => {
                 } border-2 border-gray-300 appearance-none cursor-pointer  `}
               />
               <label
-                for='toggle'
+                htmlFor='toggle'
                 className={`toggle-label block  overflow-hidden h-6 rounded-full ${
                   editorSettings.wordWrap ? "bg-green-400" : "bg-gray-700/40"
                 } cursor-pointer`}
@@ -292,7 +316,7 @@ const Editor = () => {
           </div>
           <div className='flex flex-row gap-4 items-center'>
             <label
-              for='custom-input-number'
+              htmlFor='custom-input-number'
               className='whitespace-nowrap text-white text-lg font-semibold'>
               Dark Mode :
             </label>
@@ -313,7 +337,7 @@ const Editor = () => {
                 } border-2 border-gray-300 appearance-none cursor-pointer  `}
               />
               <label
-                for='toggle'
+                htmlFor='toggle'
                 className={`toggle-label block  overflow-hidden h-6 rounded-full ${
                   editorSettings.darkMode ? "bg-green-400" : "bg-gray-700/40"
                 } cursor-pointer`}
