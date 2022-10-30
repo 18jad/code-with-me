@@ -1,6 +1,7 @@
 import ChatConversation from "components/ChatConversation";
 import FileStructure from "./FileStructure";
 import GithubTool from "./GithubTool";
+import VoiceChat from "./VoiceChat";
 
 const swapContent = (content, compare) => {
   return content === compare
@@ -15,9 +16,10 @@ const SidebarContent = ({ content }) => {
 
   return (
     <>
-      <FileStructure className={swapContent(content, "fileTree")} />
+      <FileStructure className={swapContent(content, "files")} />
       <GithubTool className={swapContent(content, "github")} />
       <ChatConversation className={swapContent(content, "chat")} />
+      <VoiceChat className={swapContent(content, "voice")} />
     </>
   );
 };
