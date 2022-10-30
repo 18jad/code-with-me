@@ -204,8 +204,7 @@ const Editor = () => {
             theme={editorSettings.darkMode ? "vs-dark" : "light"}
             options={{
               wordWrap: editorSettings.wordWrap ? "on" : "off",
-              showUnused: false,
-              folding: false,
+              showUnused: true,
               lineNumbersMinChars: 3,
               fontSize: editorSettings.fontSize,
               scrollBeyondLastLine: false,
