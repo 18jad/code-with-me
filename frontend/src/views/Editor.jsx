@@ -242,7 +242,7 @@ const Editor = () => {
               </button>
               <input
                 type='number'
-                className='outline-none focus:outline-none text-center w-full bg-gray-700/20 font-semibold text-md text-white  md:text-basecursor-default flex items-center text-gray-700'
+                className='outline-none focus:outline-none text-center w-full bg-gray-700/20 font-semibold text-md text-white  md:text-basecursor-default flex items-center text-gray-700 select-none pointer-events-none'
                 name='custom-input-number'
                 value={editorSettings.fontSize}></input>
               <button
