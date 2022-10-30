@@ -22,7 +22,7 @@ const VoiceChatCircle = tw.img`
 `;
 
 const Editor = () => {
-  const [sidebarContent, setSidebarContent] = useState("fileTree");
+  const [sidebarContent, setSidebarContent] = useState("files");
 
   return (
     <div className={styles.editorWrapper}>
