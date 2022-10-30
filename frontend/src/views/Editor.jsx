@@ -35,6 +35,7 @@ const Editor = () => {
   const [editorSettings, setEditorSetting] = useState({
     fontSize: storedSetting ? JSON.parse(storedSetting).fontSize : 16,
     wordWrap: storedSetting ? JSON.parse(storedSetting).wordWrap : true,
+    darkMode: storedSetting ? JSON.parse(storedSetting).darkMode : true,
   });
 
   const updateStoredSetting = (newSetting) => {
@@ -200,7 +201,7 @@ const Editor = () => {
           <IDE
             height='100%'
             width='100%'
-            theme='vs-dark'
+            theme={editorSettings.darkMode ? "vs-dark" : "light"}
             options={{
               wordWrap: editorSettings.wordWrap ? "on" : "off",
               showUnused: false,
@@ -261,8 +262,7 @@ const Editor = () => {
             <div className='relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in'>
               <input
                 type='checkbox'
-                name='toggle'
-                id='toggle'
+                name='wordWrap-toggle'
                 onClick={(e) => {
                   updateStoredSetting({
                     ...editorSettings,
@@ -279,7 +279,48 @@ const Editor = () => {
                 for='toggle'
                 className={`toggle-label block  overflow-hidden h-6 rounded-full ${
                   editorSettings.wordWrap ? "bg-green-400" : "bg-gray-700/40"
-                } cursor-pointer`}></label>
+                } cursor-pointer`}
+                onClick={(e) => {
+                  updateStoredSetting({
+                    ...editorSettings,
+                    wordWrap: !editorSettings.wordWrap,
+                  });
+                }}></label>
+            </div>
+          </div>
+          <div className='flex flex-row gap-4 items-center'>
+            <label
+              for='custom-input-number'
+              className='whitespace-nowrap text-white text-lg font-semibold'>
+              Dark Mode :
+            </label>
+            <div className='relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in'>
+              <input
+                type='checkbox'
+                name='darkmode-toggle'
+                onClick={(e) => {
+                  updateStoredSetting({
+                    ...editorSettings,
+                    darkMode: e.target.checked,
+                  });
+                }}
+                className={`toggle-checkbox absolute  w-6 h-6 rounded-full  ${
+                  editorSettings.darkMode
+                    ? "right-0 bg-black/80"
+                    : "left-0 bg-black/20"
+                } border-2 border-gray-300 appearance-none cursor-pointer  `}
+              />
+              <label
+                for='toggle'
+                className={`toggle-label block  overflow-hidden h-6 rounded-full ${
+                  editorSettings.darkMode ? "bg-green-400" : "bg-gray-700/40"
+                } cursor-pointer`}
+                onClick={(e) => {
+                  updateStoredSetting({
+                    ...editorSettings,
+                    darkMode: !editorSettings.darkMode,
+                  });
+                }}></label>
             </div>
           </div>
         </form>
