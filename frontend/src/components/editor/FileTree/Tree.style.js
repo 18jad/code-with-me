@@ -59,18 +59,3 @@ export const Collapse = styled.div`
   overflow: hidden;
   transition: 0.3s ease-in-out;
 `;
-
-export const VerticalLine = styled.section`
-  position: relative;
-  :before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: -2px; /* just to hide 1px peek */
-    left: 1px;
-    width: 0;
-    height: 100%;
-    border: 1px solid #fff;
-    z-index: -1;
-  }
-`;
