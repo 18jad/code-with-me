@@ -6,7 +6,7 @@ import SidebarContent from "components/editor/SidebarContent";
 import EditorTab from "components/editor/Tab";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
-import { Chats, GearSix, Stack } from "phosphor-react";
+import { Chats, GearSix, Link, Stack } from "phosphor-react";
 import { Resizable } from "re-resizable";
 import { useRef, useState } from "react";
 import { tw } from "utils/TailwindComponent";
@@ -28,6 +28,7 @@ const Editor = () => {
 
   // Modal show/hide status
   const [settingModalStatus, setSettingModalStatus] = useState(false);
+  const [inviteModalStatus, setInviteModalStatus] = useState(false);
 
   const storedSetting = localStorage.getItem("editor-setting");
 
@@ -99,7 +100,11 @@ const Editor = () => {
               alt=''
             />
           </div>
-          <button className={styles.share_btn}>
+          <button
+            className={styles.share_btn}
+            onClick={() => {
+              setInviteModalStatus(true);
+            }}>
             <span>Share</span>
             <ShareIcon className='text-white' width={13} />
           </button>
@@ -350,6 +355,39 @@ const Editor = () => {
             </div>
           </div>
         </form>
+      </Modal>
+      <Modal
+        title='Invite Someone'
+        isOpen={inviteModalStatus}
+        className='w-[400px]'
+        bgDrop='bg-black/30'
+        bg='#1e1e1e'
+        onClick={() => {
+          setInviteModalStatus(false);
+        }}>
+        <div className='email-invite flex flex-col gap-2 items-start justify-start w-full'>
+          <h3 className='text-white'>Invite by email:</h3>
+          <form className='email-input flex flex-row items-center gap-2 w-full'>
+            <input
+              type='email'
+              placeholder='Enter user email'
+              className='bg-white/10 border shadow-sm px-4 py-1 placeholder-gray-300 border-gray-500 focus:border-gray-800  focus:ring-2 focus:bg-black/10 focus:ring-gray-500 outline-none rounded-sm transition duration-150 text-white w-full'
+              required
+            />
+            <button
+              className='bg-blue-500 border shadow-sm px-4 py-1  border-blue-500 outline-none rounded-sm transition duration-150 text-white cursor-pointer hover:bg-blue-500/80'
+              type='submit'>
+              Invite
+            </button>
+          </form>
+        </div>
+        <span className='seperator text-white'>OR</span>
+        <div className='copy-link flex flex-col gap-2 items-center justify-center w-full'>
+          <button className='bg-blue-500 border shadow-sm px-2 py-1  border-blue-500 outline-none rounded-sm transition duration-150 text-white cursor-pointer hover:bg-blue-500/80 flex flex-row items-center justify-center gap-2'>
+            <Link color='#fff' size={20} />
+            <span>Copy invitation link</span>
+          </button>
+        </div>
       </Modal>
     </div>
   );
