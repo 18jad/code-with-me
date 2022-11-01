@@ -219,12 +219,21 @@ const Editor = () => {
             <EditorTab
               name='index.html'
               isSelected={true}
-              onClick={(e) => {
-                console.log(e.target);
-              }}
+              // onClick={(e) => {
+              //   this.isSelected = true;
+              // }}
             />
-            <EditorTab name='script.js' isSelected={false} />
+            <EditorTab
+              name='script.js'
+              isSelected={false}
+              // onClick={(e) => {
+              //   // change is selected to true
+              //   e.target.dataset.selected = true;
+              //   console.log(e.target);
+              // }}
+            />
             <EditorTab name='styles.csss' isSelected={false} />
+            <div className='h-[34px]' readOnly></div>
           </div>
           <IDE
             height='100%'
