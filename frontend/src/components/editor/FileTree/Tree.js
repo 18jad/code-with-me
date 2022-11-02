@@ -54,7 +54,15 @@ const TreeRecusive = ({ data, parentNode }) => {
     if (!item.id) item.id = v4();
 
     if (item.type === "file") {
-      return <File key={item.id} id={item.id} name={item.name} node={item} />;
+      return (
+        <File
+          key={item.id}
+          id={item.id}
+          name={item.name}
+          node={item}
+          path={item.path}
+        />
+      );
     }
     if (item.type === "folder") {
       return (
@@ -63,6 +71,7 @@ const TreeRecusive = ({ data, parentNode }) => {
         </Folder>
       );
     }
+    return null;
   });
 };
 

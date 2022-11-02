@@ -5,6 +5,7 @@ const structure = [
   {
     type: "folder",
     name: "project",
+    path: "/projects/project",
     files: [
       //     {
       //       type: "folder",
@@ -37,31 +38,41 @@ const structure = [
       //     },
     ],
   },
-  // { type: "file", name: "index.js" },
 ];
 
 const FileStructure = ({ className }) => {
   let [data, setData] = useState(structure);
 
+  // Recursion file path update
+  const updatePath = (fileStorage, mainPath) => {
+    const files = fileStorage[0]?.files || fileStorage?.files;
+    files.length > 0 &&
+      files.forEach((file) => {
+        console.log("This files", file);
+        if (file.type === "file") {
+          file.path = `${mainPath}/${file.name}`;
+        } else if (file.type === "folder") {
+          updatePath(file, `${mainPath}/${file.name}`);
+        }
+      });
+  };
+
   const handleClick = (node) => {
     console.log(node);
+    const filePath = node.node.path;
+    console.log("Clicked file path: ", filePath);
   };
   const handleUpdate = (state) => {
-    localStorage.setItem(
-      "tree",
-      JSON.stringify(state, function (key, value) {
-        if (key === "parentNode" || key === "id") {
-          return null;
-        }
-        return value;
-      }),
-    );
+    const mainState = state;
+    const mainPath = mainState.path;
+    updatePath(mainState, mainPath);
   };
 
   useLayoutEffect(() => {
     try {
       let savedStructure = JSON.parse(localStorage.getItem("tree"));
       if (savedStructure) {
+        // TODO: UPDATE FILE STRUCTURE WHEN FETCHING JSON STRUCTURE FROM DB
         // setData(savedStructure);
       }
     } catch (err) {
