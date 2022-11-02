@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 // @deprecated
 export const findNodeById = (nodes, id) => {
@@ -75,5 +75,10 @@ export const useDidMountEffect = (func, deps) => {
   }, deps);
 };
 
-export const createFile = ({ name }) => ({ name, type: "file" });
-export const createFolder = ({ name }) => ({ name, type: "folder", files: [] });
+export const createFile = ({ name, path }) => ({ path, name, type: "file" });
+export const createFolder = ({ path, name }) => ({
+  path,
+  name,
+  type: "folder",
+  files: [],
+});
