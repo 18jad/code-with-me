@@ -9,6 +9,9 @@ $dark-bg: #3e3e3e;
   justify-content: center;
   width: 100vw;
   background: #1e1e1e;
+  @include breakpoint(laptop) {
+    flex-direction: column-reverse;
+  }
 
   .interactionsSection {
     background: transparent;
@@ -23,11 +26,39 @@ $dark-bg: #3e3e3e;
     border-right: 1.4px solid $border;
     height: 100vh;
     top: 0;
+    @include breakpoint(laptop) {
+      position: unset;
+      height: unset;
+      flex-direction: row;
+      border: none;
+      align-self: unset;
+      width: 80%;
+      align-items: center;
+    }
+    @include breakpoint(mobile) {
+      padding: 10px;
+      gap: 40px;
+      justify-content: center;
+      width: unset;
+    }
 
     .logo {
       width: -moz-fit-content;
       width: fit-content;
       display: inline-block;
+      white-space: nowrap;
+      @include breakpoint(mobile) {
+        display: none;
+      }
+    }
+
+    .mobileLogo {
+      width: 100%;
+      display: none;
+      white-space: nowrap;
+      @include breakpoint(mobile) {
+        display: block;
+      }
     }
 
     .interactionsButtons {
@@ -37,6 +68,10 @@ $dark-bg: #3e3e3e;
       justify-content: space-between;
       flex-direction: column;
       gap: 10px;
+      @include breakpoint(mobile) {
+        flex-direction: row;
+        gap: 40px;
+      }
 
       .signOutBtn {
         background: $dark-bg;
@@ -50,6 +85,9 @@ $dark-bg: #3e3e3e;
         transition-property: gap, background;
         transition-duration: 200ms;
         transition-timing-function: ease-in-out;
+        @include breakpoint(mobile) {
+          width: 100%;
+        }
 
         &:hover {
           gap: 15px;
@@ -123,6 +161,10 @@ $dark-bg: #3e3e3e;
         .headline {
           max-width: 400px;
           text-align: center;
+          @include breakpoint(mobile) {
+            font-size: 0.9rem;
+            max-width: 80vw;
+          }
         }
       }
     }
@@ -142,12 +184,18 @@ $dark-bg: #3e3e3e;
 
         .cardCount {
           font-size: 3rem;
+          @include breakpoint(mobile) {
+            font-size: 1.5rem;
+          }
         }
 
         .cardText {
           font-size: 1.5rem;
           font-weight: 100;
           color: #9c9c9c;
+          @include breakpoint(mobile) {
+            font-size: 1.2rem;
+          }
         }
       }
     }
@@ -201,6 +249,7 @@ $dark-bg: #3e3e3e;
       flex-direction: column;
       gap: 20px;
       padding: 25px 40px;
+      width: 100%;
 
       .interBar {
         display: flex;
@@ -235,6 +284,9 @@ $dark-bg: #3e3e3e;
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
         width: 100%;
+        @include breakpoint(700px) {
+          grid-template-columns: repeat(1, 1fr);
+        }
       }
     }
   }
@@ -252,6 +304,13 @@ $dark-bg: #3e3e3e;
     border-left: 1.4px solid $border;
     align-self: stretch;
     top: 0;
+    @include breakpoint(laptop) {
+      position: unset;
+      height: unset;
+      padding: 10px;
+      gap: 0;
+      border: none;
+    }
 
     .searchInput {
       position: relative;

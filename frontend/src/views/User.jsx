@@ -210,7 +210,7 @@ const User = () => {
           </div>
           <div
             className={`${styles.searchResultWrapper} transition duration-300 ${
-              searchState ? "opacity-1" : "opacity-0"
+              searchState ? "opacity-1 h-auto" : "opacity-0 h-0"
             }`}>
             {/* TODO: Change opacity based on fetched user list */}
             {usersList ? (

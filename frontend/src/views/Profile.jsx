@@ -127,6 +127,9 @@ const Profile = () => {
           <div className={styles.logo}>
             <TextLogo text='Profile' width={55} mainSize='xl' textSize='sm' />
           </div>
+          <div className={styles.mobileLogo}>
+            <TextLogo text='Profile' width={35} mainSize='xs' textSize='xs' />
+          </div>
           <div className={styles.interactionsButtons}>
             <button className={styles.signOutBtn}>
               <span>
@@ -249,7 +252,7 @@ const Profile = () => {
                     />
                     <ProjectCard
                       title='Project name'
-                      description="Porject description, what's the project about"
+                      description='Porject'
                       likes={21}
                       updated='Updated 2 days ago'
                       link='/sdadsads'
@@ -285,7 +288,7 @@ const Profile = () => {
                   </>
                 </div>
               ) : (
-                <p className='text-white text-3xl text-center mt-20 px-48'>
+                <p className='text-white text-3xl text-center my-20 md:px-48'>
                   No projects created :(
                 </p>
               )}
@@ -295,7 +298,7 @@ const Profile = () => {
               {favorites.length ? (
                 <>{/* TODO: Add favorites cards */}</>
               ) : (
-                <p className='text-white text-3xl text-center mt-20 px-60'>
+                <p className='text-white text-3xl text-center my-20 md:px-60'>
                   No favorites found :(
                 </p>
               )}
@@ -331,7 +334,7 @@ const Profile = () => {
           </div>
           <div
             className={`${styles.searchResultWrapper} transition duration-300 ${
-              searchState ? "opacity-1" : "opacity-0"
+              searchState ? "opacity-1 h-auto" : "opacity-0 h-0"
             }`}>
             {/* TODO: Change opacity based on fetched user list */}
             {usersList ? (
@@ -354,7 +357,7 @@ const Profile = () => {
           onClick={() => {
             setEditModalStatus(false);
           }}>
-          <div className='content flex flex-row gap-14 items-center'>
+          <div className='content flex flex-col md:flex-row gap-14 items-center'>
             <div
               className='profile text-center h-fit  bg-center bg-cover object-cover rounded'
               style={{
@@ -366,7 +369,9 @@ const Profile = () => {
                 hidden
                 onChange={(e) => changeImage(e)}
               />
-              <label htmlFor='changedProfile' className='cursor-pointer'>
+              <label
+                htmlFor='changedProfile'
+                className='cursor-pointer flex flex-col items-center'>
                 <UserFocus
                   size={100}
                   color='#fff'
@@ -382,13 +387,13 @@ const Profile = () => {
               </label>
             </div>
             <form className='inputs flex flex-col gap-4 w-full'>
-              <div className='flex flex-row gap-3'>
+              <div className='flex flex-col md:flex-row gap-3'>
                 <div className='flex flex-col gap-4 w-full'>
                   <ModalInput type='text' placeholder='Full name' required />
                   <ModalInput type='text' placeholder='Username' required />
                   <ModalInput type='text' placeholder='Headline' required />
                 </div>
-                <button className='bg-white/10 border-gray-500 border px-1'>
+                <button className='bg-white/10 border-gray-500 border px-1 flex items-center justify-center'>
                   <Check size={23} color='#fff' weight='bold' />
                 </button>
               </div>
@@ -400,7 +405,7 @@ const Profile = () => {
         <Modal
           title='Create new project'
           isOpen={projectModalStatus}
-          className='w-[400px]'
+          className='w-[400px] scale-90 md:scale-100'
           onClick={() => {
             setProjectModalStatus(false);
           }}>
