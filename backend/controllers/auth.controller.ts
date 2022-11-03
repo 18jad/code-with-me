@@ -20,6 +20,21 @@ class UserAuth {
     this.response = null;
     this.request = null;
   }
+
+  // check if input email is a valid email
+  validateEmail(email: string): boolean {
+    return Boolean(email.match(this.emailFilter));
+  }
+
+  // check if input password is a valid password
+  validatePassword(password: string): boolean {
+    return Boolean(password.length >= 8);
+  }
+
+  // check if input username is a valid username
+  validateUsername(username: string) {
+    return Boolean(username.length >= 3);
+  }
 }
 
 module.exports = UserAuth;
