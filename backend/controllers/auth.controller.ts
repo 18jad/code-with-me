@@ -10,7 +10,7 @@ type User = {
   name: string;
   username: string;
   email: string;
-  password: string;
+  safePassword: string;
 };
 
 class UserAuth {
@@ -58,11 +58,17 @@ class UserAuth {
     return isUser ? true : false;
   }
 
-  hashPassword(password: string, salt: number = 10) {
-    return bcrypt.hash(password, salt);
+  // Hash password
+  async hashPassword(password: string, salt: number = 10) {
+    return await bcrypt.hash(password, salt);
   }
 
-  validate(data: Request): Promise<User> {
+  // Verify hashed password
+  async verifyPassword(password: string, toCompare: string) {
+    return await bcrypt.compare(password, toCompare);
+  }
+
+  validate(data: Request, newUser: boolean = true): Promise<User> {
     const { name, username, email, password } = data.body;
     return new Promise(async (resolve, reject) => {
       // validate email
@@ -70,11 +76,16 @@ class UserAuth {
       if (!isEmail) {
         reject("Email is not valid");
       } else {
-        const isUser = await this.checkEmail(email);
-        if (isUser) {
-          reject("Email is already in use :(");
-        }
+        async () => {
+          const isUser = await this.checkEmail(email);
+          if (isUser) {
+            reject("Email is already in use :(");
+          } else {
+            !newUser ?? reject("Email or password is incorrect.");
+          }
+        };
       }
+
       // validate username
       const isUsername = this.validateUsername(username);
       if (!isUsername) {
@@ -85,12 +96,33 @@ class UserAuth {
           reject("Username is already in use :(");
         }
       }
+
       // validate password
       const isPassword = this.validatePassword(password);
       if (!isPassword) {
         reject("Password is too short 👉👈. Minimum is 8 characters");
+      } else {
+        !newUser ??
+          (async () => {
+            const userPassword = (await prisma.user.findUnique({
+              where: {
+                email: email,
+              },
+              select: {
+                password: true,
+              },
+            })) as any;
+            const checkCredential = await this.verifyPassword(
+              password,
+              userPassword?.password,
+            );
+            if (!checkCredential) {
+              reject("Email or password is incorrect.");
+            }
+          });
       }
-      resolve({ name, username, email, password });
+      let safePassword: string = !newUser ? null : password;
+      resolve({ name, username, email, safePassword });
     });
   }
 
@@ -104,7 +136,7 @@ class UserAuth {
             name: result.name,
             username: result.username,
             email: result.email,
-            password: result.password,
+            password: await this.hashPassword(result.safePassword),
           },
         });
         if (newUser) {
