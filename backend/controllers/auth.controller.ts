@@ -51,6 +51,7 @@ class UserAuth {
         email: email,
       },
       select: {
+        id: true,
         password: false,
       },
     });
@@ -64,6 +65,7 @@ class UserAuth {
         username: username,
       },
       select: {
+        id: true,
         password: false,
       },
     });
@@ -159,7 +161,7 @@ class UserAuth {
             username: result.username,
             email: result.email,
             password: await this.hashPassword(result.password),
-            // TODO: Generate a random avatar
+            avatar: `https://avatars.dicebear.com/api/initials/${result.username}.svg`, // generate random avatar
           },
         });
         if (newUser) {
@@ -180,7 +182,6 @@ class UserAuth {
     this.request = request;
     this.validateLogin(request)
       .then(async (result) => {
-        // const avatar = `https://avatars.dicebear.com/api/avataaars/${result.username}.svg`;
         try {
           const token = jwt.sign(
             {
