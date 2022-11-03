@@ -13,8 +13,8 @@ datasource db {
 model User {
   id             Int       @id @default(autoincrement())
   name           String
-  username       String    @unique @db.VarChar(15)
-  email          String    @unique
+  username       String    @db.VarChar(15)
+  email          String
   password       String
   headline       String?   @db.VarChar(100)
   avatar         String?
@@ -26,6 +26,8 @@ model User {
   resetToken     String?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+
+  @@unique([username, email])
 }
 
 model Project {
