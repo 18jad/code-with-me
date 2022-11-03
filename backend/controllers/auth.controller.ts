@@ -10,7 +10,7 @@ type User = {
   name: string;
   username: string;
   email: string;
-  safePassword: string;
+  password: string;
 };
 
 class UserAuth {
@@ -44,6 +44,9 @@ class UserAuth {
       where: {
         email: email,
       },
+      select: {
+        password: false,
+      },
     });
     return isUser ? true : false;
   }
@@ -53,6 +56,9 @@ class UserAuth {
     const isUser = await prisma.user.findFirst({
       where: {
         username: username,
+      },
+      select: {
+        password: false,
       },
     });
     return isUser ? true : false;
@@ -68,24 +74,18 @@ class UserAuth {
     return await bcrypt.compare(password, toCompare);
   }
 
-  validate(data: Request, newUser: boolean = true): Promise<User> {
+  validateRegister(data: Request): Promise<User> {
     const { name, username, email, password } = data.body;
-    let user: any = null;
     return new Promise(async (resolve, reject) => {
       // Validate email
       const isEmail = this.validateEmail(email);
       if (!isEmail) {
         reject("Email is not valid");
       } else {
-        async () => {
-          const isUser = await this.checkEmail(email);
-          if (isUser) {
-            reject("Email is already in use :(");
-          } else {
-            // Validate crendentials if user is logging in
-            !newUser ?? reject("Email or password is incorrect.");
-          }
-        };
+        const isUser = await this.checkEmail(email);
+        if (isUser) {
+          reject("Email is already in use :(");
+        }
       }
 
       // Validate username
@@ -103,40 +103,57 @@ class UserAuth {
       const isPassword = this.validatePassword(password);
       if (!isPassword) {
         reject("Password is too short 👉👈. Minimum is 8 characters");
-      } else {
-        // Validate crendentials if user is logging in
-        !newUser ??
-          (async () => {
-            user = (await prisma.user.findUnique({
-              where: {
-                email: email,
-              },
-            })) as any;
-            const checkCredential = await this.verifyPassword(
-              password,
-              user?.password,
-            );
-            if (!checkCredential) {
-              reject("Email or password is incorrect.");
-            }
-          });
       }
-      let safePassword: string = !newUser ? null : password;
-      resolve(newUser ? { name, username, email, safePassword } : user);
+      resolve({ name, username, email, password });
+    });
+  }
+
+  validateLogin(data: Request): Promise<User> {
+    const { email, password } = data.body;
+    return new Promise(async (resolve, reject) => {
+      // Validate email
+      const isEmail = this.validateEmail(email);
+      if (!isEmail) {
+        reject("Email is not valid");
+      } else {
+        const user = (await prisma.user.findUnique({
+          where: {
+            email: email,
+          },
+        })) as User;
+        // Check if user is found
+        if (user) {
+          // Verify password
+          const checkCredential = await this.verifyPassword(
+            password,
+            user?.password,
+          );
+          if (!checkCredential) {
+            reject("Email or password is incorrect");
+          } else {
+            // Empty password before sending response
+            user.password = "";
+            resolve(user);
+          }
+        } else {
+          reject("Email or password is incorrect");
+        }
+      }
     });
   }
 
   async register(request: Request, response: Response) {
     this.response = response;
     this.request = request;
-    this.validate(request)
+    this.validateRegister(request)
       .then(async (result) => {
         const newUser = await prisma.user.create({
           data: {
             name: result.name,
             username: result.username,
             email: result.email,
-            password: await this.hashPassword(result.safePassword),
+            password: await this.hashPassword(result.password),
+            // TODO: Generate a random avatar
           },
         });
         if (newUser) {
@@ -155,9 +172,11 @@ class UserAuth {
   async login(request: Request, response: Response) {
     this.response = response;
     this.request = request;
-    this.validate(request, false)
+    this.validateLogin(request)
       .then(async (result) => {
-        sendResponse(response, true, "Sign in successfully done.", result);
+        sendResponse(response, true, "Sign in successfully done.", {
+          res: result,
+        });
       })
       .catch((error) => {
         sendResponse(response, false, "Validation Failed", { error: error });
