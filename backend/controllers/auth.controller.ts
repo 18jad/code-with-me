@@ -6,7 +6,13 @@ const sendResponse = require("../utils/sendResponse");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// Variables
+const jwt_secret = process.env.JWT_SECRET_KEY;
+const jwt_expires = process.env.JWT_EXPIRES_IN;
+
+// Type
 type User = {
+  id?: Number;
   name: string;
   username: string;
   email: string;
@@ -174,9 +180,31 @@ class UserAuth {
     this.request = request;
     this.validateLogin(request)
       .then(async (result) => {
-        sendResponse(response, true, "Sign in successfully done.", {
-          res: result,
-        });
+        // const avatar = `https://avatars.dicebear.com/api/avataaars/${result.username}.svg`;
+        try {
+          const token = jwt.sign(
+            {
+              id: result.id,
+              name: result.name,
+              username: result.username,
+              email: result.email,
+            },
+            jwt_secret,
+            {
+              expiresIn: jwt_expires,
+            },
+          );
+          sendResponse(response, true, "Sign in successfully done.", {
+            user: {
+              result,
+              authToken: token,
+            },
+          });
+        } catch (error) {
+          sendResponse(response, false, "Something went wrong", {
+            error: error,
+          });
+        }
       })
       .catch((error) => {
         sendResponse(response, false, "Validation Failed", { error: error });
