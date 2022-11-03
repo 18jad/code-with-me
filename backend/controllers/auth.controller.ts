@@ -19,6 +19,7 @@ type User = {
   password: string;
 };
 
+// UserAuth class, contains validation, login and register methods
 class UserAuth {
   private emailFilter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   public response: Response | null;
@@ -29,22 +30,38 @@ class UserAuth {
     this.request = null;
   }
 
-  // check if input email is a valid email
+  /**
+   * @description Check if email is valid (regex pattern)
+   * @param email {string}
+   * @returns {Boolean}
+   */
   validateEmail(email: string): boolean {
     return Boolean(email.match(this.emailFilter));
   }
 
-  // check if input password is a valid password
+  /**
+   * @description Check if password is valid (length >= 8)
+   * @param password {string}
+   * @returns {Boolean}
+   */
   validatePassword(password: string): boolean {
     return Boolean(password.length >= 8);
   }
 
-  // check if input username is a valid username
+  /**
+   * @description Check is username is valid (length >= 3)
+   * @param username {string}
+   * @returns {Boolean}
+   */
   validateUsername(username: string) {
     return Boolean(username.length >= 3);
   }
 
-  // check if email already exists in the database
+  /**
+   * @description Checks if email already exists in the database
+   * @param email {string}
+   * @returns {Promise<boolean>}
+   */
   async checkEmail(email: string) {
     const isUser = await prisma.user.findFirst({
       where: {
@@ -58,7 +75,11 @@ class UserAuth {
     return isUser ? true : false;
   }
 
-  // check if username already exists in the database
+  /**
+   * @description Checks if the username already exists in the database
+   * @param username {string}
+   * @returns {Promise<boolean>}
+   */
   async checkUsername(username: string) {
     const isUser = await prisma.user.findFirst({
       where: {
@@ -72,16 +93,31 @@ class UserAuth {
     return isUser ? true : false;
   }
 
-  // Hash password
+  /**
+   * @description Hash a given password
+   * @param password {string}
+   * @param salt {number} @default 10
+   * @returns {Promise<string>}
+   */
   async hashPassword(password: string, salt: number = 10) {
     return await bcrypt.hash(password, salt);
   }
 
-  // Verify hashed password
+  /**
+   * @description Compare given password against hashed password
+   * @param password {string}
+   * @param toCompare {string}
+   * @returns {Promise<boolean>}
+   */
   async verifyPassword(password: string, toCompare: string) {
     return await bcrypt.compare(password, toCompare);
   }
 
+  /**
+   * @description Checks if the user inputs are valid, and if the user already exists in the database
+   * @param data {Request}
+   * @returns {Promise<User>}
+   */
   validateRegister(data: Request): Promise<User> {
     const { name, username, email, password } = data.body;
     return new Promise(async (resolve, reject) => {
@@ -116,6 +152,11 @@ class UserAuth {
     });
   }
 
+  /**
+   * @description Checks if the user exists in the database and if the password is correct
+   * @param data {Request}
+   * @returns {Promise<User>}
+   */
   validateLogin(data: Request): Promise<User> {
     const { email, password } = data.body;
     return new Promise(async (resolve, reject) => {
@@ -150,6 +191,11 @@ class UserAuth {
     });
   }
 
+  /**
+   * @description Register a new user after validating it using validateRegister method
+   * @param request {Request}
+   * @param response {Response}
+   */
   async register(request: Request, response: Response) {
     this.response = response;
     this.request = request;
@@ -177,6 +223,11 @@ class UserAuth {
       });
   }
 
+  /**
+   * @description Login user after validating it using validateLogin method
+   * @param request {Request}
+   * @param response {Response}
+   */
   async login(request: Request, response: Response) {
     this.response = response;
     this.request = request;
