@@ -89,6 +89,32 @@ class UserAuth {
     //     console.error("Error occured: ", error);
     //     this.response ?? sendResponse(this.response, false, error);
   }
+
+  async signUp(request: Request, response: Response) {
+    this.response = response;
+    this.request = request;
+    this.validate(request)
+      .then(async (result) => {
+        const newUser = await prisma.user.create({
+          data: {
+            name: result.name,
+            username: result.username,
+            email: result.email,
+            password: result.password,
+          },
+        });
+        if (newUser) {
+          sendResponse(response, true, "User created successfully");
+        } else {
+          sendResponse(response, false, "Something went wrong", {
+            log: newUser,
+          });
+        }
+      })
+      .catch((error) => {
+        sendResponse(response, false, "Validation Failed", { error: error });
+      });
+  }
 }
 
 module.exports = UserAuth;
