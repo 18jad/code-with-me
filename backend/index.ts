@@ -7,9 +7,16 @@ require("dotenv").config();
 
 // Variables
 const app = express();
-const port = process.env.PORT || 2121;
+const port: string | number = process.env.PORT || 2121;
+const authRoutes = require("./routes/auth.routes");
+const apiVersion: number = 1.0;
+const prefix: string = String("/api/v" + apiVersion.toFixed(1));
 
+// Configuration
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Routes
+app.use(prefix + "/auth", authRoutes);
 
 app.listen(port, (error: any) => {
   if (error) {
@@ -18,5 +25,3 @@ app.listen(port, (error: any) => {
   }
   console.log("Server running on port " + port);
 });
-
-export {};
