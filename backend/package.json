@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon index.ts",
-    "start:prod": "node index.ts",
-    "dev:debug": "node --inspect-brk index.ts"
+    "start:prod": "ts-node index.ts",
+    "dev:debug": "ts-node --inspect-brk index.ts"
   },
   "keywords": [],
   "author": "Jad Yahya",
