@@ -35,6 +35,16 @@ class UserAuth {
   validateUsername(username: string) {
     return Boolean(username.length >= 3);
   }
+
+  // check if email already exists in the database
+  async checkEmail(email: string) {
+    const isUser = await prisma.user.findFirst({
+      where: {
+        email: email,
+      },
+    });
+    return isUser ? true : false;
+  }
 }
 
 module.exports = UserAuth;
