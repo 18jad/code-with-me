@@ -3,6 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 type User = {
   name: string;
@@ -56,6 +58,10 @@ class UserAuth {
     return isUser ? true : false;
   }
 
+  hashPassword(password: string, salt: number = 10) {
+    return bcrypt.hash(password, salt);
+  }
+
   validate(data: Request): Promise<User> {
     const { name, username, email, password } = data.body;
     return new Promise(async (resolve, reject) => {
@@ -86,8 +92,6 @@ class UserAuth {
       }
       resolve({ name, username, email, password });
     });
-    //     console.error("Error occured: ", error);
-    //     this.response ?? sendResponse(this.response, false, error);
   }
 
   async signUp(request: Request, response: Response) {
