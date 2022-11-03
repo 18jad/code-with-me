@@ -45,6 +45,16 @@ class UserAuth {
     });
     return isUser ? true : false;
   }
+
+  // check if username already exists in the database
+  async checkUsername(username: string) {
+    const isUser = await prisma.user.findFirst({
+      where: {
+        username: username,
+      },
+    });
+    return isUser ? true : false;
+  }
 }
 
 module.exports = UserAuth;
