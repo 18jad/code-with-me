@@ -55,6 +55,40 @@ class UserAuth {
     });
     return isUser ? true : false;
   }
+
+  validate(data: Request): Promise<User> {
+    const { name, username, email, password } = data.body;
+    return new Promise(async (resolve, reject) => {
+      // validate email
+      const isEmail = this.validateEmail(email);
+      if (!isEmail) {
+        reject("Email is not valid");
+      } else {
+        const isUser = await this.checkEmail(email);
+        if (isUser) {
+          reject("Email is already in use :(");
+        }
+      }
+      // validate username
+      const isUsername = this.validateUsername(username);
+      if (!isUsername) {
+        reject("Username is too short 👉👈. Minimum is 3 characters");
+      } else {
+        const isUser = await this.checkUsername(username);
+        if (isUser) {
+          reject("Username is already in use :(");
+        }
+      }
+      // validate password
+      const isPassword = this.validatePassword(password);
+      if (!isPassword) {
+        reject("Password is too short 👉👈. Minimum is 8 characters");
+      }
+      resolve({ name, username, email, password });
+    });
+    //     console.error("Error occured: ", error);
+    //     this.response ?? sendResponse(this.response, false, error);
+  }
 }
 
 module.exports = UserAuth;
