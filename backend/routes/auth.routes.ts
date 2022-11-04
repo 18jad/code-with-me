@@ -19,4 +19,19 @@ router.post("/login", (request: Request, response: Response) => {
   authController.login(request, response);
 });
 
+// Reset password generate route
+router.post("/generate_reset", (request: Request, response: Response) => {
+  authController.generateResetPassword(request, response);
+});
+
+// Reset token verify
+router.post("/verify_token", (request: Request, response: Response) => {
+  authController.validateResetToken(request, response);
+});
+
+// Reset password
+router.post("/reset_password", (request: Request, response: Response) => {
+  authController.resetPassword(request, response);
+});
+
 module.exports = router;
