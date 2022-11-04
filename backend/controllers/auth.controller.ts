@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const sendEmail = require("../config/emailTransporter.config");
+const sendEmail = require("../utils/emailTransporter");
 const crypto = require("crypto");
 
 // Variables
@@ -198,6 +198,7 @@ class UserAuth {
    * @description Register a new user after validating it using validateRegister method
    * @param request {Request}
    * @param response {Response}
+   * @returns {Promise<void>}
    */
   async register(request: Request, response: Response) {
     this.response = response;
@@ -230,6 +231,7 @@ class UserAuth {
    * @description Login user after validating it using validateLogin method
    * @param request {Request}
    * @param response {Response}
+   * @returns {Promise<void>}
    */
   async login(request: Request, response: Response) {
     this.response = response;
@@ -266,6 +268,12 @@ class UserAuth {
       });
   }
 
+  /**
+   * @description Generate a reset password token for user which is valid for 24 hour
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {Promise<void>}
+   */
   async generateResetPassword(request: Request, response: Response) {
     this.response = response;
     this.request = request;
@@ -280,6 +288,7 @@ class UserAuth {
         },
       })) as User;
       if (user) {
+        // Generate reset password token based on user informations, found that this is the best way to make a unique identifier
         const token = jwt.sign(
           {
             id: user.id,
@@ -289,7 +298,7 @@ class UserAuth {
           },
           jwt_secret,
           {
-            expiresIn: "1d",
+            expiresIn: "1d", // reset token valid for 24 hours
           },
         );
         // Update user database reset token
@@ -302,6 +311,7 @@ class UserAuth {
           },
         });
 
+        // Send email to user with reset password link
         if (updatedUser) {
           const mailOptions = {
             from: process.env.EMAIL_USERNAME,
@@ -335,6 +345,12 @@ class UserAuth {
     }
   }
 
+  /**
+   * @description Validate the token, basically check if token is valid (stored in user database and not random) and not expired
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {Promise<User>}
+   */
   async validateResetToken(request: Request, response: Response) {
     this.response = response;
     this.request = request;
@@ -344,8 +360,48 @@ class UserAuth {
         resetToken: token,
       },
     });
-    if (user) {
+    const verifyJwt = jwt.verify(token, jwt_secret);
+    if (user && verifyJwt) {
       sendResponse(response, true, "Token is valid");
+      return true;
+    } else {
+      sendResponse(response, false, "Token is invalid");
+      return false;
+    }
+  }
+
+  /**
+   * @description Reset password for user after validating the token
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {Promise<void>}
+   */
+  async resetPassword(request: Request, response: Response) {
+    this.response = response;
+    this.request = request;
+    const { token, password } = request.body;
+    const validateToken = await this.validateResetToken(request, response);
+    if (validateToken) {
+      const isPassword = this.validatePassword(password);
+      if (!isPassword) {
+        sendResponse(response, false, "Password is too short 👉👈");
+      } else {
+        const updatedUser = await prisma.user.update({
+          where: {
+            resetToken: token,
+          },
+          data: {
+            password: await this.hashPassword(password),
+            // generate random reset token
+            resetToken: crypto.randomBytes(20).toString("hex"),
+          },
+        });
+        if (updatedUser) {
+          sendResponse(response, true, "Password reset successfully");
+        } else {
+          sendResponse(response, false, "Something went wrong");
+        }
+      }
     } else {
       sendResponse(response, false, "Token is invalid");
     }
