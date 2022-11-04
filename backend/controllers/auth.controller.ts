@@ -361,13 +361,7 @@ class UserAuth {
       },
     });
     const verifyJwt = jwt.verify(token, jwt_secret);
-    if (user && verifyJwt) {
-      sendResponse(response, true, "Token is valid");
-      return true;
-    } else {
-      sendResponse(response, false, "Token is invalid");
-      return false;
-    }
+    return user && verifyJwt && verifyJwt["id"] === user?.id;
   }
 
   /**
