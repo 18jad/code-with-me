@@ -11,7 +11,7 @@ CREATE TABLE "User" (
     "projectsCount" INTEGER NOT NULL DEFAULT 0,
     "favoritesCount" INTEGER NOT NULL DEFAULT 0,
     "favorites" INTEGER[] DEFAULT ARRAY[]::INTEGER[],
-    "resetToken" TEXT,
+    "resetToken" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -38,6 +38,9 @@ CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_resetToken_key" ON "User"("resetToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Project_title_key" ON "Project"("title");
