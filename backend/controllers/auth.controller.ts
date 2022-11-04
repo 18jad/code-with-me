@@ -1,3 +1,4 @@
+import { resetPassworHTML } from "./../config/resetPasswordHTML";
 // Imported packages
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
@@ -5,6 +6,8 @@ const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const sendEmail = require("../config/emailTransporter.config");
+const crypto = require("crypto");
 
 // Variables
 const jwt_secret = process.env.JWT_SECRET_KEY;
@@ -261,6 +264,75 @@ class UserAuth {
       .catch((error) => {
         sendResponse(response, false, "Validation Failed", { error: error });
       });
+  }
+
+  async generateResetPassword(request: Request, response: Response) {
+    this.response = response;
+    this.request = request;
+    const { email } = request.body;
+    const isEmail = this.validateEmail(email);
+    if (!isEmail) {
+      sendResponse(response, false, "Email is not valid");
+    } else {
+      const user = (await prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+      })) as User;
+      if (user) {
+        const token = jwt.sign(
+          {
+            id: user.id,
+            name: user.name,
+            username: user.username,
+            email: user.email,
+          },
+          jwt_secret,
+          {
+            expiresIn: "1d",
+          },
+        );
+        // Update user database reset token
+        const updatedUser = await prisma.user.update({
+          where: {
+            email: email,
+          },
+          data: {
+            resetToken: token,
+          },
+        });
+
+        if (updatedUser) {
+          const mailOptions = {
+            from: process.env.EMAIL_USERNAME,
+            to: email,
+            subject: "CodeWithMe | Reset Password",
+            html: resetPassworHTML(token),
+          };
+          sendEmail(mailOptions, (error: any, info: any) => {
+            if (error) {
+              sendResponse(response, false, "Something went wrong", {
+                error: error,
+              });
+            } else {
+              sendResponse(
+                response,
+                true,
+                "Reset passsword email sent successfully",
+              );
+            }
+          });
+        } else {
+          sendResponse(
+            response,
+            false,
+            "Something went wrong. Please try again",
+          );
+        }
+      } else {
+        sendResponse(response, false, "Email is not registered");
+      }
+    }
   }
 }
 
