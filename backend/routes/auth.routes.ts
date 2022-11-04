@@ -25,8 +25,17 @@ router.post("/generate_reset", (request: Request, response: Response) => {
 });
 
 // Reset token verify
-router.post("/verify_token", (request: Request, response: Response) => {
-  authController.validateResetToken(request, response);
+router.post("/verify_token", async (request: Request, response: Response) => {
+  const validate = await authController.validateResetToken(request, response);
+  validate
+    ? response.json({
+        success: true,
+        message: "Token is valid",
+      })
+    : response.json({
+        success: false,
+        message: "Token is invalid",
+      });
 });
 
 // Reset password
