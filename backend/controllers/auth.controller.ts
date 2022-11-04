@@ -334,6 +334,22 @@ class UserAuth {
       }
     }
   }
+
+  async validateResetToken(request: Request, response: Response) {
+    this.response = response;
+    this.request = request;
+    const { token } = request.body;
+    const user = await prisma.user.findUnique({
+      where: {
+        resetToken: token,
+      },
+    });
+    if (user) {
+      sendResponse(response, true, "Token is valid");
+    } else {
+      sendResponse(response, false, "Token is invalid");
+    }
+  }
 }
 
 module.exports = UserAuth;
