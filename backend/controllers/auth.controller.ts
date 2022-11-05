@@ -374,30 +374,34 @@ class UserAuth {
     this.response = response;
     this.request = request;
     const { token, password } = request.body;
-    const validateToken = await this.validateResetToken(request, response);
-    if (validateToken) {
-      const isPassword = this.validatePassword(password);
-      if (!isPassword) {
-        sendResponse(response, false, "Password is too short 👉👈");
-      } else {
-        const updatedUser = await prisma.user.update({
-          where: {
-            resetToken: token,
-          },
-          data: {
-            password: await this.hashPassword(password),
-            // generate random reset token
-            resetToken: crypto.randomBytes(20).toString("hex"),
-          },
-        });
-        if (updatedUser) {
-          sendResponse(response, true, "Password reset successfully");
+    try {
+      const validateToken = await this.validateResetToken(request, response);
+      if (validateToken) {
+        const isPassword = this.validatePassword(password);
+        if (!isPassword) {
+          sendResponse(response, false, "Password is too short 👉👈");
         } else {
-          sendResponse(response, false, "Something went wrong");
+          const updatedUser = await prisma.user.update({
+            where: {
+              resetToken: token,
+            },
+            data: {
+              password: await this.hashPassword(password),
+              // generate random reset token
+              resetToken: crypto.randomBytes(20).toString("hex"),
+            },
+          });
+          if (updatedUser) {
+            sendResponse(response, true, "Password reset successfully");
+          } else {
+            sendResponse(response, false, "Something went wrong");
+          }
         }
+      } else {
+        sendResponse(response, false, "Token is invalid");
       }
-    } else {
-      sendResponse(response, false, "Token is invalid");
+    } catch (error) {
+      sendResponse(response, false, "Token has expired", { error });
     }
   }
 }
