@@ -54,7 +54,6 @@ class UserController {
    */
   public async getUserById(request: Request, response: Response) {
     let { id } = request.query as any;
-    console.log("id", id);
     if (typeof id === "string") {
       try {
         id = parseInt(id);
@@ -68,6 +67,33 @@ class UserController {
         await prisma.user.findUnique({
           where: {
             id: Number(id),
+          },
+        }),
+        "password",
+      ) as User;
+      if (user) {
+        user.resetToken = "";
+        sendResponse(response, true, "User found", { user });
+      }
+    } catch (error) {
+      sendResponse(response, false, "User not found", error);
+    }
+  }
+
+  /**
+   * @description Get user by id
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async getUserByUsername(request: Request, response: Response) {
+    let { username } = request.query as any;
+    console.log(username);
+    try {
+      const user = this.exclude(
+        await prisma.user.findUnique({
+          where: {
+            username: username,
           },
         }),
         "password",
