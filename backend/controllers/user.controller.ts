@@ -1,5 +1,5 @@
 // Imported packages
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { Request } from "express";
 const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
@@ -44,6 +44,41 @@ class UserController {
       delete user[key];
     }
     return user;
+  }
+
+  /**
+   * @description Get user by id
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async getUserById(request: Request, response: Response) {
+    let { id } = request.query as any;
+    console.log("id", id);
+    if (typeof id === "string") {
+      try {
+        id = parseInt(id);
+      } catch (error) {
+        sendResponse(response, false, "Invalid user id", error);
+        return null;
+      }
+    }
+    try {
+      const user = this.exclude(
+        await prisma.user.findUnique({
+          where: {
+            id: Number(id),
+          },
+        }),
+        "password",
+      ) as User;
+      if (user) {
+        user.resetToken = "";
+        sendResponse(response, true, "User found", { user });
+      }
+    } catch (error) {
+      sendResponse(response, false, "User not found", error);
+    }
   }
 }
 
