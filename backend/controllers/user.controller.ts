@@ -29,6 +29,22 @@ class UserController {
       return error;
     }
   }
+
+  /**
+   * @description Exclude properties from prisma request
+   * @param user {User} user object
+   * @param keys {string[]} keys to exclude
+   * @returns {User} user object without excluded keys
+   */
+  private exclude<User, Key extends keyof User>(
+    user: any,
+    ...keys: any[]
+  ): Omit<User, Key> {
+    for (let key of keys) {
+      delete user[key];
+    }
+    return user;
+  }
 }
 
 module.exports = UserController;
