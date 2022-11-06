@@ -1,10 +1,12 @@
 // Imported packages
 import { PrismaClient, Project, User } from "@prisma/client";
 import { Request } from "express";
+const AuthUser = require("./auth.controller");
 const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const userCheck = new AuthUser();
 
 class UserController {
   private readonly titleFilter = /^(?=.*[a-zA-Z]+.*)[A-Za-z0-9_-]{4,20}$/;
@@ -142,7 +144,17 @@ class UserController {
    */
   public validateDescription(description: string) {
     const descriptionLength: number = Number(description?.length);
-    return descriptionLength > 10 && descriptionLength < 80; // min is 10 characters and max is 100 characters
+    return descriptionLength > 10 && descriptionLength < 80; // min is 10 characters and max is 80 characters
+  }
+
+  /**
+   * @description Validate headline length
+   * @param headline {string} user headline
+   * @returns {boolean} true if headline is valid
+   */
+  public validateHeadline(headline: string) {
+    const headlineLength: number = Number(headline?.length);
+    return headlineLength > 10 && headlineLength < 100; // min is 10 characters and max is 100 characters
   }
 
   /**
