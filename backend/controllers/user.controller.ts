@@ -1,5 +1,5 @@
 // Imported packages
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient, Project, User } from "@prisma/client";
 import { Request } from "express";
 const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
@@ -7,6 +7,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 class UserController {
+  private readonly titleFilter = /^(?=.*[a-zA-Z]+.*)[A-Za-z0-9_-]{4,20}$/;
+
   /**
    * @description Extract jwt token from request header
    * @param request {Request}
@@ -117,6 +119,54 @@ class UserController {
     } catch (error) {
       sendResponse(response, false, "User not found", error);
     }
+  }
+
+  public validateTitle(title: string) {
+    const titleLength: number = Number(title?.length);
+    return (
+      titleLength >= 3 &&
+      titleLength <= 20 && // min is 3 characters and max is 20 characters and it should be unique
+      this.titleFilter.test(title) // it should contain only letters, numbers, underscores and hyphens
+    );
+  }
+
+  public validateDescription(description: string) {
+    const descriptionLength: number = Number(description?.length);
+    return descriptionLength > 10 && descriptionLength < 80; // min is 10 characters and max is 100 characters
+  }
+
+  public async checkTitle(title: string) {
+    const foundProject = await prisma.project.findFirst({
+      where: {
+        title: title,
+      },
+    });
+    return Boolean(foundProject) ? true : false;
+  }
+
+  public async validate(data: Request) {
+    const { title, description } = data.body as Project;
+    return new Promise((resolve, reject) => {
+      if (this.validateTitle(title)) {
+        this.checkTitle(title).then((found: boolean) => {
+          if (!found) {
+            if (this.validateDescription(description)) {
+              resolve({ title, description });
+            } else {
+              reject(
+                "Invalid description. Min is 10 characters and max is 80 characters",
+              );
+            }
+          } else {
+            reject("Title already exists");
+          }
+        });
+      } else {
+        reject(
+          "Invalid title. Min is 4 characters and max is 20 characters, it should contain only letters, numbers, underscores (_) and hyphens (-)",
+        );
+      }
+    });
   }
 }
 
