@@ -27,6 +27,7 @@ CREATE TABLE "Project" (
     "allowedUsers" INTEGER[] DEFAULT ARRAY[]::INTEGER[],
     "likes" INTEGER NOT NULL DEFAULT 0,
     "fileStructure" JSON NOT NULL,
+    "githubRepo" JSON NOT NULL DEFAULT '{}',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -34,13 +35,7 @@ CREATE TABLE "Project" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_resetToken_key" ON "User"("resetToken");
+CREATE UNIQUE INDEX "User_email_username_resetToken_key" ON "User"("email", "username", "resetToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Project_title_key" ON "Project"("title");
