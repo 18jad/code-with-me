@@ -244,6 +244,60 @@ class UserController {
         sendResponse(response, false, "Unauthorized user", error);
       });
   }
+
+  /**
+   * @description Edit logged in user profile name, username, headline and image
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void} Edit user profile details
+   */
+  public async editProfile(request: Request, response: Response) {
+    this.decodeToken(request)
+      .then(async (token: any) => {
+        const { id } = token;
+        const { name, username, headline } = request.body as User;
+        const validateUsername = userCheck.validateUsername(username);
+        if (validateUsername) {
+          const checkUsername = await userCheck.checkUsername(username);
+          // if username is not taken OR if username is the same as the current logged in user (means he didn't change it)
+          if (!checkUsername || username === token.username) {
+            const validateHeadline = this.validateHeadline(headline as string);
+            if (validateHeadline) {
+              prisma.user
+                .update({
+                  where: {
+                    id: id,
+                  },
+                  data: {
+                    name: name,
+                    username: username,
+                    headline: headline,
+                  },
+                })
+                .then((user) => {
+                  sendResponse(response, true, "Profile updated", { user });
+                })
+                .catch((error) => {
+                  sendResponse(response, false, "Something went wrong", error);
+                });
+            } else {
+              sendResponse(
+                response,
+                false,
+                "Invalid headline. Min is 10 characters and max is 100 characters",
+              );
+            }
+          } else {
+            sendResponse(response, false, "Username already exists");
+          }
+        } else {
+          sendResponse(response, false, "Invalid username format");
+        }
+      })
+      .catch((error) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
 }
 
 module.exports = UserController;
