@@ -39,7 +39,7 @@ class UserAuth {
    * @returns {Boolean}
    */
   validateEmail(email: string): boolean {
-    return Boolean(email.match(this.emailFilter));
+    return Boolean(email && email.match(this.emailFilter));
   }
 
   /**
@@ -48,7 +48,7 @@ class UserAuth {
    * @returns {Boolean}
    */
   validatePassword(password: string): boolean {
-    return Boolean(password.length >= 8);
+    return Boolean(password?.length >= 8);
   }
 
   /**
@@ -57,7 +57,7 @@ class UserAuth {
    * @returns {Boolean}
    */
   validateUsername(username: string) {
-    return Boolean(username.length >= 3);
+    return Boolean(username?.length >= 3);
   }
 
   /**
