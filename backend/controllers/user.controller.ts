@@ -251,6 +251,7 @@ class UserController {
    * @param response {Response}
    * @returns {void} Edit user profile details
    */
+  // TODO: Add image edit and update functionality
   public async editProfile(request: Request, response: Response) {
     this.decodeToken(request)
       .then(async (token: any) => {
@@ -297,6 +298,48 @@ class UserController {
       .catch((error) => {
         sendResponse(response, false, "Unauthorized user", error);
       });
+  }
+
+  /**
+   * @description Search for a user by username or name
+   * @param request {Request}
+   * @param response {Response}
+   */
+  public async searchUser(request: Request, response: Response) {
+    const { query } = request.query as { query: string };
+    // check if query is not empty
+    if (query && query.length > 0) {
+      const users = await prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              username: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+        select: {
+          id: true,
+          name: true,
+          username: true,
+          headline: true,
+          avatar: true,
+          projects: true,
+          password: false,
+        },
+      });
+      sendResponse(response, true, "Query excuted", { users });
+    } else {
+      sendResponse(response, false, "Query is empty");
+    }
   }
 }
 
