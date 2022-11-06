@@ -6,11 +6,25 @@ import { Request, Response } from "express";
 const router = Router();
 const UserController = require("../controllers/user.controller");
 const userController = new UserController();
+const authMiddleware = require("../middlewares/user.middleware");
 
-// Routes
-// Register route
-router.get("/get_user_by_id", (request: Request, response: Response) => {
+// Routes:
+// Get user info routes:
+// Get user info by id:
+router.get("/info_id", (request: Request, response: Response) => {
   userController.getUserById(request, response);
 });
+// Get user info by username:
+router.get("/info_username", (request: Request, response: Response) => {
+  userController.getUserByUsername(request, response);
+});
+
+router.post(
+  "/create_project",
+  authMiddleware,
+  (request: Request, response: Response) => {
+    userController.createProject(request, response);
+  },
+);
 
 module.exports = router;
