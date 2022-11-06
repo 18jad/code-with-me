@@ -10,15 +10,16 @@ const authMiddleware = require("../middlewares/user.middleware");
 
 // Routes:
 // Get user info routes:
-// Get user info by id:
+// Get user info by id
 router.get("/info_id", (request: Request, response: Response) => {
   userController.getUserById(request, response);
 });
-// Get user info by username:
+// Get user info by username
 router.get("/info_username", (request: Request, response: Response) => {
   userController.getUserByUsername(request, response);
 });
 
+// Create new project route
 router.post(
   "/create_project",
   authMiddleware,
@@ -26,5 +27,19 @@ router.post(
     userController.createProject(request, response);
   },
 );
+
+// Edit profile route
+router.post(
+  "/edit_profile",
+  authMiddleware,
+  (request: Request, response: Response) => {
+    userController.editProfile(request, response);
+  },
+);
+
+// Search user
+router.get("/search", (request: Request, response: Response) => {
+  userController.searchUser(request, response);
+});
 
 module.exports = router;
