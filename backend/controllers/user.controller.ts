@@ -19,15 +19,27 @@ class UserController {
   /**
    * @description Decode jwt token and return user info
    * @param request {Request}
-   * @returns {Object} user details stored in jwt token
+   * @returns {Promise<Userinfo>} user details stored in jwt token
    */
-  private decodeToken(request: Request) {
-    const token = this.getToken(request);
-    try {
-      return jwt.decode(token, process.env.JWT_SECRET_KEY);
-    } catch (error) {
-      return error;
-    }
+  private async decodeToken(request: Request) {
+    return new Promise((resolve, reject) => {
+      const token = this.getToken(request);
+      if (token) {
+        jwt.verify(
+          token,
+          process.env.JWT_SECRET_KEY,
+          (err: any, decoded: any) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(decoded);
+            }
+          },
+        );
+      } else {
+        reject("No token provided");
+      }
+    });
   }
 
   /**
