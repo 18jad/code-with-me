@@ -13,8 +13,8 @@ datasource db {
 model User {
   id             Int       @id @default(autoincrement())
   name           String
-  username       String    @db.VarChar(15)
-  email          String
+  username       String    @unique @db.VarChar(15)
+  email          String    @unique
   password       String
   headline       String?   @db.VarChar(100)
   avatar         String?
@@ -23,11 +23,11 @@ model User {
   favoritesCount Int       @default(0)
   projects       Project[]
   favorites      Int[]     @default([])
-  resetToken     String    @default(cuid())
+  resetToken     String    @unique @default(cuid())
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
-  @@unique([email, username, resetToken])
+  // @@unique([email, username, resetToken])
 }
 
 model Project {

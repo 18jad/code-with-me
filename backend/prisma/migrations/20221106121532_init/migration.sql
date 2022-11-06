@@ -35,7 +35,13 @@ CREATE TABLE "Project" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_username_resetToken_key" ON "User"("email", "username", "resetToken");
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_resetToken_key" ON "User"("resetToken");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Project_title_key" ON "Project"("title");
