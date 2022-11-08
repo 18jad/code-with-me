@@ -5,18 +5,20 @@ import { Request, Response } from "express";
 // Variables
 const router = Router();
 const UserController = require("../controllers/user.controller");
-const userController = new UserController();
+const InfoController = require("../controllers/info.controller");
 const authMiddleware = require("../middlewares/user.middleware");
+const userController = new UserController();
+const infoController = new InfoController();
 
 // Routes:
 // Get user info routes:
 // Get user info by id
 router.get("/info_id", (request: Request, response: Response) => {
-  userController.getUserById(request, response);
+  infoController.getUserById(request, response);
 });
 // Get user info by username
 router.get("/info_username", (request: Request, response: Response) => {
-  userController.getUserByUsername(request, response);
+  infoController.getUserByUsername(request, response);
 });
 
 // Create new project route
@@ -39,7 +41,7 @@ router.post(
 
 // Search user
 router.get("/search", (request: Request, response: Response) => {
-  userController.searchUser(request, response);
+  infoController.searchUser(request, response);
 });
 
 // Check if likes
