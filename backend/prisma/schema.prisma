@@ -40,6 +40,7 @@ model Project {
   likes         Int      @default(0)
   fileStructure Json     @db.Json
   githubRepo    Json     @default("{}") @db.Json
+  inviteToken   String   @unique @default(cuid())
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
