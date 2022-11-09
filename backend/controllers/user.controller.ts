@@ -330,6 +330,92 @@ class UserController {
         sendResponse(response, false, "Unauthorized user", error);
       });
   }
+
+  /**
+   * @description Validate invite token
+   * @param token {string} invite token
+   * @returns {Promise<boolean>} true if token is valid
+   */
+  private async validateInviteToken(token: string) {
+    const project = await prisma.project.findUnique({
+      where: {
+        inviteToken: token,
+      },
+      select: {
+        id: true,
+      },
+    });
+    return project ? true : false;
+  }
+
+  /**
+   * @description Allow user to access a project and edit the files
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async allowUser(request: Request, response: Response) {
+    this.decodeToken(request)
+      .then(async (token: any) => {
+        if (token) {
+          const { id } = token as { id: number };
+          const { invitationToken } = request.body as {
+            invitationToken: string;
+          };
+          const validateToken = await this.validateInviteToken(invitationToken);
+          if (id && invitationToken && validateToken) {
+            const { allowedUsers } = (await prisma.project.findUnique({
+              where: {
+                inviteToken: invitationToken,
+              },
+              select: {
+                allowedUsers: true,
+              },
+            })) as {
+              allowedUsers: any[];
+            };
+            // If user is already allowed do nothing
+            if (allowedUsers.includes(id)) {
+              sendResponse(response, false, "User already allowed");
+              return null;
+            }
+            // Filter the array from duplicated values if there's any and add the new user id
+            const uniqueUsers = Array.from(
+              (new Set<number[]>([...allowedUsers, id]) as any).values(),
+            ) as number[];
+            prisma.project
+              .update({
+                where: {
+                  inviteToken: invitationToken,
+                },
+                data: {
+                  allowedUsers: {
+                    set: uniqueUsers, // change allowed user array ids to the new one
+                  },
+                },
+              })
+              .then((result) => {
+                sendResponse(
+                  response,
+                  true,
+                  "User allowed successfully",
+                  result,
+                );
+              })
+              .catch((error) => {
+                sendResponse(response, false, "Something went wrong", error);
+              });
+          } else {
+            sendResponse(response, false, "Invalid invitation link");
+          }
+        } else {
+          sendResponse(response, false, "Unauthorized user");
+        }
+      })
+      .catch((error) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
 }
 
 module.exports = UserController;
