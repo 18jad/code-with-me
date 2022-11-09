@@ -416,6 +416,53 @@ class UserController {
         sendResponse(response, false, "Unauthorized user", error);
       });
   }
+
+  /**
+   * @description Check if user is allowed to access the project and edit the files
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async checkIfAllowed(request: Request, response: Response) {
+    this.decodeToken(request)
+      .then(async (token: any) => {
+        if (token) {
+          const { id } = token as { id: number };
+          const { projectTitle } = request.query as { projectTitle: string };
+          const project = (await prisma.project.findUnique({
+            where: {
+              title: projectTitle,
+            },
+            select: {
+              allowedUsers: true,
+            },
+          })) as {
+            allowedUsers: any[];
+          };
+          const allowedUsers =
+            (project?.allowedUsers as unknown as number[]) || undefined;
+          if (
+            allowedUsers &&
+            typeof allowedUsers === "object" &&
+            allowedUsers?.includes(id)
+          ) {
+            sendResponse(response, true, "User allowed");
+          } else {
+            // If project is not found
+            if (!allowedUsers) {
+              sendResponse(response, false, "Project not found");
+              return null;
+            }
+            sendResponse(response, false, "User not allowed");
+          }
+        } else {
+          sendResponse(response, false, "Unauthorized user");
+        }
+      })
+      .catch((error) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
 }
 
 module.exports = UserController;
