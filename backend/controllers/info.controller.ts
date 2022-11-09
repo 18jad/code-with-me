@@ -1,5 +1,5 @@
 // Imported packages
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient, Project, User } from "@prisma/client";
 import { Request } from "express";
 const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
@@ -11,10 +11,7 @@ class InfoController {
    * @param keys {string[]} keys to exclude
    * @returns {User} user object without excluded keys
    */
-  private exclude<User, Key extends keyof User>(
-    user: any,
-    ...keys: any[]
-  ): Omit<User, Key> {
+  private exclude(user: any, keys: any[]) {
     for (let key of keys) {
       delete user[key];
     }
@@ -29,29 +26,32 @@ class InfoController {
    */
   public async getUserById(request: Request, response: Response) {
     let { id } = request.query as any;
-    if (typeof id === "string") {
+    if (id) {
+      if (typeof id === "string") {
+        try {
+          id = parseInt(id);
+        } catch (error) {
+          sendResponse(response, false, "Invalid user id", error);
+          return null;
+        }
+      }
       try {
-        id = parseInt(id);
+        const user = this.exclude(
+          await prisma.user.findUnique({
+            where: {
+              id: Number(id),
+            },
+          }),
+          ["password", "resetToken"],
+        ) as User;
+        if (user) {
+          sendResponse(response, true, "User found", { user });
+        }
       } catch (error) {
-        sendResponse(response, false, "Invalid user id", error);
-        return null;
+        sendResponse(response, false, "User not found", error);
       }
-    }
-    try {
-      const user = this.exclude(
-        await prisma.user.findUnique({
-          where: {
-            id: Number(id),
-          },
-        }),
-        "password",
-      ) as User;
-      if (user) {
-        user.resetToken = "";
-        sendResponse(response, true, "User found", { user });
-      }
-    } catch (error) {
-      sendResponse(response, false, "User not found", error);
+    } else {
+      sendResponse(response, false, "User id cannot be null");
     }
   }
 
@@ -63,22 +63,26 @@ class InfoController {
    */
   public async getUserByUsername(request: Request, response: Response) {
     let { username } = request.query as any;
-    console.log(username);
-    try {
-      const user = this.exclude(
-        await prisma.user.findUnique({
-          where: {
-            username: username,
-          },
-        }),
-        "password",
-      ) as User;
-      if (user) {
-        user.resetToken = "";
-        sendResponse(response, true, "User found", { user });
+    if (username && username.length > 0) {
+      try {
+        const user = this.exclude(
+          await prisma.user.findUnique({
+            where: {
+              username: username,
+            },
+          }),
+          ["password", "resetToken"],
+        ) as User;
+        if (user) {
+          // if user was found
+          sendResponse(response, true, "User found", { user });
+        }
+      } catch (error) {
+        // if user was not found
+        sendResponse(response, false, "User not found", error);
       }
-    } catch (error) {
-      sendResponse(response, false, "User not found", error);
+    } else {
+      sendResponse(response, false, "Username cannot be null");
     }
   }
 
@@ -86,6 +90,7 @@ class InfoController {
    * @description Search for a user by username or name
    * @param request {Request}
    * @param response {Response}
+   * @returns {void}
    */
   public async searchUser(request: Request, response: Response) {
     const { query } = request.query as { query: string };
@@ -121,6 +126,42 @@ class InfoController {
       sendResponse(response, true, "Query excuted", { users });
     } else {
       sendResponse(response, false, "Query is empty");
+    }
+  }
+
+  /**
+   * @description Get project by title
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async getProjectByTitle(request: Request, response: Response) {
+    const { title } = request.query as { title: string };
+    // if title is not null
+    if (title && title.length > 0) {
+      try {
+        // find the project
+        const project = this.exclude(
+          await prisma.project.findUnique({
+            where: {
+              title: title,
+            },
+          }),
+          ["inviteToken"], // exclude invite token to not expose it
+        ) as Project;
+        if (project) {
+          // if project is found
+          sendResponse(response, true, "Project found", { project });
+        } else {
+          // if project was not found
+          sendResponse(response, false, "Project not found");
+        }
+      } catch (error) {
+        sendResponse(response, false, "Something went wrong", error);
+      }
+    } else {
+      // if title is null
+      sendResponse(response, false, "Title cannot be null");
     }
   }
 }
