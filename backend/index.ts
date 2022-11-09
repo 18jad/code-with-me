@@ -10,6 +10,7 @@ const app = express();
 const port: string | number = process.env.PORT || 2121;
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const infoRoutes = require("./routes/info.routes");
 const apiVersion: number = 1.0;
 const prefix: string = String("/api/v" + apiVersion.toFixed(1));
 
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use(prefix + "/auth", authRoutes);
 app.use(prefix + "/user", userRoutes);
+app.use(prefix + "/info", infoRoutes);
 
 app.listen(port, (error: any) => {
   if (error) {
