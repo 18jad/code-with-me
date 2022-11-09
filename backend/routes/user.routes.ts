@@ -60,4 +60,21 @@ router.post(
   },
 );
 
+// Allow user into a project
+router.post(
+  "/allow_user",
+  authMiddleware,
+  (request: Request, response: Response) => {
+    userController.allowUser(request, response);
+  },
+);
+
+// Check if user is allowed
+router.get(
+  "/check_allowed",
+  authMiddleware,
+  async (request: Request, response: Response) => {
+    userController.checkIfAllowed(request, response);
+  },
+);
 module.exports = router;
