@@ -433,20 +433,20 @@ class UserController {
             where: {
               title: projectTitle,
             },
-            select: {
-              allowedUsers: true,
-            },
           })) as {
             allowedUsers: any[];
+            authorId: number;
           };
           const allowedUsers =
             (project?.allowedUsers as unknown as number[]) || undefined;
           if (
-            allowedUsers &&
-            typeof allowedUsers === "object" &&
-            allowedUsers?.includes(id)
+            project &&
+            (project?.authorId === id ||
+              (allowedUsers &&
+                typeof allowedUsers === "object" &&
+                allowedUsers?.includes(id)))
           ) {
-            sendResponse(response, true, "User allowed");
+            sendResponse(response, true, "User allowed", { project });
           } else {
             // If project is not found
             if (!allowedUsers) {
