@@ -10,15 +10,6 @@ const userController = new UserController();
 
 // Routes:
 
-// Create new project route
-router.post(
-  "/create_project",
-  authMiddleware,
-  (request: Request, response: Response) => {
-    userController.createProject(request, response);
-  },
-);
-
 // Edit profile route
 router.post(
   "/edit_profile",
@@ -41,24 +32,6 @@ router.post(
   authMiddleware,
   (request: Request, response: Response) => {
     userController.updateUserLike(request, response);
-  },
-);
-
-// Allow user into a project
-router.post(
-  "/allow_user",
-  authMiddleware,
-  (request: Request, response: Response) => {
-    userController.allowUser(request, response);
-  },
-);
-
-// Check if user is allowed
-router.get(
-  "/check_allowed",
-  authMiddleware,
-  async (request: Request, response: Response) => {
-    userController.checkIfAllowed(request, response);
   },
 );
 
