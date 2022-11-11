@@ -109,6 +109,7 @@ class ProjectController {
                 },
               })
               .then((project) => {
+                // TODO: Increase project count in database when project is created
                 sendResponse(response, true, "Project created", { project });
               })
               .catch((error) => {

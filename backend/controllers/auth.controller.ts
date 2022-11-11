@@ -184,6 +184,7 @@ class UserAuth {
             reject("Email or password is incorrect");
           } else {
             // Empty password before sending response
+            // TODO: use exclude function to remove the password instead
             user.password = "";
             resolve(user);
           }
