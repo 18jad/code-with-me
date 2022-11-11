@@ -3,21 +3,9 @@ import { PrismaClient, Project, User } from "@prisma/client";
 import { Request } from "express";
 const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
+const exclude = require("../utils/exclude");
 
 class InfoController {
-  /**
-   * @description Exclude properties from prisma request
-   * @param user {User} user object
-   * @param keys {string[]} keys to exclude
-   * @returns {User} user object without excluded keys
-   */
-  private exclude(user: any, keys: any[]) {
-    for (let key of keys) {
-      delete user[key];
-    }
-    return user;
-  }
-
   /**
    * @description Get user by id
    * @param request {Request}
@@ -36,7 +24,7 @@ class InfoController {
         }
       }
       try {
-        const user = this.exclude(
+        const user = exclude(
           await prisma.user.findUnique({
             where: {
               id: Number(id),
@@ -65,7 +53,7 @@ class InfoController {
     let { username } = request.query as any;
     if (username && username.length > 0) {
       try {
-        const user = this.exclude(
+        const user = exclude(
           await prisma.user.findUnique({
             where: {
               username: username,
@@ -141,7 +129,7 @@ class InfoController {
     if (title && title.length > 0) {
       try {
         // find the project
-        const project = this.exclude(
+        const project = exclude(
           await prisma.project.findUnique({
             where: {
               title: title,
