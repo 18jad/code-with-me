@@ -1,13 +1,14 @@
-import { resetPassworHTML } from "./../config/resetPasswordHTML";
 // Imported packages
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-const prisma = new PrismaClient();
-const sendResponse = require("../utils/sendResponse");
+import { resetPassworHTML } from "./../config/resetPasswordHTML";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const sendEmail = require("../utils/emailTransporter");
+const prisma = new PrismaClient();
 const crypto = require("crypto");
+const sendResponse = require("../utils/sendResponse");
+const sendEmail = require("../utils/emailTransporter");
+const exclude = require("../utils/exclude");
 
 // Variables
 const jwt_secret = process.env.JWT_SECRET_KEY;
@@ -183,9 +184,8 @@ class UserAuth {
           if (!checkCredential) {
             reject("Email or password is incorrect");
           } else {
-            // Empty password before sending response
-            // TODO: use exclude function to remove the password instead
-            user.password = "";
+            // Exclude password before sending response
+            exclude(user, ["password"]);
             resolve(user);
           }
         } else {
