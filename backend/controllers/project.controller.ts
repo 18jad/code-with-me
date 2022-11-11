@@ -81,7 +81,7 @@ class ProjectController {
   }
 
   /**
-   * @description Validate fields and create a new project
+   * @description Validate fields and create a new project, then increase project counter and return the project data
    * @param request {Request}
    * @param response {Response}
    * @returns {void} Create the project
@@ -109,8 +109,31 @@ class ProjectController {
                 },
               })
               .then((project) => {
-                // TODO: Increase project count in database when project is created
-                sendResponse(response, true, "Project created", { project });
+                // Increase project counter when project is created
+                prisma.user
+                  .update({
+                    where: {
+                      id: id,
+                    },
+                    data: {
+                      projectsCount: {
+                        increment: 1,
+                      },
+                    },
+                  })
+                  .then(() => {
+                    sendResponse(response, true, "Project created", {
+                      project,
+                    });
+                  })
+                  .catch((error) => {
+                    sendResponse(
+                      response,
+                      false,
+                      "Something went wrong",
+                      error,
+                    );
+                  });
               })
               .catch((error) => {
                 sendResponse(response, false, "Project not created", error);
