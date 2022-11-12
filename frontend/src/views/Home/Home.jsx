@@ -226,7 +226,7 @@ const Home = () => {
                 }}>
                 {langComp.start}
               </motion.button>
-              <div className={styles.mobileDownload}>
+              {/* <div className={styles.mobileDownload}>
                 <p>
                   {langComp.mobile}
                   <br />
@@ -238,7 +238,7 @@ const Home = () => {
                     <b>IOS</b>
                   </span>
                 </p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
