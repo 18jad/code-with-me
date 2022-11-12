@@ -57,10 +57,16 @@ const Navbar = ({ contact, fn }) => {
       </Link>
       <div className='hidden md:flex '>
         <li className='flex items-center justify-center gap-10'>
-          <Link to='/docs' className={linkCss}>
+          <Link
+            to='/docs'
+            className={linkCss}
+            onClick={(e) => e.preventDefault()}>
             {langComp.docs}
           </Link>
-          <Link to='/downloads' className={linkCss}>
+          <Link
+            to='/downloads'
+            className={linkCss}
+            onClick={(e) => e.preventDefault()}>
             {langComp.download}
           </Link>
           <Link onClick={contact} className={linkCss}>
