@@ -1,7 +1,7 @@
 // Imported packages
 import { PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { resetPassworHTML } from "../views/resetPasswordHTML";
+import { resetPassworHTML } from "../views/resetPassword.html";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
