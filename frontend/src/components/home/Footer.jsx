@@ -42,14 +42,16 @@ const Footer = ({ contact }) => {
           <span className='title'>{langComp.download.title}</span>
           <ul>
             <ListChild>{langComp.download.web}</ListChild>
-            <ListChild>Android</ListChild>
-            <ListChild>IOS</ListChild>
+            <ListChild className='line-through'>Android</ListChild>
+            <ListChild className='line-through'>IOS</ListChild>
           </ul>
         </div>
         <div className='about flex-grow '>
           <span className='title'>{langComp.about.title}</span>
           <ul>
-            <ListChild>{langComp.about.docs}</ListChild>
+            <ListChild className='line-through'>
+              {langComp.about.docs}
+            </ListChild>
             <ListChild>{langComp.about.us}</ListChild>
             <ListChild onClick={contact}>{langComp.about.contact}</ListChild>
           </ul>
