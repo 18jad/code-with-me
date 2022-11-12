@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Particles from "react-tsparticles";
 import { tw } from "utils/TailwindComponent";
-import authStore from "./lang/authStore";
-import { initEngine, starsOptions } from "./particles/StarsParticles";
-import styles from "./styles/Authentication.module.scss";
+import authStore from "../lang/authStore";
+import { initEngine, starsOptions } from "../particles/StarsParticles";
+import styles from "./Authentication.module.scss";
 
 const Authentication = () => {
   // Login and sign up state (for switching between the two)

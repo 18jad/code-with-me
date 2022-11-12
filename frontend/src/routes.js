@@ -1,9 +1,9 @@
-import Authentication from "views/Authentication";
-import Editor from "views/Editor";
-import Home from "views/Home";
-import NotFound from "views/NotFound";
-import Profile from "views/Profile";
-import User from "views/User";
+import Authentication from "views/Authentication/Authentication";
+import Editor from "views/Editor/Editor";
+import Home from "views/Home/Home";
+import NotFound from "views/NotFound/NotFound";
+import Profile from "views/Profile/Profile";
+import User from "views/Profile/User";
 
 /**
  * @type {Array}
