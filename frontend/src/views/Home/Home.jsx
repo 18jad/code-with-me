@@ -9,9 +9,9 @@ import { useEffect, useReducer, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
-import homeInfo from "./lang/homeStore";
-import { initEngine, starsOptions } from "./particles/StarsParticles";
-import styles from "./styles/Home.module.scss";
+import homeInfo from "../lang/homeStore";
+import { initEngine, starsOptions } from "../particles/StarsParticles";
+import styles from "./Home.module.scss";
 
 const Home = () => {
   // To navigate through pages

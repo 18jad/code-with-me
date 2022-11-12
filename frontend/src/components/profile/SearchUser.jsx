@@ -1,5 +1,5 @@
 import EmptyProfile from "assets/images/empty_profile.png";
-import styles from "views/styles/Profile.module.scss";
+import styles from "views/Profile/Profile.module.scss";
 
 const SearchUser = ({ name, username, profile }) => {
   return (

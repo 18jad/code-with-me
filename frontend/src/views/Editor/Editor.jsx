@@ -10,7 +10,7 @@ import { Chats, GearSix, Link, Stack } from "phosphor-react";
 import { Resizable } from "re-resizable";
 import { useRef, useState } from "react";
 import { tw } from "utils/TailwindComponent";
-import styles from "./styles/Editor.module.scss";
+import styles from "./Editor.module.scss";
 const VoiceChatCircle = tw.img`
     inline-block
     h-8

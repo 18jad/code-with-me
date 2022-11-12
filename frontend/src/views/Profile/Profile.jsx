@@ -14,7 +14,7 @@ import {
 import { useState } from "react";
 import formatNumber from "utils/FormatNumber";
 import { tw } from "utils/TailwindComponent";
-import styles from "./styles/Profile.module.scss";
+import styles from "./Profile.module.scss";
 
 // Modal input element tailwind styled component
 const ModalInput = tw.input`

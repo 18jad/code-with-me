@@ -6,7 +6,7 @@ import { Heart, MagnifyingGlass, SignOut, UserCircle } from "phosphor-react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import formatNumber from "utils/FormatNumber";
-import styles from "./styles/Profile.module.scss";
+import styles from "./Profile.module.scss";
 
 // Stats card component for profile stats
 const StatsCard = ({ count, text }) => {

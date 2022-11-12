@@ -3,7 +3,7 @@ import AmongUsRed from "assets/images/amongus_red.png";
 import { House } from "phosphor-react";
 import { useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
-import { amongUsOptions, initEngine } from "./particles/AmongUs";
+import { amongUsOptions, initEngine } from "../particles/AmongUs";
 
 const NotFound = () => {
   const navigate = useNavigate();
