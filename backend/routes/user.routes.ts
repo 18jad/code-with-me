@@ -5,8 +5,10 @@ import { Request, Response } from "express";
 // Variables
 const router = Router();
 const UserController = require("../controllers/user.controller");
+const ContactController = require("../controllers/contact.controller");
 const authMiddleware = require("../middlewares/user.middleware");
 const userController = new UserController();
+const contactController = new ContactController();
 
 // Routes:
 
@@ -34,5 +36,10 @@ router.post(
     userController.updateUserLike(request, response);
   },
 );
+
+// Send contact me email
+router.post("/contact_me", (request: Request, response: Response) => {
+  contactController.sendEmail(request, response);
+});
 
 module.exports = router;
