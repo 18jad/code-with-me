@@ -1,0 +1,240 @@
+@import "global.scss";
+
+.mainContainer {
+  background: $black;
+  overflow: hidden;
+
+  .topContainer {
+    background: url("../../assets/images/background_earth.png") no-repeat;
+    width: 100vw;
+    background-size: cover;
+    color: $white;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    gap: 200px;
+    height: 120vh;
+
+    .heroSection {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+      margin: 0 auto;
+      @include breakpoint(mobile) {
+        align-items: flex-start;
+      }
+
+      .introduction {
+        $tcolor: rgba(255, 255, 255, 0.6);
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 15px;
+
+        @include breakpoint(mobile) {
+          max-width: 300px;
+
+          text-align: left;
+        }
+        span {
+          font-size: calc(1.5em + 3vw);
+          font-weight: bold;
+          overflow: hidden;
+          background: linear-gradient(90deg, $black, $white, $black);
+          background-repeat: no-repeat;
+          background-size: 80%;
+          animation: textShine 3s linear infinite;
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: $tcolor;
+          -webkit-text-fill-color: $tcolor;
+
+          @include breakpoint(mobile) {
+            // width: 300px;
+            text-align: left;
+          }
+        }
+
+        div {
+          font-size: calc(1em + 0.23vw);
+          font-weight: 200;
+          color: $lighgray;
+
+          @include breakpoint(mobile) {
+            // width: 300px;
+            text-align: left;
+          }
+        }
+      }
+
+      .interactions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-top: 25px;
+        gap: 15px;
+        @include breakpoint(mobile) {
+          align-items: flex-start;
+        }
+
+        .getStartedBtn {
+          $ctrans: 250ms ease-in-out;
+          background: $blue;
+          padding: 7px 20px;
+          border-radius: 3px;
+          font-weight: 600;
+          box-shadow: 0 4px 20px rgba($blue, 0.5), inset 2px -2px 0px #0002,
+            inset -2px -2px 0 #0002, 0px 3px 0px 2px #0003;
+          transform: rotateX(33deg);
+          border-bottom: 7px solid darken($blue, 13%);
+          border-left: 1.4px solid darken($blue, 13%);
+          border-right: 1.4px solid darken($blue, 13%);
+          transition: background 150ms ease-in-out, translate $ctrans,
+            box-shadow $ctrans, transform $ctrans, border $ctrans, scale $ctrans,
+            margin 0.5s ease-in-out;
+
+          @include breakpoint(mobile) {
+            font-size: 0.8em;
+          }
+
+          &:hover {
+            background: darken($blue, 5%);
+            translate: 0 -5px;
+            box-shadow: 0 4px 10px rgba($blue, 0.6);
+            transform: rotateX(0deg);
+            margin-bottom: 4px;
+            border-color: darken($blue, 20%);
+          }
+
+          &:active {
+            transition-delay: 0ms;
+            scale: 0.7;
+          }
+
+          &:not(:hover) {
+            animation: drop 0.5s ease-in-out; // drop effect when unhovering
+          }
+        }
+
+        .mobileDownload {
+          text-align: center;
+          font-weight: 200;
+          font-size: 0.9em;
+          color: $lighgray;
+          @include breakpoint(mobile) {
+            text-align: left;
+          }
+
+          .platformSelection {
+            @apply hover:drop-shadow-wmd transition duration-200;
+            text-decoration: underline;
+            margin-right: 5px;
+            cursor: pointer;
+
+            &:nth-last-child(1) {
+              margin-left: 5px;
+            }
+
+            &:hover {
+              color: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .editorPreviewSection {
+    height: 45vw;
+    margin-top: -300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    animation-name: floating;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    @include breakpoint(mobile) {
+      height: 100%;
+      width: 150vw;
+      margin-left: 80px;
+    }
+
+    .editorPreview {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .bottomContent {
+    position: relative;
+
+    .idePowers {
+      $mg: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 100px;
+      margin-top: $mg;
+      margin-bottom: $mg;
+    }
+  }
+}
+
+@keyframes textShine {
+  0% {
+    background-position: -500%;
+  }
+  100% {
+    background-position: 500%;
+  }
+}
+
+@keyframes drop {
+  0% {
+    translate: 0 -5px;
+    box-shadow: 0 4px 10px rgba($blue, 0.5);
+  }
+
+  50% {
+    translate: 0 3px;
+    box-shadow: 0 4px 4px #0002;
+  }
+
+  70% {
+    translate: 0 -2px;
+  }
+
+  100% {
+    translate: 0;
+  }
+}
+
+@keyframes floating {
+  0% {
+    box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);
+    transform: translatey(0px);
+  }
+  50% {
+    box-shadow: 0 25px 15px 0px rgba(0, 0, 0, 0.2);
+    transform: translatey(-10px);
+  }
+  100% {
+    box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);
+    transform: translatey(0px);
+  }
+}
+
+// Scrollbar styling
+::-webkit-scrollbar {
+  width: 0px;
+}

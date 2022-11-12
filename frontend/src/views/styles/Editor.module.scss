@@ -1,0 +1,156 @@
+@import "../../global.scss";
+$dark-bg: #1e1e1e;
+$seperator: #232526;
+
+.editorWrapper {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: $dark-bg;
+
+  .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 25px;
+    border-bottom: 2px solid $seperator;
+
+    .navbarTools {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+
+      .share_btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        background: $blue;
+        border: 1px solid $blue;
+        color: $white;
+        padding: 5px 25px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 200ms ease-in-out;
+
+        &:hover {
+          background: darken($blue, 5%);
+        }
+      }
+    }
+  }
+
+  .sidebar {
+    height: 100%;
+    width: -moz-fit-content;
+    width: 20%;
+    background: $dark-bg;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    justify-content: center;
+    border-right: 2px solid $seperator;
+
+    &_tools {
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      align-self: stretch;
+      flex-direction: column;
+      flex-grow: 1;
+      padding: 15px 25px;
+      border-right: 2px solid $seperator;
+
+      &_upper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      &_bottom {
+        position: absolute;
+        bottom: 100px;
+      }
+
+      &_tool {
+        width: -moz-fit-content;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        user-select: none;
+        cursor: pointer;
+
+        .toolIcon {
+          color: darken($white, 50%);
+          transition: color 200ms ease-in-out;
+          cursor: pointer;
+        }
+
+        .radioSelection {
+          position: absolute;
+          height: 30px;
+          width: 30px;
+          cursor: pointer;
+          opacity: 0;
+
+          &:checked {
+            & + .selectLine {
+              background: $blue;
+
+              & + .toolIcon {
+                color: $white;
+              }
+            }
+          }
+
+          &:hover {
+            & ~ .toolIcon {
+              color: darken($white, 30%);
+            }
+          }
+        }
+
+        .selectLine {
+          position: absolute;
+          left: 0;
+          width: 3px;
+          height: 20px;
+          border-radius: 0 100px 100px 0;
+        }
+      }
+    }
+
+    .settingsIcon {
+      color: darken($white, 50%);
+      transition: color 200ms ease-in-out;
+
+      &:hover {
+        color: darken($white, 30%);
+      }
+    }
+
+    &_content {
+      border-right: 2px solid $seperator;
+      width: 100%;
+      overflow: hidden;
+      color: white;
+    }
+  }
+  .editor {
+    flex: 1;
+    height: 83.5vh;
+
+    .tabs {
+      border-bottom: 2px solid $seperator;
+      padding: 11px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+}
