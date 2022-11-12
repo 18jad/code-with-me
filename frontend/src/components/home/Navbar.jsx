@@ -86,7 +86,7 @@ const Navbar = ({ contact, fn }) => {
           </option>
         </Select>
         <a
-          href='https://github.com'
+          href='https://github.com/18jad/code-with-me'
           target='_blank'
           rel='noreferrer'
           className='hidden md:block '
