@@ -6,7 +6,7 @@ const authStore = {
     email: "Email address",
     password: "Password",
     passwordConfirm: "Confirm password",
-    username: "username",
+    username: "Username",
     alreadyMember: "Already a member?",
     newHere: "New here?",
     forget: "Forgot password?",
