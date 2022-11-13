@@ -1,6 +1,7 @@
 // Imported packages
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 // Configuration
 require("dotenv").config();
@@ -17,6 +18,7 @@ const prefix: string = String("/api/v" + apiVersion.toFixed(1));
 
 // Configuration
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 // Routes
 app.use(prefix + "/auth", authRoutes);
