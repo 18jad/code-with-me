@@ -1,17 +1,33 @@
 import TextLogo from "components/TextLogo";
 import Transitions from "components/Transition";
 import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import Particles from "react-tsparticles";
 import { tw } from "utils/TailwindComponent";
 import authStore from "../lang/authStore";
 import { initEngine, starsOptions } from "../particles/StarsParticles";
 import styles from "./Authentication.module.scss";
+import Register from "./register";
 
 const Authentication = () => {
   // Login and sign up state (for switching between the two)
   const [isLogin, setIsLogin] = useState(true);
   const [forget, setForget] = useState(false);
+
+  const notiToaster = (message, error = false) => {
+    toast[error ? "error" : "success"](message, {
+      style: {
+        borderRadius: "8px",
+        background: "#fff2",
+        border: "1px solid #fff6",
+        backdropFilter: "blur(10px)",
+        color: "#fff",
+      },
+    });
+  };
+
+  const registerController = new Register(notiToaster, setIsLogin);
 
   // Edit page title
   useEffect(() => {
@@ -87,7 +103,7 @@ const Authentication = () => {
     `;
 
   return (
-    <Transitions key='yxz'>
+    <Transitions>
       <div className={styles.pageWrapper}>
         {/* Stars Background */}
         <Particles
@@ -183,19 +199,42 @@ const Authentication = () => {
                   transform: "rotateY(180deg)",
                   height: "480px",
                   marginTop: "-80px",
+                }}
+                onSubmit={(e) => {
+                  registerController.handleRegister(e);
                 }}>
                 <h1 className='text-white text-4xl'>{langComp.register}</h1>
                 <div className='flex flex-col gap-4 w-full'>
-                  <Input placeholder={langComp.email} type='email' required />
-                  <Input placeholder={langComp.username} type='text' required />
+                  <Input
+                    placeholder={langComp.email}
+                    type='email'
+                    required
+                    name='email'
+                  />
+                  <div className='double-input flex flex-row gap-2 items-center justify-center'>
+                    <Input
+                      placeholder={langComp.name}
+                      type='text'
+                      required
+                      name='name'
+                    />
+                    <Input
+                      placeholder={langComp.username}
+                      type='text'
+                      required
+                      name='username'
+                    />
+                  </div>
                   <Input
                     placeholder={langComp.password}
                     type='password'
+                    name='password'
                     required
                   />
                   <Input
                     placeholder={langComp.passwordConfirm}
                     type='password'
+                    name='passwordConfirm'
                     required
                   />
                 </div>
@@ -214,6 +253,7 @@ const Authentication = () => {
             )}
           </div>
         </div>
+        <Toaster position='bottom-center' reverseOrder={false} />
       </div>
     </Transitions>
   );
