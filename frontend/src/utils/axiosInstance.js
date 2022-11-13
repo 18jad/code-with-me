@@ -17,7 +17,7 @@ const token = "123";
 const config = {
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
     "Access-Control-Allow-Origin": BASE_URL,
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE",
     "Access-Control-Allow-Headers":
