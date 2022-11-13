@@ -26,6 +26,9 @@ class Register {
 
   validate = (elements) => {
     const { name, username, email, password, passwordConfirm } = elements;
+    [email, username, password, passwordConfirm].forEach((element) => {
+      element.style.borderColor = "#6c7280";
+    });
     return new Promise((resolve, reject) => {
       if (
         !email ||
@@ -43,8 +46,10 @@ class Register {
       } else {
         if (!this.validateEmail(email.value)) {
           reject("Please enter a valid email address");
+          email.style.borderColor = "#c64d43";
         } else {
           if (!this.validatePassword(password.value)) {
+            password.style.borderColor = "#c64d43";
             reject("Password must be at least 8 characters");
           } else {
             if (
@@ -53,6 +58,8 @@ class Register {
                 passwordConfirm.value,
               )
             ) {
+              password.style.borderColor = "#c64d43";
+              passwordConfirm.style.borderColor = "#c64d43";
               reject("Passwords do not match");
             } else {
               resolve({
