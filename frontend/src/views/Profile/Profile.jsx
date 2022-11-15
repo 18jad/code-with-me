@@ -13,8 +13,10 @@ import {
 } from "phosphor-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import formatNumber from "utils/FormatNumber";
 import { tw } from "utils/TailwindComponent";
+import { logout } from "./logout";
 import styles from "./Profile.module.scss";
 
 // Modal input element tailwind styled component
@@ -113,6 +115,9 @@ const Profile = () => {
     }
   };
 
+  // Navigator
+  const navigate = useNavigate();
+
   // Make body unscrollable if any modal is open
   document.body.style.overflow =
     editModalStatus || projectModalStatus ? "hidden" : "auto";
@@ -146,7 +151,11 @@ const Profile = () => {
             <TextLogo text='Profile' width={35} mainSize='xs' textSize='xs' />
           </div>
           <div className={styles.interactionsButtons}>
-            <button className={styles.signOutBtn}>
+            <button
+              className={styles.signOutBtn}
+              onClick={() => {
+                logout(navigate);
+              }}>
               <span>
                 <SignOut size={20} color='#fff' mirrored={true} />
               </span>
