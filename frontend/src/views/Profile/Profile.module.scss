@@ -125,6 +125,7 @@ $dark-bg: #3e3e3e;
         width: 200px;
         border-radius: 100px;
         border: 7px solid $white;
+        border-radius: 100000px;
         -webkit-user-drag: none;
         -webkit-user-select: none;
         user-select: none;
@@ -132,6 +133,7 @@ $dark-bg: #3e3e3e;
         img {
           height: 100%;
           -webkit-user-drag: none;
+          border-radius: 100000px;
         }
       }
 
