@@ -73,6 +73,10 @@ $dark-bg: #3e3e3e;
         gap: 40px;
       }
 
+      @include breakpoint(laptop) {
+        width: 50%;
+      }
+
       .signOutBtn {
         background: $dark-bg;
         display: flex;
