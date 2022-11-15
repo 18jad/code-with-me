@@ -3,8 +3,9 @@ import Transitions from "components/Transition";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
+import routes from "routes";
 import { setLogin } from "store/slices/loginSlice";
 import { tw } from "utils/TailwindComponent";
 import authStore from "../lang/authStore";
@@ -34,6 +35,9 @@ const Authentication = () => {
   // Authentication controlleres
   const registerController = new Register(notiToaster, setIsLogin);
   const loginController = new Login();
+
+  // Navigator, to navigate through pages
+  const navigate = useNavigate();
 
   // Edit page title
   useEffect(() => {
@@ -142,6 +146,10 @@ const Authentication = () => {
                   .then(({ user, response }) => {
                     notiToaster(response.data.message);
                     dispatch(setLogin({ user: user, token: user.authToken }));
+                    routes[2].condition = true;
+                    setTimeout(() => {
+                      navigate("/profile");
+                    }, 1700);
                   })
                   .catch((error) => {
                     notiToaster(error.response.data.error, true);
