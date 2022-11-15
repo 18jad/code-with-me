@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import Authentication from "views/Authentication/Authentication";
 import Editor from "views/Editor/Editor";
 import Home from "views/Home/Home";
@@ -33,8 +34,19 @@ import User from "views/Profile/User";
  *
  */
 
-// TODO: Modify condition when authentication is implemented
-const isAuthenticated = true;
+// Check if user is authenticated
+const authCookies = Cookies.get("persist:user"),
+  { loggedIn, user } = (authCookies && JSON.parse(authCookies)) || {
+    loggedIn: false,
+    user: null,
+  },
+  isAuthenticated = Boolean(
+    loggedIn &&
+      loggedIn !== "undefined" &&
+      loggedIn === "true" &&
+      !!loggedIn &&
+      !!user,
+  );
 
 const routes = [
   {
@@ -43,23 +55,25 @@ const routes = [
     isProtected: false,
   },
   {
-    path: "/auth", // TODO: Make the route protected and redirect to /.. if the user is authenticated
-    component: <Authentication />,
-    isProtected: false,
+    path: "/authenticate", // TODO: Make the route protected and redirect to /.. if the user is authenticated
+    isProtected: true,
+    condition: !isAuthenticated,
+    access: <Authentication />,
+    redirect: "/profile",
   },
   {
     path: "/profile",
     isProtected: true,
     condition: isAuthenticated,
     access: <Profile />,
-    redirect: "/login",
+    redirect: "/authenticate",
   },
   {
     path: "/user/:id",
     isProtected: true,
     condition: isAuthenticated,
     access: <User />,
-    redirect: "/login",
+    redirect: "/authenticate",
   },
   {
     path: "*",
@@ -71,7 +85,7 @@ const routes = [
     isProtected: true,
     condition: isAuthenticated,
     access: <Editor />,
-    redirect: "/login",
+    redirect: "/authenticate",
   },
 ];
 
