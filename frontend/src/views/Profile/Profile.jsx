@@ -12,6 +12,7 @@ import {
   UserFocus,
 } from "phosphor-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import formatNumber from "utils/FormatNumber";
 import { tw } from "utils/TailwindComponent";
 import styles from "./Profile.module.scss";
@@ -89,9 +90,6 @@ const Profile = () => {
   // Hold the data of user favorites projects
   const [favorites, setFavorites] = useState([]);
 
-  // Hold the data of user created projects
-  const [projects, setProjects] = useState([0]);
-
   // Modal change image functionality
   const [modalProfile, setModalProfile] = useState(null);
 
@@ -118,6 +116,23 @@ const Profile = () => {
   // Make body unscrollable if any modal is open
   document.body.style.overflow =
     editModalStatus || projectModalStatus ? "hidden" : "auto";
+
+  // Logged in user
+  const { result: loggedUser } = useSelector((state) => state.user);
+  const { username, name, headline, likesCount, projectsCount, projects } =
+    loggedUser || {
+      username: "",
+      name: "",
+      headline: "",
+      likesCount: 0,
+      projectsCount: 0,
+      projects: [],
+    };
+
+  // Authentication token
+  const authToken = useSelector((state) => state.token);
+
+  console.log(loggedUser, authToken);
 
   return (
     <Transition>
@@ -154,27 +169,24 @@ const Profile = () => {
               </span>
             </button>
             <div className={styles.profileAvatar}>
-              <img
-                src={require("assets/images/empty_profile.png")}
-                alt='profile avatar'
-              />
+              <img src={loggedUser.avatar} alt='profile avatar' />
             </div>
             <div className={styles.profileInfo}>
               <div className={styles.userNames}>
-                <span className={styles.name}>John Doe</span>
-                <span className={styles.username}>@johndoe</span>
+                <span className={styles.name}>{name}</span>
+                <span className={styles.username}>@{username}</span>
               </div>
-              <span className={styles.headline}>
-                Talk is cheap. Show me the code. Talk is cheap. Show me the
-                code. Talk is cheap. Show me the code.
-              </span>
+              <span className={styles.headline}>{headline || ""}</span>
             </div>
           </div>
 
           {/* Stats Info */}
           <div className={styles.statsWrapper}>
-            <StatsCard count={formatNumber(1304324, 1)} text='projects' />
-            <StatsCard count={formatNumber(239183, 1)} text='likes' />
+            <StatsCard
+              count={formatNumber(projectsCount || 0, 1)}
+              text='projects'
+            />
+            <StatsCard count={formatNumber(likesCount || 0, 1)} text='likes' />
             <StatsCard count={formatNumber(2193, 1)} text='favorited' />
           </div>
 
@@ -232,7 +244,7 @@ const Profile = () => {
               {/* TODO: Fix profile feed width if it contains no cards */}
 
               {/* Projects */}
-              {projects.length ? (
+              {projects ? (
                 <div className={styles.projectsContainer}>
                   {/* TODO: Add message if no project found */}
                   <>
