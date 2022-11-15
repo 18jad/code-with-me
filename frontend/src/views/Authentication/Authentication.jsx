@@ -2,12 +2,15 @@ import TextLogo from "components/TextLogo";
 import Transitions from "components/Transition";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Particles from "react-tsparticles";
+import { setLogin } from "store/slices/loginSlice";
 import { tw } from "utils/TailwindComponent";
 import authStore from "../lang/authStore";
 import { initEngine, starsOptions } from "../particles/StarsParticles";
 import styles from "./Authentication.module.scss";
+import Login from "./login";
 import Register from "./register";
 
 const Authentication = () => {
@@ -15,6 +18,7 @@ const Authentication = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [forget, setForget] = useState(false);
 
+  // Toaster function
   const notiToaster = (message, error = false) => {
     toast[error ? "error" : "success"](message, {
       style: {
@@ -27,7 +31,9 @@ const Authentication = () => {
     });
   };
 
+  // Authentication controlleres
   const registerController = new Register(notiToaster, setIsLogin);
+  const loginController = new Login();
 
   // Edit page title
   useEffect(() => {
@@ -43,6 +49,8 @@ const Authentication = () => {
   // Multi lang
   const lang = localStorage.getItem("lang-preference") || "english";
   const langComp = authStore[lang];
+
+  const dispatch = useDispatch();
 
   // Form tailwind styled component
   const Form = tw.form`
@@ -126,14 +134,32 @@ const Authentication = () => {
               transform: `rotateY(${isLogin ? "0deg" : "180deg"})`,
             }}>
             {/* Sign in form */}
-            <Form style={{ backfaceVisibility: "hidden", marginTop: "-100px" }}>
+            <Form
+              style={{ backfaceVisibility: "hidden", marginTop: "-100px" }}
+              onSubmit={(e) => {
+                loginController
+                  .handleLogin(e)
+                  .then(({ user, response }) => {
+                    notiToaster(response.data.message);
+                    dispatch(setLogin({ user: user, token: user.authToken }));
+                  })
+                  .catch((error) => {
+                    notiToaster(error.response.data.error, true);
+                  });
+              }}>
               <h1 className='text-white text-4xl'>{langComp.login}</h1>
               <div className='flex flex-col gap-4 w-full'>
-                <Input placeholder={langComp.email} type='email' required />
+                <Input
+                  placeholder={langComp.email}
+                  type='email'
+                  required
+                  name='email'
+                />
                 <div className='w-full flex flex-col items-end'>
                   <Input
                     placeholder={langComp.password}
                     type='password'
+                    name='password'
                     required
                   />
                   <span
