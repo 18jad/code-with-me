@@ -42,7 +42,6 @@ class Login {
               if (response.status === 200 && response.data.success) {
                 const { user } = response.data;
                 resolve({ response, user });
-                setTimeout(() => {}, 2000);
               } else {
                 reject(response.message);
               }
