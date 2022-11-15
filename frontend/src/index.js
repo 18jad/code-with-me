@@ -1,23 +1,22 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "App";
 import "index.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-const queryClient = new QueryClient();
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor, store } from "store/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <React.Suspense
       fallback={<div className='text-white text-2xl'>Loading...</div>}>
-      <QueryClientProvider client={queryClient}>
-        <App />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
     </React.Suspense>
   </BrowserRouter>,
 );
