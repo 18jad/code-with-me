@@ -222,7 +222,7 @@ const Home = () => {
                 }}
                 transition={{ duration: 0.2 }}
                 onClick={() => {
-                  navigate("/auth");
+                  navigate("/authenticate");
                 }}>
                 {langComp.start}
               </motion.button>
