@@ -410,9 +410,23 @@ const Profile = () => {
             <form className='inputs flex flex-col gap-4 w-full'>
               <div className='flex flex-col md:flex-row gap-3'>
                 <div className='flex flex-col gap-4 w-full'>
-                  <ModalInput type='text' placeholder='Full name' required />
-                  <ModalInput type='text' placeholder='Username' required />
-                  <ModalInput type='text' placeholder='Headline' required />
+                  <ModalInput
+                    type='text'
+                    placeholder='Full name'
+                    value={name}
+                    required
+                  />
+                  <ModalInput
+                    type='text'
+                    placeholder='Username'
+                    value={username}
+                    required
+                  />
+                  <ModalInput
+                    type='text'
+                    placeholder='Headline'
+                    value={headline}
+                  />
                 </div>
                 <button className='bg-white/10 border-gray-500 border px-1 flex items-center justify-center'>
                   <Check size={23} color='#fff' weight='bold' />
