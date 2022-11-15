@@ -260,7 +260,6 @@ const Editor = () => {
         title='Editor Settings'
         isOpen={settingModalStatus}
         className='w-[400px]'
-        bgDrop='bg-black/30'
         bg='#1e1e1e'
         onClick={() => {
           setSettingModalStatus(false);
