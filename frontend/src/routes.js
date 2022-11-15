@@ -55,7 +55,7 @@ const routes = [
     isProtected: false,
   },
   {
-    path: "/authenticate", // TODO: Make the route protected and redirect to /.. if the user is authenticated
+    path: "/authenticate",
     isProtected: true,
     condition: !isAuthenticated,
     access: <Authentication />,
