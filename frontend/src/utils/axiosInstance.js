@@ -1,4 +1,5 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 // Replace it with your own backend server port
 const PORT = 2121;
@@ -10,8 +11,13 @@ const SLUG = "api";
 
 const BASE_URL = `http://localhost:${PORT}/${SLUG}/V${API_VERSION}`;
 
+const authCookies = Cookies.get("persist:user"),
+  { user } = (authCookies && JSON.parse(authCookies)) || {
+    user: null,
+  };
+
 // JWT Token
-const token = "123";
+const token = JSON.parse(user).authToken;
 
 // Axios instance configurations
 const config = {
