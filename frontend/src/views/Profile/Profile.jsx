@@ -413,19 +413,19 @@ const Profile = () => {
                   <ModalInput
                     type='text'
                     placeholder='Full name'
-                    value={name}
+                    defaultValue={name}
                     required
                   />
                   <ModalInput
                     type='text'
                     placeholder='Username'
-                    value={username}
+                    defaultValue={username}
                     required
                   />
                   <ModalInput
                     type='text'
                     placeholder='Headline'
-                    value={headline}
+                    defaultValue={headline || ""}
                   />
                 </div>
                 <button className='bg-white/10 border-gray-500 border px-1 flex items-center justify-center'>
