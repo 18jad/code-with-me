@@ -13,7 +13,7 @@ const contactController = new ContactController();
 // Routes:
 
 // Edit profile route
-router.post(
+router.put(
   "/edit_profile",
   authMiddleware,
   (request: Request, response: Response) => {
