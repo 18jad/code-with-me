@@ -26,6 +26,7 @@ type User = {
 // UserAuth class, contains validation, login and register methods
 class UserAuth {
   private emailFilter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  private usernameFilter = /^[a-z](?:_?[a-z0-9]+){2,}$/gim;
   public response: Response | null;
   public request: Request | null;
 
@@ -58,7 +59,9 @@ class UserAuth {
    * @returns {Boolean}
    */
   validateUsername(username: string) {
-    return Boolean(username?.length >= 3);
+    return Boolean(
+      username?.length >= 3 && username.match(this.usernameFilter),
+    );
   }
 
   /**
@@ -139,7 +142,9 @@ class UserAuth {
       // Validate username
       const isUsername = this.validateUsername(username);
       if (!isUsername) {
-        reject("Username is too short 👉👈. Minimum is 3 characters");
+        reject(
+          "Username is too short or unvalid format 👉👈. Minimum is 3 characters and should start with a letter",
+        );
       } else {
         const isUser = await this.checkUsername(username);
         if (isUser) {
