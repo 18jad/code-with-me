@@ -5,8 +5,12 @@ const AuthUser = require("./auth.controller");
 const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
 const jwt = require("jsonwebtoken");
+const exclude = require("../utils/exclude");
 
+// Variables
 const userCheck = new AuthUser();
+const jwt_secret = process.env.JWT_SECRET_KEY;
+const jwt_expires = process.env.JWT_EXPIRES_IN;
 
 class UserController {
   /**
@@ -70,6 +74,7 @@ class UserController {
         if (validateUsername) {
           const checkUsername = await userCheck.checkUsername(username);
           // if username is not taken OR if username is the same as the current logged in user (means he didn't change it)
+          console.log(username, token.username);
           if (!checkUsername || username === token.username) {
             const validateHeadline = this.validateHeadline(headline as string);
             if (validateHeadline) {
@@ -85,7 +90,24 @@ class UserController {
                   },
                 })
                 .then((user) => {
-                  sendResponse(response, true, "Profile updated", { user });
+                  // Generate new jwt token based on new informations
+                  const newToken = jwt.sign(
+                    {
+                      id: user.id,
+                      name: user.name,
+                      username: user.username,
+                      email: user.email,
+                    },
+                    jwt_secret,
+                    {
+                      expiresIn: jwt_expires,
+                    },
+                  );
+                  const updatedUser = exclude(user, ["password"]);
+                  sendResponse(response, true, "Profile updated", {
+                    updatedUser,
+                    newToken,
+                  });
                 })
                 .catch((error) => {
                   sendResponse(response, false, "Something went wrong", error);
