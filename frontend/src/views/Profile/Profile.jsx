@@ -12,12 +12,15 @@ import {
   UserFocus,
 } from "phosphor-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import toast, { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setLogin } from "store/slices/loginSlice";
 import formatNumber from "utils/FormatNumber";
 import { tw } from "utils/TailwindComponent";
 import { logout } from "./logout";
 import styles from "./Profile.module.scss";
+import { ProfileController } from "./profileController";
 
 // Modal input element tailwind styled component
 const ModalInput = tw.input`
@@ -92,6 +95,9 @@ const Profile = () => {
   // Hold the data of user favorites projects
   const [favorites, setFavorites] = useState([]);
 
+  // Event dispatcher
+  const dispatch = useDispatch();
+
   // Modal change image functionality
   const [modalProfile, setModalProfile] = useState(null);
 
@@ -115,24 +121,47 @@ const Profile = () => {
     }
   };
 
+  // Toaster function
+  const notiToaster = (message, error = false) => {
+    toast[error ? "error" : "success"](message, {
+      style: {
+        borderRadius: "8px",
+        background: "#fff2",
+        border: "1px solid #fff6",
+        backdropFilter: "blur(10px)",
+        color: "#fff",
+      },
+    });
+  };
+
   // Navigator
   const navigate = useNavigate();
+
+  // Profile controller
+  const profile = new ProfileController();
 
   // Make body unscrollable if any modal is open
   document.body.style.overflow =
     editModalStatus || projectModalStatus ? "hidden" : "auto";
 
   // Logged in user
-  const { result: loggedUser } = useSelector((state) => state.user);
-  const { username, name, headline, likesCount, projectsCount, projects } =
-    loggedUser || {
-      username: "",
-      name: "",
-      headline: "",
-      likesCount: 0,
-      projectsCount: 0,
-      projects: [],
-    };
+  const loggedUser = useSelector((state) => state.user);
+  const {
+    username,
+    name,
+    headline,
+    avatar,
+    likesCount,
+    projectsCount,
+    projects,
+  } = loggedUser || {
+    username: "",
+    name: "",
+    headline: "",
+    likesCount: 0,
+    projectsCount: 0,
+    projects: [],
+  };
 
   // Authentication token
   const authToken = useSelector((state) => state.token);
@@ -178,7 +207,7 @@ const Profile = () => {
               </span>
             </button>
             <div className={styles.profileAvatar}>
-              <img src={loggedUser.avatar} alt='profile avatar' />
+              <img src={avatar} alt='profile avatar' />
             </div>
             <div className={styles.profileInfo}>
               <div className={styles.userNames}>
@@ -407,25 +436,41 @@ const Profile = () => {
                 </span>
               </label>
             </div>
-            <form className='inputs flex flex-col gap-4 w-full'>
+            <form
+              className='inputs flex flex-col gap-4 w-full'
+              onSubmit={(e) => {
+                profile
+                  .editProfile(e)
+                  .then(({ response: { data } }) => {
+                    const { updatedUser: user, newToken: token } = data;
+                    notiToaster(data.message);
+                    dispatch(setLogin({ user, token }));
+                  })
+                  .catch(({ response: { data } }) =>
+                    notiToaster(data.message, true),
+                  );
+              }}>
               <div className='flex flex-col md:flex-row gap-3'>
                 <div className='flex flex-col gap-4 w-full'>
                   <ModalInput
                     type='text'
                     placeholder='Full name'
                     defaultValue={name}
+                    name='name'
                     required
                   />
                   <ModalInput
                     type='text'
                     placeholder='Username'
                     defaultValue={username}
+                    name='username'
                     required
                   />
                   <ModalInput
                     type='text'
                     placeholder='Headline'
                     defaultValue={headline || ""}
+                    name='headline'
                   />
                 </div>
                 <button className='bg-white/10 border-gray-500 border px-1 flex items-center justify-center'>
@@ -463,6 +508,7 @@ const Profile = () => {
           </form>
         </Modal>
       </div>
+      <Toaster position='bottom-center' reverseOrder={false} />
     </Transition>
   );
 };
