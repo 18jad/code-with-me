@@ -143,14 +143,16 @@ const Authentication = () => {
               onSubmit={(e) => {
                 loginController
                   .handleLogin(e)
-                  .then(({ user, response }) => {
-                    notiToaster(response.data.message);
-                    dispatch(setLogin({ user: user, token: user.authToken }));
-                    routes[2].condition = true;
-                    setTimeout(() => {
-                      navigate("/profile");
-                    }, 1700);
-                  })
+                  .then(
+                    ({ user: { result }, user: { authToken }, response }) => {
+                      notiToaster(response.data.message);
+                      dispatch(setLogin({ user: result, token: authToken }));
+                      routes[2].condition = true;
+                      setTimeout(() => {
+                        navigate("/profile");
+                      }, 1700);
+                    },
+                  )
                   .catch((error) => {
                     notiToaster(error.response.data.error, true);
                   });
