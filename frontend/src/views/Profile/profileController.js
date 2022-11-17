@@ -1,8 +1,9 @@
 import qs from "qs";
-import { axiosUser } from "utils/axiosInstance";
+import { axiosInstance, axiosUser } from "utils/axiosInstance";
 
 export class ProfileController {
   #edit_profile_url = "/user/edit_profile";
+  #search_url = "/info/search";
   #usernameFilter = /^[a-z](?:_?[a-z0-9]+){2,}$/gim;
 
   /**
@@ -80,6 +81,30 @@ export class ProfileController {
         .catch((error) => {
           reject(error);
         });
+    });
+  };
+
+  searchUser = (username) => {
+    return new Promise((resolve, reject) => {
+      if (!username) {
+        reject("Query cannot be empty");
+      } else {
+        axiosInstance
+          .get(this.#search_url, {
+            params: { query: username },
+          })
+          .then((response) => {
+            if (response.status === 200 && response.data.success) {
+              const { users } = response.data;
+              resolve(users);
+            } else {
+              reject(response.message);
+            }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      }
     });
   };
 }
