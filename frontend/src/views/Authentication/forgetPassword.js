@@ -22,6 +22,23 @@ class ForgetController {
     });
   };
 
+  validateResetToken = (token) => {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .post(this.#validate_url, qs.stringify({ token }))
+        .then((response) => {
+          if (response.status === 200 && response.data.success) {
+            resolve(response.data);
+          } else {
+            reject(response.data);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
+
   handleForget = (e) => {
     e.preventDefault();
     return new Promise((resolve, reject) => {
