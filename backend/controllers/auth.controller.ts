@@ -334,7 +334,7 @@ class UserAuth {
               sendResponse(
                 response,
                 true,
-                "Reset passsword email sent successfully",
+                "Reset email will be sent once email is verified",
               );
             }
           });
@@ -346,7 +346,11 @@ class UserAuth {
           );
         }
       } else {
-        sendResponse(response, false, "Email is not registered");
+        sendResponse(
+          response,
+          true,
+          "Reset email will be sent once email is verified", // don't send error that user not found to avoid brute force attacks
+        );
       }
     }
   }
