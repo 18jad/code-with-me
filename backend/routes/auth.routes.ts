@@ -26,16 +26,23 @@ router.post("/generate_reset", (request: Request, response: Response) => {
 
 // Reset token verify
 router.post("/verify_token", async (request: Request, response: Response) => {
-  const validate = await authController.validateResetToken(request, response);
-  validate
-    ? response.json({
-        success: true,
-        message: "Token is valid",
-      })
-    : response.json({
-        success: false,
-        message: "Token is invalid",
-      });
+  try {
+    const validate = await authController.validateResetToken(request, response);
+    validate
+      ? response.json({
+          success: true,
+          message: "JWT token is valid",
+        })
+      : response.json({
+          success: false,
+          message: "JWT token is invalid",
+        });
+  } catch (error) {
+    response.json({
+      success: false,
+      message: "JWT token is invalid",
+    });
+  }
 });
 
 // Reset password
