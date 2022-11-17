@@ -3,6 +3,7 @@ import ProjectCard from "components/profile/ProjectCard";
 import SearchUser from "components/profile/SearchUser";
 import TextLogo from "components/TextLogo";
 import Transition from "components/Transition";
+import useDebounce from "hooks/useDebounce";
 import {
   Check,
   MagnifyingGlass,
@@ -11,10 +12,10 @@ import {
   SignOut,
   UserFocus,
 } from "phosphor-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setLogin } from "store/slices/loginSlice";
 import formatNumber from "utils/FormatNumber";
 import { tw } from "utils/TailwindComponent";
@@ -78,10 +79,13 @@ const StatsCard = ({ count, text }) => {
 
 const Profile = () => {
   // TODO: use state and store searched user data inside it
-  let usersList = false;
+  let [usersList, setUsersList] = useState([]);
 
   // Search bar value setter and state
   const [searchState, setSearchState] = useState(false);
+
+  // Search term state
+  const [searchTerm, setSearchTerm] = useState("");
 
   // To set edit profile modal status (open or close)
   const [editModalStatus, setEditModalStatus] = useState(false);
@@ -165,6 +169,23 @@ const Profile = () => {
 
   // Authentication token
   const authToken = useSelector((state) => state.token);
+
+  // Search user
+  const debouncedQuery = useDebounce(searchTerm, 500);
+
+  useEffect(
+    () => {
+      if (debouncedQuery) {
+        profile.searchUser(debouncedQuery).then((users) => {
+          setUsersList(users);
+        });
+      } else {
+        setUsersList([]);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [debouncedQuery], // Only call effect if debounced query term changes
+  );
 
   console.log(loggedUser, authToken);
 
@@ -366,10 +387,13 @@ const Profile = () => {
               onChange={(e) => {
                 let searchValue = e.target.value;
                 setSearchState(Boolean(searchValue.trim().length > 0));
+                setSearchTerm(searchValue);
               }}
-              onBlur={() => {
-                setSearchState(false);
-              }}
+              onBlur={(e) =>
+                setTimeout(() => {
+                  setSearchState(false);
+                }, 100)
+              }
               onFocus={(e) => {
                 let searchValue = e.target.value;
                 setSearchState(Boolean(searchValue.trim().length > 0));
@@ -386,12 +410,18 @@ const Profile = () => {
             className={`${styles.searchResultWrapper} transition duration-300 ${
               searchState ? "opacity-1 h-auto" : "opacity-0 h-0"
             }`}>
-            {/* TODO: Change opacity based on fetched user list */}
-            {usersList ? (
+            {usersList.length ? (
               <>
-                <SearchUser name='John Doe1' username='john_doe' />
-                <SearchUser name='John Doe' username='john_doe' />
-                <SearchUser name='John Doe' username='john_doe' />
+                {usersList
+                  .filter((user) => {
+                    if (user.username === username) return false; // dont show current logged in user in search results
+                    return true;
+                  })
+                  .map(({ username, name }) => (
+                    <Link to={`/user/${username}`}>
+                      <SearchUser name={name} username={username} />
+                    </Link>
+                  ))}
               </>
             ) : (
               <p className='text-white text-center py-2'>No results found</p>
