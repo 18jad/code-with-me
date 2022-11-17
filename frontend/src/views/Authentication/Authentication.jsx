@@ -11,6 +11,7 @@ import { tw } from "utils/TailwindComponent";
 import authStore from "../lang/authStore";
 import { initEngine, starsOptions } from "../particles/StarsParticles";
 import styles from "./Authentication.module.scss";
+import ForgetController from "./forgetPassword";
 import Login from "./login";
 import Register from "./register";
 
@@ -28,6 +29,7 @@ const Authentication = () => {
         border: "1px solid #fff6",
         backdropFilter: "blur(10px)",
         color: "#fff",
+        fontSize: "14px",
       },
     });
   };
@@ -35,6 +37,7 @@ const Authentication = () => {
   // Authentication controlleres
   const registerController = new Register(notiToaster, setIsLogin);
   const loginController = new Login();
+  const forgetController = new ForgetController();
 
   // Navigator, to navigate through pages
   const navigate = useNavigate();
@@ -203,12 +206,28 @@ const Authentication = () => {
                   transform: "rotateY(180deg)",
                   justifyContent: "space-between",
                   marginTop: "-100px",
+                }}
+                onSubmit={(e) => {
+                  forgetController
+                    .handleForget(e)
+                    .then((response) => {
+                      notiToaster(response?.message);
+                      e.target.reset();
+                    })
+                    .catch((error) => {
+                      notiToaster(error.response?.data?.message || error, true);
+                    });
                 }}>
                 <h1 className='text-white text-4xl text-center'>
                   {langComp.resetPassword}
                 </h1>
                 <div className='flex flex-col gap-2 w-full'>
-                  <Input placeholder={langComp.email} type='email' required />
+                  <Input
+                    placeholder={langComp.email}
+                    type='email'
+                    name='email'
+                    required
+                  />
                   <p className='text-gray text-xs select-none'>
                     {langComp.resetInfo}
                   </p>
