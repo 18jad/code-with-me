@@ -135,10 +135,17 @@ const ResetPassword = () => {
               }}
               onSubmit={(e) => {
                 forgetController
-                  .handleForget(e)
+                  .handleReset(e, token)
                   .then((response) => {
-                    notiToaster(response?.message);
-                    e.target.reset();
+                    const { success, message } = response;
+                    if (success) {
+                      notiToaster(message + ". Redirecting to login page...");
+                      setTimeout(() => {
+                        navigate("/authenticate");
+                      }, 2000);
+                    } else {
+                      notiToaster("Something went wrong", true);
+                    }
                   })
                   .catch((error) => {
                     notiToaster(error.response?.data?.message || error, true);
