@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import Authentication from "views/Authentication/Authentication";
+import ResetPassword from "views/Authentication/ResetPassword";
 import Editor from "views/Editor/Editor";
 import Home from "views/Home/Home";
 import NotFound from "views/NotFound/NotFound";
@@ -86,6 +87,11 @@ const routes = [
     condition: isAuthenticated,
     access: <Editor />,
     redirect: "/authenticate",
+  },
+  {
+    path: "/reset-password/:token",
+    component: <ResetPassword />,
+    isProtected: false,
   },
 ];
 
