@@ -4,6 +4,7 @@ import SearchUser from "components/profile/SearchUser";
 import TextLogo from "components/TextLogo";
 import Transition from "components/Transition";
 import useDebounce from "hooks/useDebounce";
+import moment from "moment";
 import {
   Check,
   MagnifyingGlass,
@@ -17,7 +18,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setLogin } from "store/slices/loginSlice";
-import formatNumber from "utils/FormatNumber";
+import formatNumber from "utils/formatNumber";
 import { tw } from "utils/TailwindComponent";
 import { logout } from "./logout";
 import styles from "./Profile.module.scss";
@@ -173,6 +174,13 @@ const Profile = () => {
   // Search user
   const debouncedQuery = useDebounce(searchTerm, 500);
 
+  // Self fetch profile
+  useEffect(() => {
+    profile.fetchUser(username).then((res) => {
+      dispatch(setLogin({ user: res, token: authToken }));
+    });
+  }, []);
+
   useEffect(
     () => {
       if (debouncedQuery) {
@@ -186,8 +194,6 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [debouncedQuery], // Only call effect if debounced query term changes
   );
-
-  console.log(loggedUser, authToken);
 
   return (
     <Transition>
@@ -305,57 +311,18 @@ const Profile = () => {
               {/* Projects */}
               {projects ? (
                 <div className={styles.projectsContainer}>
-                  {/* TODO: Add message if no project found */}
                   <>
-                    <ProjectCard
-                      title='Project name'
-                      description="Porject description, what's the project about"
-                      likes={21}
-                      updated='Updated 2 days ago'
-                      link='/sdadsads'
-                    />
-                    <ProjectCard
-                      title='Project name'
-                      description="Porject description, what's the project about"
-                      likes={21}
-                      updated='Updated 2 days ago'
-                      link='/sdadsads'
-                    />
-                    <ProjectCard
-                      title='Project name'
-                      description='Porject'
-                      likes={21}
-                      updated='Updated 2 days ago'
-                      link='/sdadsads'
-                    />
-                    <ProjectCard
-                      title='Project name'
-                      description="Porject description, what's the project about"
-                      likes={21}
-                      updated='Updated 2 days ago'
-                      link='/sdadsads'
-                    />
-                    <ProjectCard
-                      title='Project name'
-                      description="Porject description, what's the project about"
-                      likes={21}
-                      updated='Updated 2 days ago'
-                      link='/sdadsads'
-                    />
-                    <ProjectCard
-                      title='Project name'
-                      description="Porject description, what's the project about"
-                      likes={21}
-                      updated='Updated 2 days ago'
-                      link='/sdadsads'
-                    />
-                    <ProjectCard
-                      title='Project name'
-                      description="Porject description, what's the project about"
-                      likes={21}
-                      updated='Updated 2 days ago'
-                      link='/sdadsads'
-                    />
+                    {projects.map(
+                      ({ title, description, updatedAt }, index) => (
+                        <ProjectCard
+                          title={title}
+                          description={description}
+                          updated={moment(updatedAt).fromNow()}
+                          link={`/project/${title}`}
+                          key={index}
+                        />
+                      ),
+                    )}
                   </>
                 </div>
               ) : (
