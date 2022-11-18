@@ -309,7 +309,7 @@ const Profile = () => {
               {/* TODO: Fix profile feed width if it contains no cards */}
 
               {/* Projects */}
-              {projects ? (
+              {projects.length ? (
                 <div className={styles.projectsContainer}>
                   <>
                     {projects.map(
@@ -332,15 +332,15 @@ const Profile = () => {
               )}
             </div>
           ) : (
-            <div>
+            <span>
               {favorites.length ? (
                 <>{/* TODO: Add favorites cards */}</>
               ) : (
-                <p className='text-white text-3xl text-center my-20 md:px-60'>
+                <p className='text-white text-3xl text-center p-0 my-20 md:px-60'>
                   No favorites found :(
                 </p>
               )}
-            </div>
+            </span>
           )}
         </div>
 

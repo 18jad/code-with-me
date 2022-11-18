@@ -74,7 +74,6 @@ class UserController {
         if (validateUsername) {
           const checkUsername = await userCheck.checkUsername(username);
           // if username is not taken OR if username is the same as the current logged in user (means he didn't change it)
-          console.log(username, token.username);
           if (!checkUsername || username === token.username) {
             const validateHeadline = this.validateHeadline(headline as string);
             if (validateHeadline) {

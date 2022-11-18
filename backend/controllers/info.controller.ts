@@ -69,7 +69,6 @@ class InfoController {
         ) as User;
         if (user) {
           // if user was found
-          console.log(user);
           sendResponse(response, true, "User found", { user });
         }
       } catch (error) {
