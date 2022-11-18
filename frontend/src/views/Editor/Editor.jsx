@@ -8,9 +8,12 @@ import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import { Chats, GearSix, Link, Stack } from "phosphor-react";
 import { Resizable } from "re-resizable";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import io from "socket.io-client";
 import { tw } from "utils/TailwindComponent";
 import styles from "./Editor.module.scss";
+
 const VoiceChatCircle = tw.img`
     inline-block
     h-8
@@ -23,6 +26,11 @@ const VoiceChatCircle = tw.img`
 `;
 
 const Editor = () => {
+  // Socket io connection
+  const socket = io.connect("http://localhost:2121");
+
+  const { id } = useParams();
+
   // Sidebar content switcher
   const [sidebarContent, setSidebarContent] = useState("files");
 
@@ -31,12 +39,6 @@ const Editor = () => {
   const [inviteModalStatus, setInviteModalStatus] = useState(false);
 
   const storedSetting = localStorage.getItem("editor-setting");
-
-  const sideBarRef = useRef(null);
-
-  const handleMouseDown = (e) => {
-    console.log(sideBarRef.current.offsetWidth);
-  };
 
   // Editor settings
   const [editorSettings, setEditorSetting] = useState({
