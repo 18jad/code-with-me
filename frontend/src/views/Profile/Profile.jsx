@@ -486,11 +486,33 @@ const Profile = () => {
           onClick={() => {
             setProjectModalStatus(false);
           }}>
-          <form className='inputs flex flex-col gap-4 w-full'>
+          <form
+            className='inputs flex flex-col gap-4 w-full'
+            onSubmit={(e) => {
+              profile
+                .createProject(e)
+                .then((res) => {
+                  notiToaster(
+                    res.data.message + ". Redirecting to project page...",
+                  );
+                  setTimeout(() => {
+                    navigate(`/project/${res.data.project.title}`);
+                  }, 2000);
+                })
+                .catch((error) =>
+                  notiToaster(error.response?.data?.message || error, true),
+                );
+            }}>
             <div className='flex flex-col gap-3'>
-              <ModalInput type='text' placeholder='Project title' required />
+              <ModalInput
+                type='text'
+                placeholder='Project title'
+                name='title'
+                required
+              />
               <ModalTextarea
                 type='text'
+                name='description'
                 placeholder='Project description'
                 required
               />
