@@ -178,6 +178,9 @@ class UserAuth {
           where: {
             email: email,
           },
+          include: {
+            projects: true,
+          },
         })) as User;
         // Check if user is found
         if (user) {
