@@ -4,6 +4,7 @@ import { axiosInstance, axiosUser } from "utils/axiosInstance";
 export class ProfileController {
   #edit_profile_url = "/user/edit_profile";
   #search_url = "/info/search";
+  #fetch_user_url = "/info/info_username";
   #usernameFilter = /^[a-z](?:_?[a-z0-9]+){2,}$/gim;
 
   /**
@@ -97,6 +98,28 @@ export class ProfileController {
             if (response.status === 200 && response.data.success) {
               const { users } = response.data;
               resolve(users);
+            } else {
+              reject(response.message);
+            }
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      }
+    });
+  };
+
+  fetchUser = (username) => {
+    return new Promise((resolve, reject) => {
+      if (!username) {
+        reject("Username cannot be empty");
+      } else {
+        axiosUser
+          .get(`${this.#fetch_user_url}?username=${username}`)
+          .then((response) => {
+            if (response.status === 200 && response.data.success) {
+              const { user } = response.data;
+              resolve(user);
             } else {
               reject(response.message);
             }
