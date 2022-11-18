@@ -2,6 +2,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const http = require("http");
+const { Server } = require("socket.io");
 
 // Configuration
 require("dotenv").config();
@@ -26,7 +28,28 @@ app.use(prefix + "/user", userRoutes);
 app.use(prefix + "/info", infoRoutes);
 app.use(prefix + "/project", projectRoutes);
 
-app.listen(port, (error: any) => {
+// Server
+const server = http.createServer(app);
+
+// Socket io server
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  },
+});
+
+io.on(
+  "connection",
+  (socket: { id: any; on: (arg1: string, arg2: () => void) => void }) => {
+    console.log("User connected", socket.id);
+    socket.on("disconnect", () => {
+      console.log("User disconnected");
+    });
+  },
+);
+
+server.listen(port, (error: any) => {
   if (error) {
     console.log("Error log:", error);
     throw new Error(error.message);
