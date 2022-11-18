@@ -32,6 +32,7 @@
     "redux-persist": "^6.0.0",
     "redux-persist-cookie-storage": "^1.0.0",
     "redux-thunk": "^2.4.2",
+    "socket.io-client": "^4.5.3",
     "styled-components": "^5.3.6",
     "tsparticles-engine": "^2.3.3",
     "tsparticles-preset-stars": "^2.3.3",
