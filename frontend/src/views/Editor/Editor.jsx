@@ -275,7 +275,7 @@ const Editor = () => {
           </div>
           {/* Sidebar content */}
           <div className={styles.sidebar_content}>
-            <SidebarContent content={sidebarContent} />
+            <SidebarContent content={sidebarContent} socket={socket} />
           </div>
         </Resizable>
 
