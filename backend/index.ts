@@ -63,7 +63,15 @@ io.on("connection", (socket: SocketController) => {
   });
 
   socket.on("send_message", (data) => {
+    console.log(data);
     io.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("typing", (data) => {
+    socket.to(data.room).emit("typing", data);
+    socket.on("stop_typing", (stopped_data) => {
+      socket.to(data.room).emit("stop_typing", stopped_data);
+    });
   });
 
   socket.once("disconnect", () => {
