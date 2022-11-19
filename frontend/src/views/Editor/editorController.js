@@ -5,6 +5,7 @@ export class EditorController {
   #emailFilter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   #check_url = "/project/check_allowed";
   #share_url = "/project/send_invitation";
+  #allowd_url = "/project/allow_user";
 
   checkIfAllowed(project_id) {
     return new Promise((resolve, reject) => {
@@ -43,6 +44,21 @@ export class EditorController {
             });
         }
       }
+    });
+  }
+
+  allowUser(inviteToken) {
+    return new Promise((resolve, reject) => {
+      axiosUser
+        .post(this.#allowd_url, {
+          invitationToken: inviteToken,
+        })
+        .then((result) => {
+          resolve(result.data);
+        })
+        .catch((err) => {
+          reject(err);
+        });
     });
   }
 }
