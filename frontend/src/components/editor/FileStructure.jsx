@@ -40,8 +40,9 @@ const structure = [
   },
 ];
 
-const FileStructure = ({ className }) => {
-  let [data, setData] = useState(structure);
+const FileStructure = ({ className, fileStructure }) => {
+  console.log(fileStructure, structure);
+  let [data, setData] = useState(fileStructure);
 
   // Recursion file path update
   const updatePath = (fileStorage, mainPath) => {
