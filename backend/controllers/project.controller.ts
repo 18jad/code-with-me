@@ -188,24 +188,25 @@ class ProjectController {
           };
           const validateToken = await this.validateInviteToken(invitationToken);
           if (id && invitationToken && validateToken) {
-            const { allowedUsers } = (await prisma.project.findUnique({
+            const checkProject = (await prisma.project.findUnique({
               where: {
                 inviteToken: invitationToken,
-              },
-              select: {
-                allowedUsers: true,
               },
             })) as {
               allowedUsers: any[];
             };
             // If user is already allowed do nothing
-            if (allowedUsers.includes(id)) {
-              sendResponse(response, false, "User already allowed");
+            if (checkProject.allowedUsers.includes(id)) {
+              sendResponse(response, false, "User already allowed", {
+                project: checkProject,
+              });
               return null;
             }
             // Filter the array from duplicated values if there's any and add the new user id
             const uniqueUsers = Array.from(
-              (new Set<number[]>([...allowedUsers, id]) as any).values(),
+              (
+                new Set<number[]>([...checkProject.allowedUsers, id]) as any
+              ).values(),
             ) as number[];
             prisma.project
               .update({
