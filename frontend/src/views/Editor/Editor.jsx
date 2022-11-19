@@ -16,8 +16,10 @@ import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
+import NotFound from "views/NotFound/NotFound";
 import { ProfileController } from "views/Profile/profileController";
 import styles from "./Editor.module.scss";
+import { EditorController } from "./editorController";
 
 const ParticipantsCircle = tw.img`
     inline-block
@@ -37,12 +39,17 @@ const Editor = () => {
   const [participants, setParticipants] = useState([]);
 
   const profileController = new ProfileController();
+  const editorController = new EditorController();
 
   let newJoin = true;
 
   const { id } = useParams();
 
   const { user: loggedUser } = useSelector((state) => state);
+
+  const [fileStructure, setFileStructure] = useState([]);
+
+  const [allowed, setAllowed] = useState(true);
 
   useEffect(() => {
     socket.on("user_joined", ({ users, user: joinedUser }) => {
@@ -90,14 +97,28 @@ const Editor = () => {
       });
       notificationToaster(user + " left the project", true);
     });
-  }, []);
+  }, [allowed]);
 
   useEffect(() => {
-    socket.emit("join_room", {
-      room: id,
-      username: loggedUser.username,
-      participants,
-    });
+    editorController
+      .checkIfAllowed(id)
+      .then((res) => {
+        if (res.success) {
+          setAllowed(true);
+          console.log(res.project.fileStructure);
+          setFileStructure([res.project.fileStructure]);
+          console.log(res);
+          socket.emit("join_room", {
+            room: id,
+            username: loggedUser.username,
+            participants,
+          });
+        }
+      })
+      .catch((err) => {
+        setAllowed(false);
+        console.log(err);
+      });
   }, []);
 
   // Sidebar content switcher
@@ -139,7 +160,7 @@ const Editor = () => {
     });
   };
 
-  return (
+  return allowed ? (
     <div className={styles.editorWrapper}>
       {/* Navbar */}
       <div className={styles.navbar}>
@@ -275,7 +296,11 @@ const Editor = () => {
           </div>
           {/* Sidebar content */}
           <div className={styles.sidebar_content}>
-            <SidebarContent content={sidebarContent} socket={socket} />
+            <SidebarContent
+              content={sidebarContent}
+              socket={socket}
+              fileStructure={fileStructure}
+            />
           </div>
         </Resizable>
 
@@ -465,6 +490,8 @@ const Editor = () => {
       </Modal>
       <Toaster position='bottom-center' reverseOrder={false} />
     </div>
+  ) : (
+    <NotFound />
   );
 };
 
