@@ -17,7 +17,7 @@ import io from "socket.io-client";
 import { setProject } from "store/slices/projectSlice";
 import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
-import NotFound from "views/NotFound/NotFound";
+import AccessDenied from "views/NotFound/AccessDenied";
 import { ProfileController } from "views/Profile/profileController";
 import styles from "./Editor.module.scss";
 import { EditorController } from "./editorController";
@@ -106,7 +106,13 @@ const Editor = () => {
       .then((res) => {
         if (res.success) {
           setAllowed(true);
-          dispatch(setProject({ project: res.project }));
+          console.log(res);
+          dispatch(
+            setProject({
+              project: res.project,
+              link: `http://localhost:3000/invite/${res.project.inviteToken}`,
+            }),
+          );
           socket.emit("join_room", {
             room: id,
             username: loggedUser.username,
@@ -486,7 +492,7 @@ const Editor = () => {
       <Toaster position='bottom-center' reverseOrder={false} />
     </div>
   ) : (
-    <NotFound />
+    <AccessDenied />
   );
 };
 
