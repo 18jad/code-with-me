@@ -5,10 +5,17 @@ const UserController = require("./user.controller");
 const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
 const jwt = require("jsonwebtoken");
+const sendEmail = require("../utils/emailTransporter");
+const AuthController = require("./auth.controller");
+const authController = new AuthController();
 
 const userController = new UserController();
 
 const decodeToken = (request: Request) => userController.decodeToken(request);
+
+const validateEmail = (email: string): Boolean => {
+  return authController.validateEmail(email);
+};
 
 class ProjectController {
   private readonly titleFilter = /^(?=.*[a-zA-Z]+.*)[A-Za-z0-9_-]{4,20}$/;
@@ -279,6 +286,36 @@ class ProjectController {
       .catch((error: any) => {
         sendResponse(response, false, "Unauthorized user", error);
       });
+  }
+
+  /**
+   * @description Invite a user to a project using his email
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  sendInviation(request: Request, response: Response) {
+    const { email, link } = request.body as { email: string; link: string };
+    const validEmail = validateEmail(email);
+    if (email && link && validEmail) {
+      decodeToken(request).then((result: any) => {
+        const mailOptions = {
+          from: process.env.EMAIL_USERNAME,
+          to: email,
+          subject: "Invitation to collaborate on a project",
+          text: `${result.name} invite you to collaborate on a project. Click on the link below to accept the invitation. ${link}`,
+        };
+        sendEmail(mailOptions, (error: any, info: any) => {
+          if (error) {
+            sendResponse(response, false, "Something went wrong", error);
+          } else {
+            sendResponse(response, true, "Email sent");
+          }
+        });
+      });
+    } else {
+      sendEmail(response, false, "Unvalid fields");
+    }
   }
 }
 
