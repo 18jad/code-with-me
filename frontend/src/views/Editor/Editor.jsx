@@ -80,6 +80,16 @@ const Editor = () => {
       newJoin = false;
       !newJoin && notificationToaster(joinedUser + " joined the project");
     });
+
+    socket.on("user_disconnected", ({ user }) => {
+      setParticipants((prev) => {
+        const newParticipants = prev.filter(
+          (participant) => participant.username !== user,
+        );
+        return newParticipants;
+      });
+      notificationToaster(user + " left the project", true);
+    });
   }, []);
 
   useEffect(() => {

@@ -61,13 +61,18 @@ io.on("connection", (socket: SocketController) => {
       : users.push({ id: socket.id, room: data.room, user: data.username });
     io.to(data.room).emit("user_joined", { users, user: data.username });
   });
+
+  socket.on("send_message", (data) => {
+    io.to(data.room).emit("receive_message", data);
+  });
+
   socket.once("disconnect", () => {
     const index = users.findIndex((user: any) => user.id === socket.id);
-    const leftRoom = users[index]?.room;
+    const leftUser = users[index];
     if (index !== -1) {
       users.splice(index, 1)[0];
     }
-    io.to(leftRoom).emit("user_disconnected", users);
+    io.to(leftUser?.room).emit("user_disconnected", leftUser);
     console.log("User disconnected", users);
   });
 });
