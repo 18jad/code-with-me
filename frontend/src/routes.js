@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import Authentication from "views/Authentication/Authentication";
 import ResetPassword from "views/Authentication/ResetPassword";
+import AcceptInvite from "views/Editor/AcceptInvite";
 import Editor from "views/Editor/Editor";
 import Home from "views/Home/Home";
 import NotFound from "views/NotFound/NotFound";
@@ -91,6 +92,11 @@ const routes = [
   {
     path: "/reset-password/:token",
     component: <ResetPassword />,
+    isProtected: false,
+  },
+  {
+    path: "/invite/:id",
+    component: <AcceptInvite />,
     isProtected: false,
   },
 ];
