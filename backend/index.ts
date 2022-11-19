@@ -39,15 +39,38 @@ const io = new Server(server, {
   },
 });
 
-io.on(
-  "connection",
-  (socket: { id: any; on: (arg1: string, arg2: () => void) => void }) => {
-    console.log("User connected", socket.id);
-    socket.on("disconnect", () => {
-      console.log("User disconnected");
-    });
-  },
-);
+interface SocketController {
+  id: any;
+  join: (arg1: string | number) => void;
+  on: (arg1: string, arg2: (param: any) => void) => void;
+  emit: (arg1: string, arg2: (param: any) => void) => void;
+  to: (arg1: string | number) => any;
+  once: (arg1: string, arg2: (param: any) => void) => void;
+}
+
+let users = [] as any;
+
+io.on("connection", (socket: SocketController) => {
+  console.log("User connected", socket.id);
+
+  socket.on("join_room", (data) => {
+    socket.join(data.room);
+    users.filter((e: any) => e.user == data.username && e.room == data.room)
+      .length > 0
+      ? null
+      : users.push({ id: socket.id, room: data.room, user: data.username });
+    io.to(data.room).emit("user_joined", { users, user: data.username });
+  });
+  socket.once("disconnect", () => {
+    const index = users.findIndex((user: any) => user.id === socket.id);
+    const leftRoom = users[index]?.room;
+    if (index !== -1) {
+      users.splice(index, 1)[0];
+    }
+    io.to(leftRoom).emit("user_disconnected", users);
+    console.log("User disconnected", users);
+  });
+});
 
 server.listen(port, (error: any) => {
   if (error) {
