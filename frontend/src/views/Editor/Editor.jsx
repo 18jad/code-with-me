@@ -11,9 +11,10 @@ import { Chats, GearSix, Link, Stack } from "phosphor-react";
 import { Resizable } from "re-resizable";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
+import { setProject } from "store/slices/projectSlice";
 import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
 import NotFound from "views/NotFound/NotFound";
@@ -43,11 +44,11 @@ const Editor = () => {
 
   let newJoin = true;
 
+  const dispatch = useDispatch();
+
   const { id } = useParams();
 
-  const { user: loggedUser } = useSelector((state) => state);
-
-  const [fileStructure, setFileStructure] = useState([]);
+  const { user: loggedUser } = useSelector((state) => state.user);
 
   const [allowed, setAllowed] = useState(true);
 
@@ -105,9 +106,7 @@ const Editor = () => {
       .then((res) => {
         if (res.success) {
           setAllowed(true);
-          console.log(res.project.fileStructure);
-          setFileStructure([res.project.fileStructure]);
-          console.log(res);
+          dispatch(setProject({ project: res.project }));
           socket.emit("join_room", {
             room: id,
             username: loggedUser.username,
@@ -202,7 +201,7 @@ const Editor = () => {
         {/* Sidebar */}
         <Resizable
           defaultSize={{
-            width: "20%",
+            width: "22%",
             height: "100%",
           }}
           maxWidth='25%'
@@ -296,11 +295,7 @@ const Editor = () => {
           </div>
           {/* Sidebar content */}
           <div className={styles.sidebar_content}>
-            <SidebarContent
-              content={sidebarContent}
-              socket={socket}
-              fileStructure={fileStructure}
-            />
+            <SidebarContent content={sidebarContent} socket={socket} />
           </div>
         </Resizable>
 

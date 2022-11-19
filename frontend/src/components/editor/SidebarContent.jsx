@@ -9,17 +9,14 @@ const swapContent = (content, compare) => {
     : "opacity-0 h-0 w-0 -z-50 pointer-events-none sticky top-0 self-stretch";
 };
 
-const SidebarContent = ({ content, socket, fileStructure }) => {
+const SidebarContent = ({ content, socket }) => {
   // Here we are hiding the element under the current active element using swapContent function
   // Instead of just rendering another component
   // This is to prevent the sidebar content from being re-rendered and losing old content/state
 
   return (
     <>
-      <FileStructure
-        className={swapContent(content, "files")}
-        fileStructure={fileStructure}
-      />
+      <FileStructure className={swapContent(content, "files")} />
       <GithubTool className={swapContent(content, "github")} />
       <ChatConversation
         className={swapContent(content, "chat")}
