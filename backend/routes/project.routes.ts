@@ -37,4 +37,13 @@ router.get(
   },
 );
 
+// Send inviation to project via email
+router.post(
+  "/send_invitation",
+  authMiddleware,
+  (request: Request, response: Response) => {
+    userController.sendInviation(request, response);
+  },
+);
+
 module.exports = router;
