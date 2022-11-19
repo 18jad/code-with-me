@@ -49,6 +49,7 @@ const Editor = () => {
   const { id } = useParams();
 
   const { user: loggedUser } = useSelector((state) => state.user);
+  const { project } = useSelector((state) => state);
 
   const [allowed, setAllowed] = useState(true);
 
@@ -56,6 +57,7 @@ const Editor = () => {
     socket.on("user_joined", ({ users, user: joinedUser }) => {
       newJoin
         ? users.forEach(({ user }) => {
+            if (!user) return null;
             profileController
               .fetchUser(user)
               .then(({ id, username, avatar }) => {
@@ -69,7 +71,8 @@ const Editor = () => {
                     ).values(),
                   ]);
                 }
-              });
+              })
+              .catch((error) => console.log(error));
           })
         : profileController
             .fetchUser(joinedUser)
@@ -467,12 +470,38 @@ const Editor = () => {
         }}>
         <div className='email-invite flex flex-col gap-2 items-start justify-start w-full'>
           <h3 className='text-white'>Invite by email:</h3>
-          <form className='email-input flex flex-row items-center gap-2 w-full'>
+          <form
+            className='email-input flex flex-row items-center gap-2 w-full'
+            onSubmit={(e) => {
+              editorController
+                .shareProject(e)
+                .then((result) => {
+                  if (result?.success) {
+                    notificationToaster("Invitation sent successfully");
+                    e.target.reset();
+                  }
+                })
+                .catch((error) => {
+                  notificationToaster(
+                    error?.response?.data?.message || error,
+                    true,
+                  );
+                });
+            }}>
             <input
               type='email'
               placeholder='Enter user email'
+              name='email'
               className='bg-white/10 border shadow-sm px-4 py-1 placeholder-gray-300 border-gray-500 focus:border-gray-800  focus:ring-2 focus:bg-black/10 focus:ring-gray-500 outline-none rounded-sm transition duration-150 text-white w-full'
               required
+            />
+            <input
+              type='text'
+              placeholder='link'
+              name='link'
+              value={project.link}
+              hidden
+              readOnly
             />
             <button
               className='bg-blue-500 border shadow-sm px-4 py-1  border-blue-500 outline-none rounded-sm transition duration-150 text-white cursor-pointer hover:bg-blue-500/80'
@@ -483,7 +512,16 @@ const Editor = () => {
         </div>
         <span className='seperator text-white'>OR</span>
         <div className='copy-link flex flex-col gap-2 items-center justify-center w-full'>
-          <button className='bg-blue-500 border shadow-sm px-2 py-1  border-blue-500 outline-none rounded-sm transition duration-150 text-white cursor-pointer hover:bg-blue-500/80 flex flex-row items-center justify-center gap-2'>
+          <button
+            className='bg-blue-500 border shadow-sm px-2 py-1  border-blue-500 outline-none rounded-sm transition duration-150 text-white cursor-pointer hover:bg-blue-500/80 flex flex-row items-center justify-center gap-2 w-[300px]'
+            onClick={(e) => {
+              navigator.clipboard.writeText(project.link);
+              notificationToaster("Link copied to clipboard");
+              e.target.innerText = "Copied";
+              setTimeout(() => {
+                e.target.innerText = "Copy invitation link";
+              }, 1300);
+            }}>
             <Link color='#fff' size={20} />
             <span>Copy invitation link</span>
           </button>
