@@ -46,11 +46,6 @@ const FileStructure = ({ className }) => {
     (state) => state.project?.project?.fileStructure,
   );
 
-  console.log(
-    "fice state",
-    useSelector((state) => state.project),
-  );
-
   let [data, setData] = useState(structure);
 
   // Recursion file path update
@@ -75,15 +70,12 @@ const FileStructure = ({ className }) => {
   const handleUpdate = (state) => {
     const mainState = state[0];
     const mainPath = mainState.path;
-    console.log("Main state", mainPath);
     updatePath(mainState, mainPath);
   };
 
   useLayoutEffect(() => {
     try {
-      console.log("File structure", fileStructure);
       setData([fileStructure]);
-      console.log("File structure new", data);
     } catch (err) {
       console.log(err);
     }
