@@ -1,5 +1,5 @@
-const Message = ({ message, time, senderName, isMe }) => {
-  return (
+const Message = ({ message, time, senderName, isMe, type }) => {
+  return type === "user" ? (
     <div
       className={`message flex flex-col max-w-[200px] mb-2 ${
         isMe
@@ -21,6 +21,11 @@ const Message = ({ message, time, senderName, isMe }) => {
         }`}>
         {time}
       </span>
+    </div>
+  ) : (
+    <div className='message flex flex-col mb-2 items-center  clear-both'>
+      <p className='text-xs px-2 py-1 rounded-lg'>{message}</p>
+      <span className='text-[10px] text-gray text-end ml-1'>{time}</span>
     </div>
   );
 };
