@@ -1,4 +1,5 @@
 import { useLayoutEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import Tree from "./FileTree/Tree";
 
 const structure = [
@@ -40,9 +41,17 @@ const structure = [
   },
 ];
 
-const FileStructure = ({ className, fileStructure }) => {
-  console.log(fileStructure, structure);
-  let [data, setData] = useState(fileStructure);
+const FileStructure = ({ className }) => {
+  const fileStructure = useSelector(
+    (state) => state.project?.project?.fileStructure,
+  );
+
+  console.log(
+    "fice state",
+    useSelector((state) => state.project),
+  );
+
+  let [data, setData] = useState(structure);
 
   // Recursion file path update
   const updatePath = (fileStorage, mainPath) => {
@@ -64,22 +73,21 @@ const FileStructure = ({ className, fileStructure }) => {
     console.log("Clicked file path: ", filePath);
   };
   const handleUpdate = (state) => {
-    const mainState = state;
+    const mainState = state[0];
     const mainPath = mainState.path;
+    console.log("Main state", mainPath);
     updatePath(mainState, mainPath);
   };
 
   useLayoutEffect(() => {
     try {
-      let savedStructure = JSON.parse(localStorage.getItem("tree"));
-      if (savedStructure) {
-        // TODO: UPDATE FILE STRUCTURE WHEN FETCHING JSON STRUCTURE FROM DB
-        // setData(savedStructure);
-      }
+      console.log("File structure", fileStructure);
+      setData([fileStructure]);
+      console.log("File structure new", data);
     } catch (err) {
       console.log(err);
     }
-  }, []);
+  }, [fileStructure]);
   return (
     <div className={className}>
       <h2 className='p-4 border-b-2 border-[#232526] mb-2'>Project Name</h2>

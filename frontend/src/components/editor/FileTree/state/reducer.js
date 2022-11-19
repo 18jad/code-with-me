@@ -22,7 +22,6 @@ const reducer = (state, action) => {
       return action.payload;
 
     case FILE.CREATE:
-      console.log(action.payload);
       node.files.push(
         createFile({
           name: action.payload.name,

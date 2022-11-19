@@ -137,8 +137,10 @@ const Profile = () => {
   document.body.style.overflow =
     editModalStatus || projectModalStatus ? "hidden" : "auto";
 
+  console.log(useSelector((state) => state));
+
   // Logged in user
-  const loggedUser = useSelector((state) => state.user);
+  const loggedUser = useSelector((state) => state.user.user);
   const {
     username,
     name,
@@ -157,7 +159,7 @@ const Profile = () => {
   };
 
   // Authentication token
-  const authToken = useSelector((state) => state.token);
+  const authToken = useSelector((state) => state.user.token);
 
   // Search user
   const debouncedQuery = useDebounce(searchTerm, 500);
