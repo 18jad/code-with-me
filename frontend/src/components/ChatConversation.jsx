@@ -1,3 +1,4 @@
+import useDebounce from "hooks/useDebounce";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -12,6 +13,10 @@ const ChatConversation = ({ className, socket }) => {
   const room = id;
 
   const [messages, setMessages] = useState([]);
+
+  const [typing, setTyping] = useState(false);
+
+  const debounceTyping = useDebounce(typing, 1500);
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -50,6 +55,15 @@ const ChatConversation = ({ className, socket }) => {
       ]);
     });
 
+    socket.on("typing", (data) => {
+      setTyping(data);
+    });
+
+    socket.on("stop_typing", () => {
+      console.log("stopped");
+      setTyping(false);
+    });
+
     socket.on("user_disconnected", ({ user }) => {
       console.log("user disconnected", user);
       setMessages((messages) => [
@@ -62,6 +76,11 @@ const ChatConversation = ({ className, socket }) => {
       ]);
     });
   }, []);
+
+  useEffect(() => {
+    socket.emit("stop_typing");
+    setTyping(false);
+  }, [debounceTyping]);
 
   return (
     <div className={className}>
@@ -85,6 +104,14 @@ const ChatConversation = ({ className, socket }) => {
           onSubmit={(e) => {
             sendMessage(e);
           }}>
+          <span
+            className={`text-xs px-2 py-1 h-[25px] flex items-center bg-black/20 ${
+              typing ? "opacity-1" : "opacity-0"
+            }`}>
+            {typing && (
+              <span className='animate-pulse'>{typing?.user} is typing...</span>
+            )}
+          </span>
           <input
             type='text'
             className='w-full px-3 bg-[#232526] py-3  border-t border-white/5 outline-none'
