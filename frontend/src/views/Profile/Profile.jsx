@@ -14,11 +14,12 @@ import {
   UserFocus,
 } from "phosphor-react";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setLogin } from "store/slices/loginSlice";
 import formatNumber from "utils/formatNumber";
+import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
 import { logout } from "./logout";
 import styles from "./Profile.module.scss";
@@ -124,19 +125,6 @@ const Profile = () => {
 
       image.src = URL.createObjectURL(file); // set the image object source to image blob
     }
-  };
-
-  // Toaster function
-  const notiToaster = (message, error = false) => {
-    toast[error ? "error" : "success"](message, {
-      style: {
-        borderRadius: "8px",
-        background: "#fff2",
-        border: "1px solid #fff6",
-        backdropFilter: "blur(10px)",
-        color: "#fff",
-      },
-    });
   };
 
   // Navigator
@@ -440,11 +428,11 @@ const Profile = () => {
                   .editProfile(e)
                   .then(({ response: { data } }) => {
                     const { updatedUser: user, newToken: token } = data;
-                    notiToaster(data.message);
+                    notificationToaster(data.message);
                     dispatch(setLogin({ user, token }));
                   })
                   .catch(({ response: { data } }) =>
-                    notiToaster(data.message, true),
+                    notificationToaster(data.message, true),
                   );
               }}>
               <div className='flex flex-col md:flex-row gap-3'>
@@ -492,7 +480,7 @@ const Profile = () => {
               profile
                 .createProject(e)
                 .then((res) => {
-                  notiToaster(
+                  notificationToaster(
                     res.data.message + ". Redirecting to project page...",
                   );
                   setTimeout(() => {
@@ -500,7 +488,10 @@ const Profile = () => {
                   }, 2000);
                 })
                 .catch((error) =>
-                  notiToaster(error.response?.data?.message || error, true),
+                  notificationToaster(
+                    error.response?.data?.message || error,
+                    true,
+                  ),
                 );
             }}>
             <div className='flex flex-col gap-3'>
