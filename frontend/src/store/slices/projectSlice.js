@@ -15,6 +15,7 @@ const initialState = {
       },
     ],
   },
+  link: "",
 };
 
 export const projectSlice = createSlice({
@@ -23,6 +24,7 @@ export const projectSlice = createSlice({
   reducers: {
     setProject: (state, action) => {
       state.project = action.payload.project;
+      state.link = action.payload.link;
     },
   },
 });
