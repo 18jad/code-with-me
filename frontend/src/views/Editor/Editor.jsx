@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { default as IDE } from "@monaco-editor/react";
 import GithubTool from "assets/icons/GithubTool";
 import ShareIcon from "assets/icons/ShareIcon";
@@ -8,10 +9,17 @@ import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import { Chats, GearSix, Link, Stack } from "phosphor-react";
 import { Resizable } from "re-resizable";
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import io from "socket.io-client";
+import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
+import { ProfileController } from "views/Profile/profileController";
 import styles from "./Editor.module.scss";
-const VoiceChatCircle = tw.img`
+
+const ParticipantsCircle = tw.img`
     inline-block
     h-8
     w-8
@@ -22,7 +30,66 @@ const VoiceChatCircle = tw.img`
     select-none
 `;
 
+// Socket io connection
+const socket = io.connect("http://localhost:2121");
+
 const Editor = () => {
+  const [participants, setParticipants] = useState([]);
+
+  const profileController = new ProfileController();
+
+  let newJoin = true;
+
+  const { id } = useParams();
+
+  const { user: loggedUser } = useSelector((state) => state);
+
+  useEffect(() => {
+    socket.on("user_joined", ({ users, user: joinedUser }) => {
+      newJoin
+        ? users.forEach(({ user }) => {
+            profileController
+              .fetchUser(user)
+              .then(({ id, username, avatar }) => {
+                if (!participants.includes({ id, username, avatar })) {
+                  setParticipants((prev) => [
+                    ...new Map(
+                      [...prev, { id, username, avatar }].map((item) => [
+                        item["id"],
+                        item,
+                      ]),
+                    ).values(),
+                  ]);
+                }
+              });
+          })
+        : profileController
+            .fetchUser(joinedUser)
+            .then(({ id, username, avatar }) => {
+              if (!participants.includes({ id, username, avatar })) {
+                setParticipants((prev) => [
+                  ...new Map(
+                    [...prev, { id, username, avatar }].map((item) => [
+                      item["id"],
+                      item,
+                    ]),
+                  ).values(),
+                ]);
+              }
+            });
+      newJoin = false;
+      !newJoin && notificationToaster(joinedUser + " joined the project");
+    });
+  }, []);
+
+  useEffect(() => {
+    socket.emit("join_room", {
+      room: id,
+      username: loggedUser.username,
+      participants,
+    });
+  }, []);
+
   // Sidebar content switcher
   const [sidebarContent, setSidebarContent] = useState("files");
 
@@ -31,12 +98,6 @@ const Editor = () => {
   const [inviteModalStatus, setInviteModalStatus] = useState(false);
 
   const storedSetting = localStorage.getItem("editor-setting");
-
-  const sideBarRef = useRef(null);
-
-  const handleMouseDown = (e) => {
-    console.log(sideBarRef.current.offsetWidth);
-  };
 
   // Editor settings
   const [editorSettings, setEditorSetting] = useState({
@@ -83,22 +144,17 @@ const Editor = () => {
         <div className={styles.navbarTools}>
           {/* Voice chat bubbles wrapper */}
           <div className='flex -space-x-2'>
-            <VoiceChatCircle
-              src='https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-              alt=''
-            />
-            <VoiceChatCircle
-              src='https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-              alt=''
-            />
-            <VoiceChatCircle
-              src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80'
-              alt=''
-            />
-            <VoiceChatCircle
-              src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-              alt=''
-            />
+            {participants &&
+              participants.map((user, index) => {
+                return (
+                  <ParticipantsCircle
+                    key={index}
+                    src={user?.avatar}
+                    alt={user?.username}
+                    title={user?.username}
+                  />
+                );
+              })}
           </div>
           <button
             className={styles.share_btn}
@@ -397,6 +453,7 @@ const Editor = () => {
           </button>
         </div>
       </Modal>
+      <Toaster position='bottom-center' reverseOrder={false} />
     </div>
   );
 };

@@ -1,12 +1,13 @@
 import TextLogo from "components/TextLogo";
 import Transitions from "components/Transition";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import Particles from "react-tsparticles";
 import routes from "routes";
 import { setLogin } from "store/slices/loginSlice";
+import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
 import authStore from "../lang/authStore";
 import { initEngine, starsOptions } from "../particles/StarsParticles";
@@ -20,22 +21,8 @@ const Authentication = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [forget, setForget] = useState(false);
 
-  // Toaster function
-  const notiToaster = (message, error = false) => {
-    toast[error ? "error" : "success"](message, {
-      style: {
-        borderRadius: "8px",
-        background: "#fff2",
-        border: "1px solid #fff6",
-        backdropFilter: "blur(10px)",
-        color: "#fff",
-        fontSize: "14px",
-      },
-    });
-  };
-
   // Authentication controlleres
-  const registerController = new Register(notiToaster, setIsLogin);
+  const registerController = new Register(notificationToaster, setIsLogin);
   const loginController = new Login();
   const forgetController = new ForgetController();
 
@@ -148,7 +135,7 @@ const Authentication = () => {
                   .handleLogin(e)
                   .then(
                     ({ user: { result }, user: { authToken }, response }) => {
-                      notiToaster(response.data.message);
+                      notificationToaster(response.data.message);
                       dispatch(setLogin({ user: result, token: authToken }));
                       routes[2].condition = true;
                       setTimeout(() => {
@@ -157,7 +144,7 @@ const Authentication = () => {
                     },
                   )
                   .catch((error) => {
-                    notiToaster(error.response.data.error, true);
+                    notificationToaster(error.response.data.error, true);
                   });
               }}>
               <h1 className='text-white text-4xl'>{langComp.login}</h1>
@@ -211,11 +198,14 @@ const Authentication = () => {
                   forgetController
                     .handleForget(e)
                     .then((response) => {
-                      notiToaster(response?.message);
+                      notificationToaster(response?.message);
                       e.target.reset();
                     })
                     .catch((error) => {
-                      notiToaster(error.response?.data?.message || error, true);
+                      notificationToaster(
+                        error.response?.data?.message || error,
+                        true,
+                      );
                     });
                 }}>
                 <h1 className='text-white text-4xl text-center'>
