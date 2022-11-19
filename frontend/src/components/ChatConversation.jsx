@@ -8,7 +8,7 @@ import Message from "./editor/Message";
 const ChatConversation = ({ className, socket }) => {
   const { id } = useParams();
 
-  const loggedUser = useSelector((state) => state.user);
+  const loggedUser = useSelector((state) => state.user.user);
 
   const room = id;
 
