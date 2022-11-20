@@ -41,7 +41,7 @@ const structure = [
   },
 ];
 
-const FileStructure = ({ className, socket }) => {
+const FileStructure = ({ className, socket, fileFn }) => {
   const fileStructure = useSelector(
     (state) => state.project?.project?.fileStructure,
   );
@@ -66,7 +66,10 @@ const FileStructure = ({ className, socket }) => {
   };
 
   const handleClick = (node) => {
-    console.log(node);
+    if (node.node.type === "file") {
+      console.log(node.node.type);
+      fileFn(node.node.name);
+    }
     const filePath = node.node.path;
     console.log("Clicked file path: ", filePath);
   };
