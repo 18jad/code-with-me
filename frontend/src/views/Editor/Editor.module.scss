@@ -142,15 +142,68 @@ $seperator: #232526;
     }
   }
   .editor {
-    flex: 1;
     height: 83.5vh;
-
     .tabs {
       border-bottom: 2px solid $seperator;
       padding: 11px;
       display: flex;
       align-items: center;
+      justify-content: center;
+      width: 100%;
       gap: 10px;
+    }
+  }
+
+  .terminal {
+    // bottom: 0;
+    z-index: 10000000000;
+    background: $dark-bg;
+    flex: 1;
+    margin-top: -140px;
+
+    &_header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px;
+      border-bottom: 2px solid $seperator;
+      border-top: 2px solid $seperator;
+      background: darken($dark-bg, 2%);
+      color: $white;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+
+      .terminalIcon {
+        color: darken($white, 50%);
+        cursor: pointer;
+        transition: color 150ms ease-in-out;
+
+        &:hover {
+          color: darken($white, 30%);
+        }
+      }
+    }
+
+    &_description {
+      padding: 5px 15px;
+      color: $white;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+      background: darken($dark-bg, 2%);
+    }
+
+    &_output {
+      padding: 15px;
+      height: 140px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: darken($dark-bg, 3%);
+      color: $white;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
     }
   }
 }
