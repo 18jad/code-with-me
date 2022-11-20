@@ -234,6 +234,126 @@ class ProjectController {
       });
   }
 
+  public async saveFile(request: Request, response: Response) {
+    decodeToken(request)
+      .then((token: any) => {
+        const { title, file_name, file_content } = request.body;
+        console.log(file_content);
+        const projectDirectory = path.join(
+          __dirname,
+          `../public/projects/${title}`,
+        );
+
+        const filePath = path.join(projectDirectory, file_name);
+        fs.writeFile(filePath, file_content, (error: any) => {
+          if (error) {
+            sendResponse(response, false, "File not saved", error);
+          } else {
+            sendResponse(response, true, "File saved successfully");
+          }
+        });
+      })
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  public async deleteFile(request: Request, response: Response) {
+    decodeToken(request)
+      .then((token: any) => {
+        const { title, file_name } = request.body;
+        const projectDirectory = path.join(
+          __dirname,
+          `../public/projects/${title}`,
+        );
+
+        const filePath = path.join(projectDirectory, file_name);
+        fs.unlink(filePath, (error: any) => {
+          if (error) {
+            sendResponse(response, false, "File not deleted", error);
+          } else {
+            sendResponse(response, true, "File deleted successfully");
+          }
+        });
+      })
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  public async renameFile(request: Request, response: Response) {
+    decodeToken(request)
+      .then((token: any) => {
+        const { title, file_name, new_file_name } = request.body;
+        const projectDirectory = path.join(
+          __dirname,
+          `../public/projects/${title}`,
+        );
+
+        const filePath = path.join(projectDirectory, file_name);
+        const newFilePath = path.join(projectDirectory, new_file_name);
+        fs.rename(filePath, newFilePath, (error: any) => {
+          if (error) {
+            sendResponse(response, false, "File not renamed", error);
+          } else {
+            sendResponse(response, true, "File renamed successfully");
+          }
+        });
+      })
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  public async createFolder(request: Request, response: Response) {
+    decodeToken(request)
+      .then((token: any) => {
+        const { title, folder_name } = request.body;
+        const projectDirectory = path.join(
+          __dirname,
+          `../public/projects/${title}`,
+        );
+
+        const folderPath = path.join(projectDirectory, folder_name);
+        fs.mkdir(folderPath, (error: any) => {
+          if (error) {
+            sendResponse(response, false, "Folder not created", error);
+          } else {
+            sendResponse(response, true, "Folder created");
+          }
+        });
+      })
+
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  public async readFile(request: Request, response: Response) {
+    decodeToken(request)
+      .then((token: any) => {
+        const { title, file_name } = request.query;
+        const projectDirectory = path.join(
+          __dirname,
+          `../public/projects/${title}`,
+        );
+
+        const filePath = path.join(projectDirectory, file_name);
+        fs.open(filePath, "r", (error: any, fd: any) => {
+          if (error) {
+            sendResponse(response, false, "File not read", error);
+          } else {
+            sendResponse(response, true, "File read successfully", {
+              file_content: fs.readFileSync(filePath, "utf8"),
+            });
+          }
+        });
+      })
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
   /**
    * @description Validate invite token
    * @param token {string} invite token
