@@ -7,7 +7,7 @@ import SidebarContent from "components/editor/SidebarContent";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import useKey from "hooks/useKey";
-import { Chats, GearSix, Link, Play, Stack } from "phosphor-react";
+import { Chats, GearSix, Link, Play, Stack, X } from "phosphor-react";
 import { Resizable } from "re-resizable";
 import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -52,6 +52,18 @@ const editorLanguage = {
   json: "json",
 };
 
+const runJsCode = (code) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const result = eval(code);
+      console.log("res", result);
+      resolve(eval(code));
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+
 const Editor = () => {
   const [participants, setParticipants] = useState([]);
 
@@ -60,6 +72,10 @@ const Editor = () => {
 
   const [openedFile, setOpenedFile] = useState(null);
   const [fileCode, setFileCode] = useState("");
+
+  const [terminal, setTerminal] = useState(false);
+
+  const [terminalOutput, setTerminalOutput] = useState("");
 
   console.log(
     "Opened file",
@@ -241,6 +257,11 @@ const Editor = () => {
     });
   };
 
+  const updateTerminal = (show, output = "") => {
+    setTerminal(show);
+    setTerminalOutput(output);
+  };
+
   return allowed ? (
     <div className={styles.editorWrapper}>
       {/* Navbar */}
@@ -386,9 +407,10 @@ const Editor = () => {
         </Resizable>
 
         {/* Editor and tabs */}
-        <div className={styles.editor}>
-          <div className={styles.tabs}>
-            {/* <EditorTab
+        <div className='flex flex-col w-full'>
+          <div className={styles.editor}>
+            <div className={styles.tabs}>
+              {/* <EditorTab
               name='index.html'
               isSelected={true}
               // onClick={(e) => {
@@ -405,50 +427,76 @@ const Editor = () => {
               // }}
             />
             <EditorTab name='styles.csss' isSelected={false} /> */}
-            <p className='text-white'>{openedFile}</p>
-            <div className='h-[34px]' readOnly></div>
-            {openedFile && openedFile.split(".").pop() === "js" && (
-              <Play
-                className='text-white cursor-pointer hover:text-white/70 transition duration-150'
-                width={20}
-                weight='fill'
-                title='Run code'
-              />
-            )}
-            {openedFile && (
-              <AiFillSave
-                className='text-white cursor-pointer hover:text-white/70 transition duration-150 absolute right-6 text-lg'
-                onClick={handleFileSave}
-              />
-            )}
+              <p className='text-white'>{openedFile}</p>
+              <div className='h-[34px]' readOnly></div>
+              {openedFile && openedFile.split(".").pop() === "js" && (
+                <Play
+                  className='text-white cursor-pointer hover:text-white/70 transition duration-150'
+                  width={20}
+                  weight='fill'
+                  title='Run code'
+                  onClick={() => {
+                    runJsCode(editorRef.current.getValue())
+                      .then((res) => {
+                        updateTerminal(true, res);
+                      })
+                      .catch((err) => {
+                        updateTerminal(true, err);
+                      });
+                  }}
+                />
+              )}
+              {openedFile && (
+                <AiFillSave
+                  className='text-white cursor-pointer hover:text-white/70 transition duration-150 absolute right-6 text-lg'
+                  onClick={handleFileSave}
+                />
+              )}
+            </div>
+            <IDE
+              height='100%'
+              width='99.9%'
+              onMount={handleEditorDidMount}
+              className={`${openedFile ? "" : "hidden"}`}
+              theme={editorSettings.darkMode ? "vs-dark" : "light"}
+              options={{
+                wordWrap: editorSettings.wordWrap ? "on" : "off",
+                showUnused: true,
+                lineNumbersMinChars: 3,
+                fontSize: editorSettings.fontSize,
+                scrollBeyondLastLine: false,
+                automaticLayout: true,
+                tabCompletion: "on",
+                padding: {
+                  top: 5,
+                },
+              }}
+              // TODO: MAKE CODE SAVE IN JSON SETTING FOR TAB SWITCHING FUNCTIONALITY
+              // value={editorSettings.code}
+              value={fileCode}
+              language={
+                editorLanguage[openedFile?.split(".").pop()] ||
+                openedFile?.split(".").pop()
+              }
+              onChange={handleCodeChange}
+            />
           </div>
-          <IDE
-            height='100%'
-            width='99.9%'
-            onMount={handleEditorDidMount}
-            className={`${openedFile ? "" : "hidden"}`}
-            theme={editorSettings.darkMode ? "vs-dark" : "light"}
-            options={{
-              wordWrap: editorSettings.wordWrap ? "on" : "off",
-              showUnused: true,
-              lineNumbersMinChars: 3,
-              fontSize: editorSettings.fontSize,
-              scrollBeyondLastLine: false,
-              automaticLayout: true,
-              tabCompletion: "on",
-              padding: {
-                top: 5,
-              },
-            }}
-            // TODO: MAKE CODE SAVE IN JSON SETTING FOR TAB SWITCHING FUNCTIONALITY
-            // value={editorSettings.code}
-            value={fileCode}
-            language={
-              editorLanguage[openedFile?.split(".").pop()] ||
-              openedFile?.split(".").pop()
-            }
-            onChange={handleCodeChange}
-          />
+          <div className={styles.terminal} hidden={!terminal}>
+            <header className={styles.terminal_header}>
+              <span>Terminal</span>
+              <X
+                size={20}
+                color='currentColor'
+                weight='bold'
+                onClick={() => updateTerminal(false)}
+                className={styles.terminalIcon}
+              />
+            </header>
+            <p className={styles.terminal_description}>Output: </p>
+            <div className={styles.terminal_output}>
+              <p>{terminalOutput}</p>
+            </div>
+          </div>
         </div>
       </div>
       <Modal
