@@ -76,6 +76,10 @@ io.on("connection", (socket: SocketController) => {
     });
   });
 
+  socket.on("create_file", (data) => {
+    io.to(data.room).emit("create_file", data);
+  });
+
   socket.once("disconnect", () => {
     const index = users.findIndex((user: any) => user.id === socket.id);
     const leftUser = users[index];
