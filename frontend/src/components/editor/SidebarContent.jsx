@@ -16,7 +16,10 @@ const SidebarContent = ({ content, socket }) => {
 
   return (
     <>
-      <FileStructure className={swapContent(content, "files")} />
+      <FileStructure
+        className={swapContent(content, "files")}
+        socket={socket}
+      />
       <GithubTool className={swapContent(content, "github")} />
       <ChatConversation
         className={swapContent(content, "chat")}
