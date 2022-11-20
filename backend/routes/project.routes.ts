@@ -64,4 +64,22 @@ router.post(
   },
 );
 
+// Save file
+router.post(
+  "/save_file",
+  authMiddleware,
+  (request: Request, response: Response) => {
+    userController.saveFile(request, response);
+  },
+);
+
+// Read file
+router.get(
+  "/read_file",
+  authMiddleware,
+  (request: Request, response: Response) => {
+    userController.readFile(request, response);
+  },
+);
+
 module.exports = router;
