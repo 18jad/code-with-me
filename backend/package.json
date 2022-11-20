@@ -32,7 +32,8 @@
     "octokit": "^2.0.10",
     "socket.io": "^4.5.3",
     "ts-node": "^10.9.1",
-    "typescript": ">=2.7"
+    "typescript": ">=2.7",
+    "uuidv4": "^6.2.13"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
