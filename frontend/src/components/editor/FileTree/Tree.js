@@ -47,16 +47,18 @@ const Tree = ({ children, data, onNodeClick, onUpdate }) => {
 
 const TreeRecusive = ({ data, parentNode }) => {
   return data.map((item, i) => {
+    console.log(data[i]);
+    // TODO: FIX UPDATE DELETE FILE ERROR
     if (!parentNode) {
       item = Object.assign({}, item, { parentNode: data });
-      data[i] = item;
+      // data[i] = item;
     } else {
       item = Object.assign({}, item, { parentNode });
-      data[i] = item;
+      // data[i] = item;
     }
     if (!item.id) {
       item = Object.assign({}, item, { id: v4() });
-      data[i] = item;
+      // data[i] = item;
     }
 
     if (item.type === "file") {

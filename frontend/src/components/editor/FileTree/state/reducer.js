@@ -1,6 +1,9 @@
 import _cloneDeep from "lodash.clonedeep";
+import { EditorController } from "views/Editor/editorController";
 import { createFile, createFolder, searchDFS } from "../utils";
 import { FILE, FOLDER } from "./constants";
+
+const editorController = new EditorController();
 
 const reducer = (state, action) => {
   let newState = _cloneDeep(state);
@@ -10,10 +13,15 @@ const reducer = (state, action) => {
     let foundNode = searchDFS({
       data: newState,
       cond: (item) => {
+        console.log(item, action.payload.id);
         return item.id === action.payload.id;
       },
     });
+    // TODO: HANDLE FILE RENAME DELETE ERROR
+    console.log(foundNode);
+
     node = foundNode.item;
+    console.log(node);
     parent = node.parentNode;
   }
 
@@ -27,6 +35,20 @@ const reducer = (state, action) => {
           name: action.payload.name,
         }),
       );
+      let ustate = newState[0];
+
+      editorController
+        .createFile(node.name, action.payload.name)
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+
+      editorController
+        .updateProjectStructure(node.name, JSON.stringify(ustate))
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => console.log(err));
+
       return newState;
 
     case FOLDER.CREATE:
