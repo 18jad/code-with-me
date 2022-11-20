@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Tree from "./FileTree/Tree";
 
@@ -41,7 +41,7 @@ const structure = [
   },
 ];
 
-const FileStructure = ({ className }) => {
+const FileStructure = ({ className, socket }) => {
   const fileStructure = useSelector(
     (state) => state.project?.project?.fileStructure,
   );
@@ -55,7 +55,10 @@ const FileStructure = ({ className }) => {
       files.forEach((file) => {
         console.log("This files", file);
         if (file.type === "file") {
-          file.path = `${mainPath}/${file.name}`;
+          // copy file
+          const copyFile = { ...file };
+          copyFile.path = `${mainPath}/${file.name}`;
+          // file.path = `${mainPath}/${file.name}`; //TODO: handle file not extensible error
         } else if (file.type === "folder") {
           updatePath(file, `${mainPath}/${file.name}`);
         }
@@ -71,7 +74,21 @@ const FileStructure = ({ className }) => {
     const mainState = state[0];
     const mainPath = mainState.path;
     updatePath(mainState, mainPath);
+    socket.emit("create_file", { newStructure: state, room: state[0].name });
+    console.log("bew file", state);
   };
+
+  useEffect(() => {
+    let incept = 0;
+    socket.on("create_file", (data) => {
+      console.log(data);
+      incept === 0 && setData(data.newStructure);
+      incept++;
+      setTimeout(() => {
+        incept = 0;
+      }, 1000);
+    });
+  }, []);
 
   useLayoutEffect(() => {
     try {
