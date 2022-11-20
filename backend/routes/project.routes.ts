@@ -46,4 +46,22 @@ router.post(
   },
 );
 
+// Update project structure
+router.post(
+  "/update_project",
+  authMiddleware,
+  (request: Request, response: Response) => {
+    userController.updateProject(request, response);
+  },
+);
+
+// Create file
+router.post(
+  "/create_file",
+  authMiddleware,
+  (request: Request, response: Response) => {
+    userController.createFile(request, response);
+  },
+);
+
 module.exports = router;
