@@ -41,18 +41,20 @@ const io = new Server(server, {
   },
 });
 
-interface SocketController {
-  id: any;
-  join: (arg1: string | number) => void;
-  on: (arg1: string, arg2: (param: any) => void) => void;
-  emit: (arg1: string, arg2: (param: any) => void) => void;
-  to: (arg1: string | number) => any;
-  once: (arg1: string, arg2: (param: any) => void) => void;
+namespace Socket {
+  export interface Controller {
+    id: any;
+    join: (arg1: string | number) => void;
+    on: (arg1: string, arg2: (param: any) => void) => void;
+    emit: (arg1: string, arg2: (param: any) => void) => void;
+    to: (arg1: string | number) => any;
+    once: (arg1: string, arg2: (param: any) => void) => void;
+  }
 }
 
 let users = [] as any;
 
-io.on("connection", (socket: SocketController) => {
+io.on("connection", (socket: Socket.Controller) => {
   console.log("User connected", socket.id);
 
   socket.on("join_room", (data) => {
@@ -78,6 +80,10 @@ io.on("connection", (socket: SocketController) => {
 
   socket.on("create_file", (data) => {
     io.to(data.room).emit("create_file", data);
+  });
+
+  socket.on("code_edit", (data) => {
+    socket.to(data.room).emit("code_edit", data);
   });
 
   socket.once("disconnect", () => {
