@@ -6,6 +6,8 @@ export class EditorController {
   #check_url = "/project/check_allowed";
   #share_url = "/project/send_invitation";
   #allowd_url = "/project/allow_user";
+  #update_url = "/project/update_project";
+  #creat_file_url = "/project/create_file";
   #github_access = "/github/get_access_token";
   #push_url = "/github/push";
 
@@ -64,6 +66,38 @@ export class EditorController {
         })
         .catch((err) => {
           reject(err);
+        });
+    });
+  }
+
+  updateProjectStructure(title, structure) {
+    return new Promise((resolve, reject) => {
+      axiosUser
+        .post(this.#update_url, {
+          title,
+          fileStructure: structure,
+        })
+        .then((result) => {
+          resolve(result.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  createFile(title, file_name) {
+    return new Promise((resolve, reject) => {
+      axiosUser
+        .post(this.#creat_file_url, {
+          title,
+          file_name,
+        })
+        .then((result) => {
+          resolve(result.data);
+        })
+        .catch((error) => {
+          reject(error);
         });
     });
   }
