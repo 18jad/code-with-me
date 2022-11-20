@@ -4,13 +4,14 @@ import GithubTool from "assets/icons/GithubTool";
 import ShareIcon from "assets/icons/ShareIcon";
 import Voice from "assets/icons/Voice";
 import SidebarContent from "components/editor/SidebarContent";
-import EditorTab from "components/editor/Tab";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
-import { Chats, GearSix, Link, Stack } from "phosphor-react";
+import useKey from "hooks/useKey";
+import { Chats, GearSix, Link, Play, Stack } from "phosphor-react";
 import { Resizable } from "re-resizable";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
+import { AiFillSave } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
@@ -36,11 +37,35 @@ const ParticipantsCircle = tw.img`
 // Socket io connection
 const socket = io.connect("http://localhost:2121");
 
+const editorLanguage = {
+  html: "html",
+  css: "css",
+  js: "javascript",
+  php: "php",
+  py: "python",
+  rb: "ruby",
+  sh: "shell",
+  sql: "sql",
+  txt: "plaintext",
+  xml: "xml",
+  md: "markdown",
+  json: "json",
+};
+
 const Editor = () => {
   const [participants, setParticipants] = useState([]);
 
   const profileController = new ProfileController();
   const editorController = new EditorController();
+
+  const [openedFile, setOpenedFile] = useState(null);
+  const [fileCode, setFileCode] = useState("");
+
+  console.log(
+    "Opened file",
+    openedFile,
+    editorLanguage[openedFile?.split(".").pop()],
+  );
 
   let newJoin = true;
 
@@ -52,6 +77,8 @@ const Editor = () => {
   const { project } = useSelector((state) => state);
 
   const [allowed, setAllowed] = useState(true);
+
+  const editorRef = useRef(null);
 
   useEffect(() => {
     socket.on("user_joined", ({ users, user: joinedUser }) => {
@@ -128,6 +155,52 @@ const Editor = () => {
         console.log(err);
       });
   }, []);
+
+  const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
+    editorRef.current.addAction({
+      id: "shortcuts-ide",
+      label: "Shortcuts",
+      keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyP],
+      precondition: null,
+      keybindingContext: null,
+      contextMenuGroupId: "navigation",
+      contextMenuOrder: 1.5,
+      run: function (ed) {},
+    });
+  };
+
+  useEffect(() => {
+    editorController
+      .readFile(id, openedFile)
+      .then(({ message, file_content }) => {
+        setFileCode(file_content);
+      })
+      .catch((err) => console.log(err));
+  }, [openedFile]);
+
+  const handleCodeChange = (value) => {
+    socket.emit("code_edit", { room: id, code: value, file: openedFile });
+  };
+
+  const handleFileSave = () => {
+    if (!openedFile) return;
+    editorController
+      .saveFile(id, openedFile, editorRef.current.getValue())
+      .then(({ message }) => {
+        notificationToaster(message);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // CTRL + S callback
+  useKey("ctrls", handleFileSave);
+
+  socket.on("code_edit", ({ code, file }) => {
+    console.log("Code change", code);
+    file === openedFile && setFileCode(code);
+    // setOpenedFile(code);
+  });
 
   // Sidebar content switcher
   const [sidebarContent, setSidebarContent] = useState("files");
@@ -304,14 +377,18 @@ const Editor = () => {
           </div>
           {/* Sidebar content */}
           <div className={styles.sidebar_content}>
-            <SidebarContent content={sidebarContent} socket={socket} />
+            <SidebarContent
+              content={sidebarContent}
+              socket={socket}
+              fileFn={setOpenedFile}
+            />
           </div>
         </Resizable>
 
         {/* Editor and tabs */}
         <div className={styles.editor}>
           <div className={styles.tabs}>
-            <EditorTab
+            {/* <EditorTab
               name='index.html'
               isSelected={true}
               // onClick={(e) => {
@@ -327,12 +404,29 @@ const Editor = () => {
               //   console.log(e.target);
               // }}
             />
-            <EditorTab name='styles.csss' isSelected={false} />
+            <EditorTab name='styles.csss' isSelected={false} /> */}
+            <p className='text-white'>{openedFile}</p>
             <div className='h-[34px]' readOnly></div>
+            {openedFile && openedFile.split(".").pop() === "js" && (
+              <Play
+                className='text-white cursor-pointer hover:text-white/70 transition duration-150'
+                width={20}
+                weight='fill'
+                title='Run code'
+              />
+            )}
+            {openedFile && (
+              <AiFillSave
+                className='text-white cursor-pointer hover:text-white/70 transition duration-150 absolute right-6 text-lg'
+                onClick={handleFileSave}
+              />
+            )}
           </div>
           <IDE
             height='100%'
             width='99.9%'
+            onMount={handleEditorDidMount}
+            className={`${openedFile ? "" : "hidden"}`}
             theme={editorSettings.darkMode ? "vs-dark" : "light"}
             options={{
               wordWrap: editorSettings.wordWrap ? "on" : "off",
@@ -346,8 +440,14 @@ const Editor = () => {
                 top: 5,
               },
             }}
-            defaultLanguage='javascript'
-            defaultValue='console.log("Hello World")'
+            // TODO: MAKE CODE SAVE IN JSON SETTING FOR TAB SWITCHING FUNCTIONALITY
+            // value={editorSettings.code}
+            value={fileCode}
+            language={
+              editorLanguage[openedFile?.split(".").pop()] ||
+              openedFile?.split(".").pop()
+            }
+            onChange={handleCodeChange}
           />
         </div>
       </div>
