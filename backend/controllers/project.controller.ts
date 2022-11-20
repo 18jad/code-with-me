@@ -4,10 +4,12 @@ import { Request } from "express";
 const UserController = require("./user.controller");
 const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
-const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/emailTransporter");
 const AuthController = require("./auth.controller");
 const authController = new AuthController();
+const fs = require("fs");
+const path = require("path");
+const { uuid } = require("uuidv4");
 
 const userController = new UserController();
 
@@ -88,6 +90,22 @@ class ProjectController {
   }
 
   /**
+   * @description Make project directory on the server to store project files
+   * @param title {string} project title
+   * @returns {void}
+   */
+  private makeProjectDirectory(title: string) {
+    const projectDirectory = path.join(
+      __dirname,
+      `../public/projects/${title}`,
+    );
+    // Check if project directory exists
+    if (!fs.existsSync(projectDirectory)) {
+      fs.mkdirSync(projectDirectory);
+    }
+  }
+
+  /**
    * @description Validate fields and create a new project, then increase project counter and return the project data
    * @param request {Request}
    * @param response {Response}
@@ -100,13 +118,14 @@ class ProjectController {
         this.validate(request)
           .then((result: any) => {
             const { title, description } = result as Project;
+            this.makeProjectDirectory(title);
             const project = prisma.project
               .create({
                 data: {
                   title: title,
                   description: description,
                   fileStructure: JSON.parse(
-                    `{"type":"folder","name":"${title}","path":"/projects/${title}","files":[]}`,
+                    `{"id": "${uuid()}", "type":"folder","name":"${title}","path":"/projects/${title}","files":[]}`,
                   ),
                   author: {
                     connect: {
@@ -149,6 +168,66 @@ class ProjectController {
           .catch((error: any) => {
             sendResponse(response, false, error);
           });
+      })
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  // Update project file structure
+  public async updateProject(request: Request, response: Response) {
+    decodeToken(request)
+      .then((token: any) => {
+        const { id } = token;
+        const { title, fileStructure } = request.body;
+        console.log(fileStructure);
+        const parsedfileStructure = JSON.parse(fileStructure);
+
+        prisma.project
+          .update({
+            where: {
+              title: title,
+            },
+            data: {
+              fileStructure: parsedfileStructure,
+            },
+          })
+          .then((project) => {
+            sendResponse(response, true, "Project file structure updated", {
+              project,
+            });
+          })
+          .catch((error) => {
+            sendResponse(
+              response,
+              false,
+              "Project file structure not updated",
+              error,
+            );
+          });
+      })
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  public async createFile(request: Request, response: Response) {
+    decodeToken(request)
+      .then((token: any) => {
+        const { title, file_name } = request.body;
+        const projectDirectory = path.join(
+          __dirname,
+          `../public/projects/${title}`,
+        );
+
+        const filePath = path.join(projectDirectory, file_name);
+        fs.open(filePath, "w", (error: any) => {
+          if (error) {
+            sendResponse(response, false, "File not created", error);
+          } else {
+            sendResponse(response, true, "File created");
+          }
+        });
       })
       .catch((error: any) => {
         sendResponse(response, false, "Unauthorized user", error);
