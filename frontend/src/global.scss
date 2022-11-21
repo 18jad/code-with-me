@@ -1,0 +1,29 @@
+// Global variables
+$blue: #3e97fc;
+$lighgray: #babbcc;
+$white: #ffffff;
+$black: #000000;
+
+/*
+    Responsive breakpoints:
+        @include breakpoint($size) { @content }
+*/
+@mixin breakpoint($size) {
+  @if $size == mobile {
+    @media (max-width: 600px) {
+      @content;
+    }
+  } @else if $size == tablet {
+    @media (max-width: 900px) {
+      @content;
+    }
+  } @else if $size == laptop {
+    @media (max-width: 1200px) {
+      @content;
+    }
+  } @else {
+    @media (max-width: $size) {
+      @content;
+    }
+  }
+}
