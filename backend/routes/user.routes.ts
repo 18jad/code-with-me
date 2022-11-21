@@ -29,7 +29,7 @@ router.get("/check_like", async (request: Request, response: Response) => {
 });
 
 // Like user
-router.post(
+router.put(
   "/update_user_like",
   authMiddleware,
   (request: Request, response: Response) => {
