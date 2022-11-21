@@ -82,4 +82,13 @@ router.get(
   },
 );
 
+// Excute code
+router.post(
+  "/excute_code",
+  authMiddleware,
+  (request: Request, response: Response) => {
+    userController.excuteCode(request, response);
+  },
+);
+
 module.exports = router;
