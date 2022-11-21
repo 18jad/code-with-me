@@ -8,6 +8,7 @@ export class ProfileController {
   #fetch_user_url = "/info/info_username";
   #check_like_url = "/user/check_like";
   #update_like_url = "/user/update_user_like";
+  #collab_projects_url = "/user/collabed_projects";
   #usernameFilter = /^[a-z](?:_?[a-z0-9]+){2,}$/gim;
   #titleFilter = /^(?=.*[a-zA-Z]+.*)[A-Za-z0-9_-]{4,20}$/;
 
@@ -211,6 +212,23 @@ export class ProfileController {
         .put(this.#update_like_url, {
           userId,
         })
+        .then((response) => {
+          if (response.status === 200) {
+            resolve(response.data);
+          } else {
+            reject(response);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  getCollabProjects() {
+    return new Promise((resolve, reject) => {
+      axiosUser
+        .get(this.#collab_projects_url)
         .then((response) => {
           if (response.status === 200) {
             resolve(response.data);
