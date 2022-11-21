@@ -10,6 +10,7 @@ export class EditorController {
   #creat_file_url = "/project/create_file";
   #save_file_url = "/project/save_file";
   #read_file_url = "/project/read_file";
+  #excute_code_url = "/project/excute_code";
   #github_access = "/github/get_access_token";
   #push_url = "/github/push";
 
@@ -125,6 +126,22 @@ export class EditorController {
     return new Promise((resolve, reject) => {
       axiosUser
         .get(`${this.#read_file_url}?title=${title}&file_name=${file_name}`)
+        .then((result) => {
+          resolve(result.data);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
+
+  excuteCode(title, file_name) {
+    return new Promise((resolve, reject) => {
+      axiosUser
+        .post(this.#excute_code_url, {
+          title,
+          file_name,
+        })
         .then((result) => {
           resolve(result.data);
         })
