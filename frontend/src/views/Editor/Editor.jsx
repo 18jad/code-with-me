@@ -7,7 +7,15 @@ import SidebarContent from "components/editor/SidebarContent";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import useKey from "hooks/useKey";
-import { Chats, GearSix, Link, Play, Stack, X } from "phosphor-react";
+import {
+  Chats,
+  GearSix,
+  Link,
+  Play,
+  Presentation,
+  Stack,
+  X,
+} from "phosphor-react";
 import { Resizable } from "re-resizable";
 import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -83,6 +91,8 @@ const Editor = () => {
   const [allowed, setAllowed] = useState(true);
 
   const editorRef = useRef(null);
+
+  const iframeRef = useRef(null);
 
   useEffect(() => {
     socket.on("user_joined", ({ users, user: joinedUser }) => {
@@ -160,6 +170,19 @@ const Editor = () => {
       });
   }, []);
 
+  const runCode = () => {
+    const document = iframeRef.current.contentDocument;
+    const documentContents = `
+          
+              ${editorRef.current.getValue()}
+            
+        `;
+
+    document.open();
+    document.write(documentContents);
+    document.close();
+  };
+
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
     editorRef.current.addAction({
@@ -212,6 +235,7 @@ const Editor = () => {
   // Modal show/hide status
   const [settingModalStatus, setSettingModalStatus] = useState(false);
   const [inviteModalStatus, setInviteModalStatus] = useState(false);
+  const [previewModalStatus, setPreviewModalStatus] = useState(false);
 
   const storedSetting = localStorage.getItem("editor-setting");
 
@@ -450,6 +474,17 @@ const Editor = () => {
                   }}
                 />
               )}
+              {openedFile && openedFile.split(".").pop() === "html" && (
+                <Presentation
+                  size={20}
+                  className='text-white cursor-pointer hover:text-white/70 transition duration-150 mb-1'
+                  weight='bold'
+                  onClick={() => {
+                    setPreviewModalStatus(true);
+                    runCode();
+                  }}
+                />
+              )}
               {openedFile && (
                 <AiFillSave
                   className='text-white cursor-pointer hover:text-white/70 transition duration-150 absolute right-6 text-lg'
@@ -678,6 +713,16 @@ const Editor = () => {
             <span>Copy invitation link</span>
           </button>
         </div>
+      </Modal>
+      <Modal
+        isOpen={previewModalStatus}
+        className='w-[900px] h-[600px]'
+        bgDrop='bg-black/30'
+        bg='#1e1e1e'
+        onClick={() => {
+          setPreviewModalStatus(false);
+        }}>
+        <iframe title='result' className='iframe' ref={iframeRef} />
       </Modal>
       <Toaster position='bottom-center' reverseOrder={false} />
     </div>
