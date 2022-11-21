@@ -259,6 +259,41 @@ class UserController {
         sendResponse(response, false, "Unauthorized user", error);
       });
   }
+
+  /**
+   * @description Get the projects that logged in user is collabed with
+   * @param Request {Request}
+   * @param Response {Response}
+   */
+  // This would have been redundant and much simpler if we save the project that user is collabed with in his database table, but whatever...
+  getCollabProjects(Request: Request, Response: Response) {
+    this.decodeToken(Request)
+      .then(async (token: any) => {
+        if (token) {
+          // logged in user id
+          const { id } = token as { id: number };
+          prisma.project
+            .findMany({
+              where: {
+                allowedUsers: {
+                  hasEvery: [id], // get all projects that allowed user contains logged in user id
+                },
+              },
+            })
+            .then((result) => {
+              sendResponse(Response, true, "Collab projects", {
+                projects: result, // send them back in project object
+              });
+            })
+            .catch((error) => {
+              sendResponse(Response, false, "Something went wrong", error);
+            });
+        }
+      })
+      .catch((error) => {
+        sendResponse(Response, false, "Unauthorized user", error);
+      });
+  }
 }
 
 module.exports = UserController;
