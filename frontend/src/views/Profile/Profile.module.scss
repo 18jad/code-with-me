@@ -108,10 +108,14 @@ $dark-bg: #3e3e3e;
   .profileFeedSection {
     background: transparent;
     height: 100%;
+    width: 600px;
     flex-grow: 1;
     border-top: none;
     border-bottom: none;
     align-self: stretch;
+    @include breakpoint(laptop) {
+      width: unset;
+    }
 
     .profileContainer {
       display: flex;
