@@ -189,7 +189,11 @@ const Profile = () => {
     () => {
       if (debouncedQuery) {
         profile.searchUser(debouncedQuery).then((users) => {
-          setUsersList(users);
+          if (users.length) {
+            setUsersList(users);
+          } else {
+            setUsersList([]);
+          }
         });
       } else {
         setUsersList([]);
@@ -409,7 +413,11 @@ const Profile = () => {
             className={`${styles.searchResultWrapper} transition duration-300 ${
               searchState ? "opacity-1 h-auto" : "opacity-0 h-0"
             }`}>
-            {usersList?.length ? (
+            {usersList &&
+            usersList.filter((user) => {
+              if (user.username === username) return false;
+              return true;
+            })?.length ? (
               <>
                 {usersList
                   .filter((user) => {
