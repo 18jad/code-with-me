@@ -321,11 +321,11 @@ const Editor = () => {
         {/* Sidebar */}
         <Resizable
           defaultSize={{
-            width: "22  %",
+            width: "350px",
             height: "100%",
           }}
-          maxWidth='25%'
-          minWidth='20vw'
+          maxWidth='400px'
+          minWidth='300px'
           enable={{
             top: false,
             right: true,
