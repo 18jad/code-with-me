@@ -1,8 +1,58 @@
 import JoinVc from "assets/icons/JoinVc";
+// import { Peer } from "peerjs";
 import { MicrophoneSlash } from "phosphor-react";
+import { useState } from "react";
+// import { useEffect, useRef } from "react";
+// import { useParams } from "react-router-dom";
 
-const VoiceChat = ({ className }) => {
-  const voiceChatStarted = true;
+// const initPeer = (id) => {
+//   const peer = new Peer(undefined, {
+//     host: "localhost",
+//     port: 3005,
+//     path: "/",
+//   });
+//   return peer;
+// };
+
+const VoiceChat = ({ className, socket }) => {
+  // const { id } = useParams();
+
+  // const voicePeer = initPeer(id);
+
+  // const voiceRef = useRef(null);
+
+  // useEffect(() => {
+  //   navigator.mediaDevices
+  //     .getUserMedia({
+  //       video: false,
+  //       audio: true,
+  //     })
+  //     .then((stream) => {
+  //       voiceRef.current.srcObject = stream;
+  //       voiceRef.current.play();
+
+  //       voicePeer.on("call", (call) => {
+  //         call.answer(stream);
+  //         call.on("stream", (userVideoStream) => {
+  //           voiceRef.current.srcObject = userVideoStream;
+  //           voiceRef.current.play();
+  //         });
+  //       });
+
+  //       socket.on("join_voice", (id) => {
+  //         const call = voicePeer.call(id, stream);
+  //         call.on("stream", (userVideoStream) => {
+  //           console.log(userVideoStream);
+  //         });
+  //       });
+  //     });
+  // }, [voiceRef, socket]);
+
+  // voicePeer.on("open", (userId) => {
+  //   socket.emit("join_voice", { room: id, id: userId });
+  // });
+
+  const [voiceChat, setVoiceChat] = useState(false);
 
   return (
     <div className={className}>
@@ -10,7 +60,7 @@ const VoiceChat = ({ className }) => {
         Voice Chat
       </h2>
       <div className='content flex flex-col relative items-center '>
-        {voiceChatStarted ? (
+        {voiceChat ? (
           <div className='flex flex-col gap-4 items-center justify-center w-4/5 mb-6 mt-4'>
             <button className='flex flex-row items-center justify-center gap-2 border py-1 w-full rounded border-white/10 text-sm hover:bg-white/5 transition-colors duration-150 [text-shadow:0_0_8px_#0000007d]'>
               <MicrophoneSlash size={17} className='mb-1' color='#fff' />
@@ -22,7 +72,11 @@ const VoiceChat = ({ className }) => {
           </div>
         ) : (
           <div className='mb-6'>
-            <button className='rounded-full mt-4 drop-shadow-vc hover:drop-shadow-vch transition duration-200 hover:scale-105 w-fit h-fit'>
+            <button
+              className='rounded-full mt-4 drop-shadow-vc hover:drop-shadow-vch transition duration-200 hover:scale-105 w-fit h-fit'
+              onClick={() => {
+                setVoiceChat(true);
+              }}>
               <JoinVc width={130} />
             </button>
           </div>
@@ -50,6 +104,7 @@ const VoiceChat = ({ className }) => {
           </div>
         </div>
       </div>
+      {/* <video src='' ref={voiceRef}></video> */}
     </div>
   );
 };

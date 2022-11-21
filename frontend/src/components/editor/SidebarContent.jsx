@@ -26,7 +26,7 @@ const SidebarContent = ({ content, socket, fileFn }) => {
         className={swapContent(content, "chat")}
         socket={socket}
       />
-      <VoiceChat className={swapContent(content, "voice")} />
+      <VoiceChat className={swapContent(content, "voice")} socket={socket} />
     </>
   );
 };
