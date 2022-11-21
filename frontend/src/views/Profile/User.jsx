@@ -144,7 +144,6 @@ const User = () => {
                 </div>
                 <span className={styles.headline}>{user?.headline}</span>
               </div>
-              {/* TODO: if liked set value to liked and change functionality */}
               <button
                 className={`absolute -bottom-4 text-white flex flex-row gap-2  py-1 px-4 rounded-md  transition duration-200 ${
                   profileUser.isLiked

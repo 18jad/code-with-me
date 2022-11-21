@@ -76,7 +76,6 @@ const GithubTool = ({ className }) => {
     <div className={className}>
       <h2 className='p-4 border-b-2 border-[#232526] mb-2'>Github</h2>
       <div className='content flex flex-col items-center mt-5 px-2 gap-4 border-b-2 border-[#232526] pb-5'>
-        {/* TODO: Change to github connect status */}
         {!githubLogin ? (
           <OauthPopup
             url={`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}&scope=repo`}

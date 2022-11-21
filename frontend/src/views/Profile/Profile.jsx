@@ -80,7 +80,7 @@ const StatsCard = ({ count, text }) => {
 };
 
 const Profile = () => {
-  // TODO: use state and store searched user data inside it
+  // Searched user data
   let [usersList, setUsersList] = useState([]);
 
   // Search bar value setter and state
@@ -316,8 +316,6 @@ const Profile = () => {
                   <span>Create new project</span>
                 </button>
               </div>
-
-              {/* TODO: Fix profile feed width if it contains no cards */}
 
               {/* Projects */}
               {myProject?.length ? (
