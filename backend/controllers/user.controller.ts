@@ -192,6 +192,17 @@ class UserController {
                     decrement: 1, // decrement likes counter by 1
                   },
                 },
+                select: {
+                  id: true,
+                  likes: true,
+                  likesCount: true,
+                  username: true,
+                  headline: true,
+                  projectsCount: true,
+                  avatar: true,
+                  projects: true,
+                  name: true,
+                },
               })
               .then((result) => {
                 sendResponse(response, true, "User unliked successfully", {
@@ -220,6 +231,17 @@ class UserController {
                   likesCount: {
                     increment: 1, // increase likes counter by 1
                   },
+                },
+                select: {
+                  id: true,
+                  likes: true,
+                  likesCount: true,
+                  username: true,
+                  headline: true,
+                  avatar: true,
+                  projectsCount: true,
+                  projects: true,
+                  name: true,
                 },
               })
               .then((result) => {
