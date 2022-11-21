@@ -10,6 +10,7 @@ const authController = new AuthController();
 const fs = require("fs");
 const path = require("path");
 const { uuid } = require("uuidv4");
+const { excuteJsFile } = require("../utils/compiler/childProccess");
 
 const userController = new UserController();
 
@@ -256,6 +257,45 @@ class ProjectController {
       .catch((error: any) => {
         sendResponse(response, false, "Unauthorized user", error);
       });
+  }
+
+  public async runJSCode(
+    id: string,
+    exc_tmp: string,
+    response: Response,
+  ): Promise<any> {
+    if (exc_tmp.split(".").pop() == "js") {
+      excuteJsFile(id, exc_tmp)
+        .then((result: any) => {
+          sendResponse(response, true, "Code executed successfully", result);
+        })
+        .catch((error: any) => {
+          sendResponse(response, false, "Code not executed", error);
+        });
+    } else {
+      sendResponse(
+        response,
+        false,
+        "Currently we only support JS files, the file you are trying to run is not a JS file",
+      );
+    }
+  }
+
+  public async excuteCode(request: Request, response: Response) {
+    const { title, file_name } = request.body;
+    const exc_tmp: string = file_name.split(".").pop() as string;
+    switch (exc_tmp) {
+      case "js":
+        this.runJSCode(title, file_name, response);
+        break;
+      default:
+        sendResponse(
+          response,
+          false,
+          "Currently we only support JS files, the file you are trying to run is not a JS file",
+        );
+        break;
+    }
   }
 
   public async deleteFile(request: Request, response: Response) {
