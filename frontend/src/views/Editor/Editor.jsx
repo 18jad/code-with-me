@@ -52,18 +52,6 @@ const editorLanguage = {
   json: "json",
 };
 
-const runJsCode = (code) => {
-  return new Promise((resolve, reject) => {
-    try {
-      const result = eval(code);
-      console.log("res", result);
-      resolve(eval(code));
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-
 const Editor = () => {
   const [participants, setParticipants] = useState([]);
 
@@ -75,8 +63,6 @@ const Editor = () => {
 
   const [terminal, setTerminal] = useState(false);
 
-  const [terminalOutput, setTerminalOutput] = useState("");
-
   console.log(
     "Opened file",
     openedFile,
@@ -86,6 +72,8 @@ const Editor = () => {
   let newJoin = true;
 
   const dispatch = useDispatch();
+
+  const terminalRef = useRef(null);
 
   const { id } = useParams();
 
@@ -257,9 +245,14 @@ const Editor = () => {
     });
   };
 
-  const updateTerminal = (show, output = "") => {
+  const updateTerminal = (show, output = "", error = false) => {
     setTerminal(show);
-    setTerminalOutput(output);
+    terminalRef.current.innerText = output;
+    if (error) {
+      terminalRef.current.style.color = "red";
+    } else {
+      terminalRef.current.style.color = "white";
+    }
   };
 
   return allowed ? (
@@ -304,11 +297,11 @@ const Editor = () => {
         {/* Sidebar */}
         <Resizable
           defaultSize={{
-            width: "22%",
+            width: "22  %",
             height: "100%",
           }}
           maxWidth='25%'
-          minWidth='18%'
+          minWidth='20vw'
           enable={{
             top: false,
             right: true,
@@ -436,12 +429,23 @@ const Editor = () => {
                   weight='fill'
                   title='Run code'
                   onClick={() => {
-                    runJsCode(editorRef.current.getValue())
+                    editorController
+                      .excuteCode(id, openedFile)
                       .then((res) => {
-                        updateTerminal(true, res);
+                        console.log(res);
+                        updateTerminal(true, res.stdout);
                       })
                       .catch((err) => {
-                        updateTerminal(true, err);
+                        let exc_error = err.response?.data?.stderr.replace(
+                          /\\n|\\r\\n|\\n\\r|\\r/g,
+                          "<br>",
+                        );
+                        exc_error = exc_error.replace(
+                          "C:\\Users\\Jad Yahya\\Documents\\SE Factory\\Web Development\\Projects\\FINAL PROJECT\\code-with-me\\backend\\public\\projects\\",
+                          "",
+                        );
+                        console.log(err.response?.data?.stderr);
+                        updateTerminal(true, exc_error || "Error", true);
                       });
                   }}
                 />
@@ -494,7 +498,7 @@ const Editor = () => {
             </header>
             <p className={styles.terminal_description}>Output: </p>
             <div className={styles.terminal_output}>
-              <p>{terminalOutput}</p>
+              <p ref={terminalRef}></p>
             </div>
           </div>
         </div>
