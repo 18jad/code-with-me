@@ -1,6 +1,27 @@
 import Icon from "assets/icons/icons";
+import { axiosInstance } from "utils/axiosInstance";
+import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
 import contactStore from "../lang/contactStore";
+
+const sendEmail = (e) => {
+  e.preventDefault();
+  const { name, email, subject, message } = e.target.elements;
+  axiosInstance
+    .post("/user/contact_me", {
+      name: name.value,
+      email: email.value,
+      subject: subject.value,
+      message: message.value,
+    })
+    .then((res) => {
+      notificationToaster(res.data.message);
+      e.target.reset();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
 const ContactForm = () => {
   const lang = localStorage.getItem("lang-preference") || "english";
@@ -51,15 +72,34 @@ const ContactForm = () => {
   return (
     <div className='bg-white/10 rounded-md md:w-2/3 mx-auto flex flex-col items-center r p-10 border border-white/30 backdrop-blur-sm gap-14 w-11/12  h-full'>
       <h1 className='text-3xl md:text-5xl text-white'>{langComp.title}</h1>
-      <form className='inputs flex flex-col w-full m-auto justify-center items-end md:gap-14'>
+      <form
+        className='inputs flex flex-col w-full m-auto justify-center items-end md:gap-14'
+        onSubmit={(e) => {
+          sendEmail(e);
+        }}>
         <div className='flex flex-col md:flex-row w-full h-full gap-10 my-10 justify-center'>
           <div className='left_inputs flex flex-col gap-14 w-full md:w-1/3'>
-            <FormInput placeholder={langComp.name} type='text' required />
-            <FormInput placeholder={langComp.email} type='email' required />
-            <FormInput placeholder={langComp.subject} type='text' required />
+            <FormInput
+              placeholder={langComp.name}
+              type='text'
+              name='name'
+              required
+            />
+            <FormInput
+              placeholder={langComp.email}
+              type='email'
+              name='email'
+              required
+            />
+            <FormInput
+              placeholder={langComp.subject}
+              type='text'
+              name='subject'
+              required
+            />
           </div>
           <div className='right_inputs w-full md:w-1/2 h-[200px] md:h-auto'>
-            <TextArea placeholder={langComp.message} />
+            <TextArea placeholder={langComp.message} name='message' />
           </div>
         </div>
         <div className='flex w-full justify-center px-2 flex-row-reverse'>
