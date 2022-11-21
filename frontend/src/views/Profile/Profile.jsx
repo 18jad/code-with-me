@@ -101,6 +101,8 @@ const Profile = () => {
   // Hold the data of user favorites projects
   const [favorites, setFavorites] = useState([]);
 
+  const [myProject, setMyProject] = useState([]);
+
   // Event dispatcher
   const dispatch = useDispatch();
 
@@ -157,6 +159,12 @@ const Profile = () => {
     projectsCount: 0,
     projects: [],
   };
+
+  useEffect(() => {
+    if (projects && projects.length) {
+      setMyProject(projects);
+    }
+  }, [projects]);
 
   // Authentication token
   const authToken = useSelector((state) => state.user.token);
@@ -242,7 +250,7 @@ const Profile = () => {
               text='projects'
             />
             <StatsCard count={formatNumber(likesCount || 0, 1)} text='likes' />
-            <StatsCard count={formatNumber(2193, 1)} text='favorited' />
+            {/* <StatsCard count={formatNumber(2193, 1)} text='favorited' /> */}
           </div>
 
           {/* Section Switcher */}
@@ -299,10 +307,10 @@ const Profile = () => {
               {/* TODO: Fix profile feed width if it contains no cards */}
 
               {/* Projects */}
-              {projects.length ? (
+              {myProject?.length ? (
                 <div className={styles.projectsContainer}>
                   <>
-                    {projects.map(
+                    {myProject.map(
                       ({ title, description, updatedAt }, index) => (
                         <ProjectCard
                           title={title}
@@ -323,7 +331,7 @@ const Profile = () => {
             </div>
           ) : (
             <span>
-              {favorites.length ? (
+              {favorites?.length ? (
                 <>{/* TODO: Add favorites cards */}</>
               ) : (
                 <p className='text-white text-3xl text-center p-0 my-20 md:px-60'>
@@ -343,7 +351,7 @@ const Profile = () => {
               className='bg-white/5 border shadow-sm pl-10  pr-2 py-2 placeholder-gray-300 border-gray-500 focus:border-gray-800  focus:ring-2 focus:bg-black/10 focus:ring-gray-500 outline-none rounded transition duration-150 text-white w-full'
               onChange={(e) => {
                 let searchValue = e.target.value;
-                setSearchState(Boolean(searchValue.trim().length > 0));
+                setSearchState(Boolean(searchValue.trim()?.length > 0));
                 setSearchTerm(searchValue);
               }}
               onBlur={(e) =>
@@ -353,7 +361,7 @@ const Profile = () => {
               }
               onFocus={(e) => {
                 let searchValue = e.target.value;
-                setSearchState(Boolean(searchValue.trim().length > 0));
+                setSearchState(Boolean(searchValue.trim()?.length > 0));
               }}
             />
             <MagnifyingGlass
@@ -367,7 +375,7 @@ const Profile = () => {
             className={`${styles.searchResultWrapper} transition duration-300 ${
               searchState ? "opacity-1 h-auto" : "opacity-0 h-0"
             }`}>
-            {usersList.length ? (
+            {usersList?.length ? (
               <>
                 {usersList
                   .filter((user) => {
