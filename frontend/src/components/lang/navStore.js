@@ -1,17 +1,17 @@
 const navStore = {
   english: {
     docs: "Docs",
-    download: "Download",
+    goapp: "App",
     contact: "Contact",
   },
   french: {
     docs: "Docs",
-    download: "Télécharger",
+    goapp: "App",
     contact: "Contactez",
   },
   chinese: {
     docs: "文件",
-    download: "下载",
+    goapp: "应用",
     contact: "接触",
   },
 };
