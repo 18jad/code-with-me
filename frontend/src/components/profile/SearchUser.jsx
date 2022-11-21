@@ -6,7 +6,7 @@ const SearchUser = ({ name, username, profile }) => {
     <div className={styles.user}>
       <div className={styles.userAvatar}>
         <img
-          src={(profile && profile.length && require(profile)) || EmptyProfile}
+          src={profile || EmptyProfile}
           alt='user avatar'
           className='h-10 aspect-square object-cover rounded-full'
         />

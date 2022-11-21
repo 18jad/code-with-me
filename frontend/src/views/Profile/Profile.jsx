@@ -416,9 +416,13 @@ const Profile = () => {
                     if (user.username === username) return false; // dont show current logged in user in search results
                     return true;
                   })
-                  .map(({ username, name }) => (
+                  .map(({ username, name, avatar }) => (
                     <Link to={`/user/${username}`}>
-                      <SearchUser name={name} username={username} />
+                      <SearchUser
+                        name={name}
+                        username={username}
+                        profile={avatar}
+                      />
                     </Link>
                   ))}
               </>
