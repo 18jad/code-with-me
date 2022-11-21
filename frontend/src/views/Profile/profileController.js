@@ -6,6 +6,7 @@ export class ProfileController {
   #create_project_url = "/project/create_project";
   #search_url = "/info/search";
   #fetch_user_url = "/info/info_username";
+  #check_like_url = "/user/check_like";
   #usernameFilter = /^[a-z](?:_?[a-z0-9]+){2,}$/gim;
   #titleFilter = /^(?=.*[a-zA-Z]+.*)[A-Za-z0-9_-]{4,20}$/;
 
@@ -185,4 +186,21 @@ export class ProfileController {
       }
     });
   };
+
+  checkIfLiked(id, userId) {
+    return new Promise((resolve, reject) => {
+      axiosInstance
+        .get(`${this.#check_like_url}?id=${id}&userId=${userId}`)
+        .then((response) => {
+          if (response.status === 200) {
+            resolve(response.data);
+          } else {
+            reject(response);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  }
 }
