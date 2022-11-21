@@ -320,11 +320,12 @@ const Profile = () => {
                 <div className={styles.projectsContainer}>
                   <>
                     {myProject.map(
-                      ({ title, description, updatedAt }, index) => (
+                      ({ title, description, updatedAt, createdAt }, index) => (
                         <ProjectCard
                           title={title}
                           description={description}
-                          updated={moment(updatedAt).fromNow()}
+                          updated={`Updated ${moment(updatedAt).fromNow()}`}
+                          created={`Created ${moment(createdAt).fromNow()}`}
                           link={`/project/${title}`}
                           key={index}
                         />
@@ -349,11 +350,15 @@ const Profile = () => {
                   <div className={styles.projectsContainer}>
                     <>
                       {collabs.map(
-                        ({ title, description, updatedAt }, index) => (
+                        (
+                          { title, description, updatedAt, createdAt },
+                          index,
+                        ) => (
                           <ProjectCard
                             title={title}
                             description={description}
-                            updated={moment(updatedAt).fromNow()}
+                            updated={`Updated ${moment(updatedAt).fromNow()}`}
+                            created={`Created ${moment(createdAt).fromNow()}`}
                             link={`/project/${title}`}
                             key={index}
                           />

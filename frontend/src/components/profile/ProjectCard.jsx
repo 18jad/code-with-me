@@ -1,7 +1,6 @@
-import { Heart } from "phosphor-react";
 import { Link } from "react-router-dom";
 
-const ProjectCard = ({ title, description, likes, updated, link }) => {
+const ProjectCard = ({ title, description, updated, link, created }) => {
   return (
     <Link
       to={link}
@@ -11,12 +10,11 @@ const ProjectCard = ({ title, description, likes, updated, link }) => {
         <p className='text-[#B6B6B6] font-light'>{description}</p>
       </div>
       <div className='bottom-bar flex flex-row justify-between items-center'>
-        <div className='likes flex flex-row gap-1'>
-          <Heart size={20} color='#D1D1D1' weight='fill' />
-          <span className='text-[#D1D1D1] text-base'>{likes}</span>
+        <div className='created'>
+          <p className='text-xs text-[#B6B6B6]'>{created}</p>
         </div>
         <div className='updated'>
-          <p className='text-xs text-[#B6B6B6]'>{updated}</p>
+          <p className='text-xs text-white'>{updated}</p>
         </div>
       </div>
     </Link>
