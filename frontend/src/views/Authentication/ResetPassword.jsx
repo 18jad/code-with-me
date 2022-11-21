@@ -141,7 +141,7 @@ const ResetPassword = () => {
                     if (success) {
                       notiToaster(message + ". Redirecting to login page...");
                       setTimeout(() => {
-                        navigate("/authenticate");
+                        window.location.href = "/authenticate";
                       }, 2000);
                     } else {
                       notiToaster("Something went wrong", true);
