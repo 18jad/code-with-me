@@ -19,6 +19,7 @@
     "moment": "^2.29.4",
     "node-sass": "^7.0.3",
     "octokit": "^2.0.10",
+    "peerjs": "^1.4.7",
     "phosphor-react": "^1.4.1",
     "qs": "^6.11.0",
     "re-resizable": "^6.9.9",
