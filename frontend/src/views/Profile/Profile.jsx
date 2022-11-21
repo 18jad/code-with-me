@@ -98,8 +98,8 @@ const Profile = () => {
   // To switch between tabs
   const [isOverview, setIsOverview] = useState(true);
 
-  // Hold the data of user favorites projects
-  const [favorites, setFavorites] = useState([]);
+  // Hold the data of user collabed projects
+  const [collabs, setCollabs] = useState([]);
 
   const [myProject, setMyProject] = useState([]);
 
@@ -177,6 +177,12 @@ const Profile = () => {
     profile.fetchUser(username).then((res) => {
       dispatch(setLogin({ user: res, token: authToken }));
     });
+    profile
+      .getCollabProjects()
+      .then(({ projects }) => {
+        setCollabs(projects);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   useEffect(
@@ -250,7 +256,10 @@ const Profile = () => {
               text='projects'
             />
             <StatsCard count={formatNumber(likesCount || 0, 1)} text='likes' />
-            {/* <StatsCard count={formatNumber(2193, 1)} text='favorited' /> */}
+            <StatsCard
+              count={formatNumber(collabs?.length || 0, 1)}
+              text='collabs'
+            />
           </div>
 
           {/* Section Switcher */}
@@ -275,15 +284,15 @@ const Profile = () => {
             <button className={styles.sectionSwitcherBtn}>
               <input
                 type='radio'
-                id='favorites'
+                id='collabs'
                 name='sectionSwitcher'
                 className={styles.radioSelection}
                 onClick={() => setIsOverview(false)}
                 hidden
               />
               <div className={styles.selectLine}></div>
-              <label htmlFor='favorites' className={styles.switcherTitle}>
-                Favorites
+              <label htmlFor='collabs' className={styles.switcherTitle}>
+                Collabs
               </label>
             </button>
           </div>
@@ -330,15 +339,35 @@ const Profile = () => {
               )}
             </div>
           ) : (
-            <span>
-              {favorites?.length ? (
-                <>{/* TODO: Add favorites cards */}</>
+            <div className={styles.projectsOverview}>
+              {/* Toolbar */}
+              {collabs?.length ? (
+                <>
+                  <div className={styles.interBar}>
+                    Project you have collaborated and have access to:
+                  </div>
+                  <div className={styles.projectsContainer}>
+                    <>
+                      {collabs.map(
+                        ({ title, description, updatedAt }, index) => (
+                          <ProjectCard
+                            title={title}
+                            description={description}
+                            updated={moment(updatedAt).fromNow()}
+                            link={`/project/${title}`}
+                            key={index}
+                          />
+                        ),
+                      )}
+                    </>
+                  </div>
+                </>
               ) : (
                 <p className='text-white text-3xl text-center p-0 my-20 md:px-60'>
-                  No favorites found :(
+                  No collabs found {":("}
                 </p>
               )}
-            </span>
+            </div>
           )}
         </div>
 
