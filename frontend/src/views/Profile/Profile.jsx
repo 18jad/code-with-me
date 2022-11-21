@@ -495,14 +495,14 @@ const Profile = () => {
                 <div className='flex flex-col gap-4 w-full'>
                   <ModalInput
                     type='text'
-                    placeholder='Full name'
+                    placeholder='*Full name'
                     defaultValue={name}
                     name='name'
                     required
                   />
                   <ModalInput
                     type='text'
-                    placeholder='Username'
+                    placeholder='*Username'
                     defaultValue={username}
                     name='username'
                     required
@@ -553,14 +553,14 @@ const Profile = () => {
             <div className='flex flex-col gap-3'>
               <ModalInput
                 type='text'
-                placeholder='Project title'
+                placeholder='*Project title'
                 name='title'
                 required
               />
               <ModalTextarea
                 type='text'
                 name='description'
-                placeholder='Project description'
+                placeholder='*Project description'
                 required
               />
               <p className='text-xs text-gray'>
