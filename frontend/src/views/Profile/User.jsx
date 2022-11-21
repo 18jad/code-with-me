@@ -151,6 +151,18 @@ const User = () => {
                     ? "bg-red-400 hover:bg-red-600"
                     : "bg-blue-500 hover:bg-blue-600"
                 }`}
+                onClick={() => {
+                  userController
+                    .updateLike(user.id)
+                    .then(({ message, success, result: user }) => {
+                      setUserLikes(user.likesCount);
+                      setProfileUser({ user, isLiked: !profileUser.isLiked });
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      // setProfileUser({ user, isLiked: false });
+                    });
+                }}
                 data-liked={true}>
                 <Heart
                   size={20}
@@ -171,7 +183,6 @@ const User = () => {
                 count={formatNumber(user.likesCount, userLikes)}
                 text='likes'
               />
-              <StatsCard count={formatNumber(2193, 1)} text='favorited' />
             </div>
 
             {/* Section Switcher */}
