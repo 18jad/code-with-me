@@ -42,4 +42,12 @@ router.post("/contact_me", (request: Request, response: Response) => {
   contactController.sendEmail(request, response);
 });
 
+// Get collabed projects
+router.get(
+  "/collabed_projects",
+  async (request: Request, response: Response) => {
+    userController.getCollabProjects(request, response);
+  },
+);
+
 module.exports = router;
