@@ -6,6 +6,7 @@ import useDebounce from "hooks/useDebounce";
 import moment from "moment";
 import { Heart, MagnifyingGlass, SignOut, UserCircle } from "phosphor-react";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import formatNumber from "utils/formatNumber";
 import NotFound from "views/NotFound/NotFound";
@@ -32,22 +33,33 @@ const User = () => {
 
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({ user: null });
+  const [profileUser, setProfileUser] = useState({ user: true, isLiked: null });
 
   // Hold the data of user created projects
   const [projects, setProjects] = useState([0]);
+
+  const [userLikes, setUserLikes] = useState(0);
+
+  const { user: loggedUser } = useSelector((state) => state.user);
 
   // Fetch user info
   useEffect(() => {
     userController
       .fetchUser(id)
       .then((user) => {
-        console.log(user);
-        setUser(user);
+        userController
+          .checkIfLiked(loggedUser.id, user.id)
+          .then(({ isLiked: { isLiked } }) => {
+            setProfileUser({ user, isLiked });
+          })
+          .catch((err) => {
+            setProfileUser({ user, isLiked: false });
+          });
         setProjects(user.projects);
+        setUserLikes(user.likesCount);
       })
       .catch((error) => {
-        setUser(false);
+        setProfileUser({ user: false, isLiked: false });
       });
   }, []);
 
@@ -61,6 +73,8 @@ const User = () => {
 
   // Search user
   const debouncedQuery = useDebounce(searchTerm, 500);
+
+  const user = profileUser.user;
 
   useEffect(
     () => {
@@ -132,10 +146,18 @@ const User = () => {
               </div>
               {/* TODO: if liked set value to liked and change functionality */}
               <button
-                className='absolute -bottom-4 text-white flex flex-row gap-2 bg-blue-500 py-1 px-4 rounded-md hover:bg-blue-600 transition duration-200'
-                data-liked={false}>
-                <Heart size={20} color='#fff' />
-                <span>Like</span>
+                className={`absolute -bottom-4 text-white flex flex-row gap-2  py-1 px-4 rounded-md  transition duration-200 ${
+                  profileUser.isLiked
+                    ? "bg-red-400 hover:bg-red-600"
+                    : "bg-blue-500 hover:bg-blue-600"
+                }`}
+                data-liked={true}>
+                <Heart
+                  size={20}
+                  color='#fff'
+                  weight={`${profileUser.isLiked ? "fill" : "bold"}`}
+                />
+                <span>{profileUser.isLiked ? "Unlike" : "Like"}</span>
               </button>
             </div>
 
@@ -146,7 +168,7 @@ const User = () => {
                 text='projects'
               />
               <StatsCard
-                count={formatNumber(user.likesCount, 1)}
+                count={formatNumber(user.likesCount, userLikes)}
                 text='likes'
               />
               <StatsCard count={formatNumber(2193, 1)} text='favorited' />
