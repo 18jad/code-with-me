@@ -63,6 +63,8 @@ const Editor = () => {
 
   const [terminal, setTerminal] = useState(false);
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
   console.log(
     "Opened file",
     openedFile,
@@ -720,13 +722,18 @@ const Editor = () => {
       </Modal>
       <Modal
         isOpen={previewModalStatus}
-        className='w-[900px] h-[600px]'
+        className={`${
+          isFullscreen ? "w-[100vw] h-[100vh]" : "w-[1000px] h-[700px]"
+        }`}
         bgDrop='bg-black/30'
-        bg='#1e1e1e'
+        title='Preview'
+        onFull={() => {
+          setIsFullscreen(!isFullscreen);
+        }}
         onClick={() => {
           setPreviewModalStatus(false);
         }}>
-        <iframe title='result' className='iframe' ref={iframeRef} />
+        <iframe title='result' className='w-full h-full' ref={iframeRef} />
       </Modal>
       <Toaster position='bottom-center' reverseOrder={false} />
     </div>

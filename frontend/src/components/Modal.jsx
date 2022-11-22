@@ -1,11 +1,12 @@
 import { X } from "phosphor-react";
+import { AiOutlineFullscreen } from "react-icons/ai";
 
 const Modal = ({
   isOpen,
   title,
   children,
   onClick,
-  bg = "#333",
+  onFull,
   className = [],
 }) => {
   return (
@@ -18,11 +19,9 @@ const Modal = ({
       onClick={onClick}>
       <div
         className={
-          `modal bg-[${
-            bg ? bg : " bg-gray-800 "
-          }] flex flex-col shadow-lg border-2 border-white/20 items-center justify-center h-fit transition duration-500 gap-10 p-10 rounded relative ${
-            isOpen ? "opacity-1" : "opacity-0"
-          }` +
+          `modal bg-[#1e1e1e] flex flex-col shadow-lg border-2 border-white/20 items-center justify-center h-fit transition-all duration-300 ${
+            children.type === "iframe" ? "p-2 pt-3" : "p-10 gap-10"
+          } rounded relative ${isOpen ? "opacity-1" : "opacity-0"}` +
           " " +
           [...className].join("")
         }
@@ -37,7 +36,15 @@ const Modal = ({
           onClick={onClick}
         />
         <h1 className='text-white text-3xl'>{title}</h1>
-        {children}
+        {children.type === "iframe" && (
+          <AiOutlineFullscreen
+            className='close_modal font-bold text-white absolute top-4 right-4 cursor-pointer hover:text-white/60 transition duration-200 text-xl'
+            onClick={onFull}
+          />
+        )}
+        <div className={`${children.type === "iframe" ? "w-full h-full" : ""}`}>
+          {children}
+        </div>
       </div>
     </div>
   );
