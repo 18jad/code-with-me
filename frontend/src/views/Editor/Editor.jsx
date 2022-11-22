@@ -132,7 +132,9 @@ const Editor = () => {
               }
             });
       newJoin = false;
-      !newJoin && notificationToaster(joinedUser + " joined the project");
+      !newJoin &&
+        joinedUser !== loggedUser.username &&
+        notificationToaster(joinedUser + " joined the project");
     });
 
     socket.on("user_disconnected", (user) => {
