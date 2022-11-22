@@ -144,7 +144,10 @@ const Authentication = () => {
                     },
                   )
                   .catch((error) => {
-                    notificationToaster(error.response.data.error, true);
+                    notificationToaster(
+                      error?.response?.data?.error || error,
+                      true,
+                    );
                   });
               }}>
               <h1 className='text-white text-4xl'>{langComp.login}</h1>
