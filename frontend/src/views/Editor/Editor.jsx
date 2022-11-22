@@ -7,6 +7,7 @@ import SidebarContent from "components/editor/SidebarContent";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import useKey from "hooks/useKey";
+import useToast from "hooks/useToast";
 import {
   Chats,
   GearSix,
@@ -74,11 +75,7 @@ const Editor = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [previewTitle, setPreviewTitle] = useState("Preview");
 
-  console.log(
-    "Opened file",
-    openedFile,
-    editorLanguage[openedFile?.split(".").pop()],
-  );
+  const toast = useToast();
 
   let newJoin = true;
 
