@@ -88,8 +88,10 @@ const Editor = () => {
 
   useEffect(() => {
     socket.on("user_joined", ({ users, user: joinedUser }) => {
+      const roomUsers = users[id];
+
       newJoin
-        ? users.forEach(({ user }) => {
+        ? roomUsers.forEach(({ user }) => {
             if (!user) return null;
             profileController
               .fetchUser(user)
@@ -125,15 +127,15 @@ const Editor = () => {
       !newJoin && notificationToaster(joinedUser + " joined the project");
     });
 
-    socket.on("user_disconnected", ({ user }) => {
-      setParticipants((prev) => {
-        const newParticipants = prev.filter(
-          (participant) => participant.username !== user,
-        );
-        return newParticipants;
-      });
-      notificationToaster(user + " left the project", true);
-    });
+    // socket.on("user_disconnected", ({ user }) => {
+    //   setParticipants((prev) => {
+    //     const newParticipants = prev.filter(
+    //       (participant) => participant.username !== user,
+    //     );
+    //     return newParticipants;
+    //   });
+    //   notificationToaster(user + " left the project", true);
+    // });
   }, [allowed]);
 
   useEffect(() => {
