@@ -49,6 +49,7 @@ namespace Socket {
     emit: (arg1: string, arg2: (param: any) => void) => void;
     to: (arg1: string | number) => any;
     once: (arg1: string, arg2: (param: any) => void) => void;
+    broadcast: any;
   }
 }
 
@@ -83,7 +84,7 @@ io.on("connection", (socket: Socket.Controller) => {
   });
 
   socket.on("code_edit", (data) => {
-    socket.to(data.room).emit("code_edit", data);
+    socket.broadcast.to(data.room).emit("code_edit", data);
   });
 
   socket.once("disconnect", () => {
