@@ -64,7 +64,7 @@ const ChatConversation = ({ className, socket }) => {
       setTyping(false);
     });
 
-    socket.on("user_disconnected", ({ user }) => {
+    socket.on("user_disconnected", (user) => {
       console.log("user disconnected", user);
       setMessages((messages) => [
         ...messages,
