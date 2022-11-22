@@ -50,6 +50,8 @@ namespace Socket {
     to: (arg1: string | number) => any;
     once: (arg1: string, arg2: (param: any) => void) => void;
     broadcast: any;
+    username: string;
+    room: string;
   }
 }
 
@@ -59,8 +61,9 @@ io.on("connection", (socket: Socket.Controller) => {
   console.log("User connected", socket.id);
 
   socket.on("join_room", (data) => {
-    console.log(data);
     socket.join(data.room);
+    socket.username = data.username;
+    socket.room = data.room;
     users[data.room] = users[data.room] || [];
     users[data.room].filter(
       (e: any) => e.user == data.username && e.room == data.room,
@@ -71,7 +74,6 @@ io.on("connection", (socket: Socket.Controller) => {
           room: data.room,
           user: data.username,
         });
-
     console.log("users", users);
     io.to(data.room).emit("user_joined", { users, user: data.username });
   });
@@ -96,14 +98,16 @@ io.on("connection", (socket: Socket.Controller) => {
     socket.broadcast.to(data.room).emit("code_edit", data);
   });
 
-  socket.once("disconnect", () => {
-    // const index = users.findIndex((user: any) => user.id === socket.id);
-    // const leftUser = users[index];
-    // if (index !== -1) {
-    //   users.splice(index, 1)[0];
-    // }
-    // io.to(leftUser?.room).emit("user_disconnected", leftUser);
-    // console.log("User disconnected", users);
+  socket.once("disconnect", (data) => {
+    for (const [room, roomUsers] of Object.entries(users)) {
+      if (room === socket.room) {
+        users[room as any] = roomUsers.filter(
+          ({ user }: { [user: string]: any }) => user !== socket.username,
+        );
+        io.to(room).emit("user_disconnected", socket.username);
+        break;
+      }
+    }
   });
 });
 
