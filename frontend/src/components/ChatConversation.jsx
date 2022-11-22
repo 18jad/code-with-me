@@ -1,5 +1,6 @@
 import useDebounce from "hooks/useDebounce";
 import moment from "moment";
+import { TelegramLogo } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -112,14 +113,19 @@ const ChatConversation = ({ className, socket }) => {
               <span className='animate-pulse'>{typing?.user} is typing...</span>
             )}
           </span>
-          <input
-            type='text'
-            className='w-full px-3 bg-[#232526] py-3  border-t border-white/5 outline-none'
-            placeholder='Enter a message'
-            name='message'
-            onChange={sendTyping}
-            required
-          />
+          <div className='flex flex-row'>
+            <input
+              type='text'
+              className='w-full bg-[#232526] p-3  border-t border-white/5 outline-none'
+              placeholder='Enter a message'
+              name='message'
+              onChange={sendTyping}
+              required
+            />
+            <button>
+              <TelegramLogo className='w-12 bg-[#232526] h-14 px-3 text-[#4e96fa] border-t border-l border-white/5 outline-none hover:opacity-70 transition duration-200' />
+            </button>
+          </div>
         </form>
       </div>
     </div>
