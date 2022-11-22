@@ -7,21 +7,13 @@ import SidebarContent from "components/editor/SidebarContent";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import useKey from "hooks/useKey";
-import {
-  Chats,
-  GearSix,
-  Link,
-  Play,
-  Presentation,
-  Stack,
-  X,
-} from "phosphor-react";
+import { Chats, GearSix, Play, Presentation, Stack, X } from "phosphor-react";
 import { Resizable } from "re-resizable";
 import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { AiFillSave } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import { setProject } from "store/slices/projectSlice";
 import { notificationToaster } from "utils/notificationToaster";
@@ -147,14 +139,17 @@ const Editor = () => {
   useEffect(() => {
     editorController
       .checkIfAllowed(id)
-      .then((res) => {
-        if (res.success) {
-          setAllowed(true);
-          console.log(res);
+      .then(({ project, success }) => {
+        if (success) {
+          setAllowed(
+            project.authorId === loggedUser.id ||
+              project?.allowedUsers?.includes(loggedUser.id) ||
+              false,
+          );
           dispatch(
             setProject({
-              project: res.project,
-              link: `http://localhost:3000/invite/${res.project.inviteToken}`,
+              project: project,
+              link: `http://localhost:3000/invite/${project.inviteToken}`,
             }),
           );
           socket.emit("join_room", {
@@ -173,9 +168,7 @@ const Editor = () => {
   const runCode = () => {
     const document = iframeRef.current.contentDocument;
     const documentContents = `
-          
               ${editorRef.current.getValue()}
-            
         `;
 
     document.open();
@@ -201,13 +194,19 @@ const Editor = () => {
     editorController
       .readFile(id, openedFile)
       .then(({ message, file_content }) => {
-        setFileCode(file_content);
+        setFileCode({ code: file_content, isMe: true });
       })
       .catch((err) => console.log(err));
   }, [openedFile]);
 
   const handleCodeChange = (value) => {
-    socket.emit("code_edit", { room: id, code: value, file: openedFile });
+    setFileCode({ code: value, isMe: true });
+    socket.emit("code_edit", {
+      room: id,
+      code: value,
+      file: openedFile,
+      user: loggedUser.username,
+    });
   };
 
   const handleFileSave = () => {
@@ -223,10 +222,12 @@ const Editor = () => {
   // CTRL + S callback
   useKey("ctrls", handleFileSave);
 
-  socket.on("code_edit", ({ code, file }) => {
-    console.log("Code change", code);
-    file === openedFile && setFileCode(code);
-    // setOpenedFile(code);
+  socket.on("code_edit", ({ code, file, user }) => {
+    file === openedFile &&
+      user !== loggedUser.username &&
+      fileCode !== code &&
+      fileCode.isMe &&
+      setFileCode({ code, isMe: false });
   });
 
   // Sidebar content switcher
@@ -284,12 +285,15 @@ const Editor = () => {
       {/* Navbar */}
       <div className={styles.navbar}>
         <div className={styles.logoWrapper}>
-          <TextLogo
-            text='Editor playground'
-            width={50}
-            mainSize='xl'
-            textSize='sm'
-          />
+          <Link to='/profile'>
+            <TextLogo
+              text='Editor playground'
+              className='hover:drop-shadow-vc'
+              width={44}
+              mainSize='lg'
+              textSize='xs'
+            />
+          </Link>
         </div>
         <div className={styles.navbarTools}>
           {/* Voice chat bubbles wrapper */}
@@ -510,9 +514,7 @@ const Editor = () => {
                   top: 5,
                 },
               }}
-              // TODO: MAKE CODE SAVE IN JSON SETTING FOR TAB SWITCHING FUNCTIONALITY
-              // value={editorSettings.code}
-              value={fileCode}
+              value={fileCode.code}
               language={
                 editorLanguage[openedFile?.split(".").pop()] ||
                 openedFile?.split(".").pop()
