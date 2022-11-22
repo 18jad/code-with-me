@@ -13,7 +13,11 @@ Cookies.defaults = {
 
 const persistConfig = {
   key: "user",
-  storage: new CookieStorage(Cookies),
+  storage: new CookieStorage(Cookies, {
+    setCookieOptions: {
+      path: "/",
+    },
+  }),
 };
 
 const persistedReducer = persistReducer(persistConfig, loginReducer);
