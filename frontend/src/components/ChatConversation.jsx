@@ -22,12 +22,14 @@ const ChatConversation = ({ className, socket }) => {
   const sendMessage = (e) => {
     e.preventDefault();
     const message = e.target.elements.message.value;
-    socket.emit("send_message", {
-      message,
-      user: { username: loggedUser.username, name: loggedUser.name },
-      room,
-    });
-    e.target.elements.message.value = "";
+    if (message && message.trim() !== "" && message.trim().length > 0) {
+      socket.emit("send_message", {
+        message,
+        user: { username: loggedUser.username, name: loggedUser.name },
+        room,
+      });
+      e.target.elements.message.value = "";
+    } else return;
   };
 
   const receiveMessage = ({ message, user }) => {
