@@ -7,7 +7,15 @@ import SidebarContent from "components/editor/SidebarContent";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import useKey from "hooks/useKey";
-import { Chats, GearSix, Play, Presentation, Stack, X } from "phosphor-react";
+import {
+  Chats,
+  GearSix,
+  LinkSimple,
+  Play,
+  Presentation,
+  Stack,
+  X,
+} from "phosphor-react";
 import { Resizable } from "re-resizable";
 import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -705,7 +713,9 @@ const Editor = () => {
             </button>
           </form>
         </div>
-        <span className='seperator text-white'>OR</span>
+        <span className='seperator text-white text-center m-auto flex items-center justify-center my-5'>
+          OR
+        </span>
         <div className='copy-link flex flex-col gap-2 items-center justify-center w-full'>
           <button
             className='bg-blue-500 border shadow-sm px-2 py-1  border-blue-500 outline-none rounded-sm transition duration-150 text-white cursor-pointer hover:bg-blue-500/80 flex flex-row items-center justify-center gap-2 w-[300px]'
@@ -717,7 +727,7 @@ const Editor = () => {
                 e.target.innerText = "Copy invitation link";
               }, 1300);
             }}>
-            <Link color='#fff' size={20} />
+            <LinkSimple color='#fff' size={20} />
             <span>Copy invitation link</span>
           </button>
         </div>
