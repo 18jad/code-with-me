@@ -137,7 +137,7 @@ class UserController {
    * @returns {void}
    */
   public async uploadProfile(request: any, response: any) {
-    const imageURL = `http://localhost:${process.env.PORT}/image/profiles/${request.file.originalname}`;
+    const imageURL = `http://localhost:${process.env.PORT}/image/profiles/${request.file.filename}`;
     this.decodeToken(request)
       .then(async (token: any) => {
         const { id } = token;
