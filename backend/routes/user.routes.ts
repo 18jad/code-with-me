@@ -1,6 +1,7 @@
 // Imported packages
 const { Router } = require("express");
 import { Request, Response } from "express";
+const multer = require("multer");
 
 // Variables
 const router = Router();
@@ -9,6 +10,16 @@ const ContactController = require("../controllers/contact.controller");
 const authMiddleware = require("../middlewares/user.middleware");
 const userController = new UserController();
 const contactController = new ContactController();
+const storage = multer.diskStorage({
+  destination: function (req: any, file: any, cb: any) {
+    cb(null, "./public/images/profiles");
+  },
+  filename: function (req: any, file: any, cb: any) {
+    console.log("upload file", file);
+    cb(null, file.originalname);
+  },
+});
+const uploadStorage = multer({ storage });
 
 // Routes:
 
@@ -18,6 +29,15 @@ router.put(
   authMiddleware,
   (request: Request, response: Response) => {
     userController.editProfile(request, response);
+  },
+);
+
+// Upload profile picture to the server
+router.post(
+  "/upload_profile",
+  [authMiddleware, uploadStorage.single("profile")],
+  (request: any, response: Response) => {
+    userController.uploadProfile(request, response);
   },
 );
 
