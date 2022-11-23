@@ -30,10 +30,4 @@ export const store = configureStore({
   middleware: [thunk],
 });
 
-export const persistor = persistStore(store, {
-  storage: new CookieStorage(Cookies, {
-    setCookieOptions: {
-      path: "/",
-    },
-  }),
-});
+export const persistor = persistStore(store);
