@@ -1,6 +1,7 @@
 // Imported packages
 const { Router } = require("express");
 import { Request, Response } from "express";
+const fs = require("fs");
 
 // Variables
 const router = Router();
