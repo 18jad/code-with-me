@@ -47,6 +47,9 @@ const User = () => {
     userController
       .fetchUser(id)
       .then((user) => {
+        // Edit page title to user name
+        document.title = `${user.name} | CWM`;
+
         userController
           .checkIfLiked(loggedUser.id, user.id)
           .then(({ isLiked: { isLiked } }) => {
