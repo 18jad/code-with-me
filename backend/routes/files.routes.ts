@@ -6,7 +6,7 @@ import { Request, Response } from "express";
 const router = Router();
 
 // Image handler and server
-app.get("/image/:dir/:id", (request: Request, response: Response) => {
+router.get("/image/:dir/:id", (request: Request, response: Response) => {
   const { dir, id } = request.params;
   if (!dir) {
     response.status(400).json({
@@ -30,7 +30,7 @@ app.get("/image/:dir/:id", (request: Request, response: Response) => {
 });
 
 // Files handlers and server
-app.get("/file/:project/:file", (request: Request, response: Response) => {
+router.get("/file/:project/:file", (request: Request, response: Response) => {
   const { project, file } = request.params;
   if (!project) {
     response.status(400).json({
