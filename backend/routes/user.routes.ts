@@ -15,8 +15,8 @@ const storage = multer.diskStorage({
     cb(null, "./public/images/profiles");
   },
   filename: function (req: any, file: any, cb: any) {
-    console.log("upload file", file);
-    cb(null, file.originalname);
+    const fileName = file.originalname.toLowerCase().split(" ").join("-");
+    cb(null, Date.now() + "-" + fileName);
   },
 });
 const uploadStorage = multer({ storage });
@@ -35,7 +35,7 @@ router.put(
 // Upload profile picture to the server
 router.post(
   "/upload_profile",
-  [authMiddleware, uploadStorage.single("profile")],
+  uploadStorage.single("avatar"),
   (request: any, response: Response) => {
     userController.uploadProfile(request, response);
   },
