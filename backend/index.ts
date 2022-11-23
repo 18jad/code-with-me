@@ -57,7 +57,7 @@ namespace Socket {
 
 let users = {} as Array<Object>[];
 
-io.of("/project").on("connection", (socket: Socket.Controller) => {
+io.on("connection", (socket: Socket.Controller) => {
   console.log("User connected", socket.id);
 
   socket.on("join_room", (data) => {
