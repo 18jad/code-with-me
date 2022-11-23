@@ -29,4 +29,28 @@ app.get("/image/:dir/:id", (request: Request, response: Response) => {
   }
 });
 
+// Files handlers and server
+app.get("/file/:project/:file", (request: Request, response: Response) => {
+  const { project, file } = request.params;
+  if (!project) {
+    response.status(400).json({
+      message: "Project is missing",
+    });
+  }
+  if (!file) {
+    response.status(400).json({
+      message: "File is missing",
+    });
+  }
+  const filePath = `${__dirname}/public/projects/${project}/${file}`;
+  // check if directory exists on the server
+  if (fs.existsSync(filePath)) {
+    response.sendFile(filePath);
+  } else {
+    response.status(404).json({
+      message: "File not found",
+    });
+  }
+});
+
 module.exports = router;
