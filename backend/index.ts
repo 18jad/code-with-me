@@ -33,6 +33,12 @@ app.use(prefix + "/project", projectRoutes);
 app.use(prefix + "/github", githubRoutes);
 app.use("/", filesRoutes);
 
+app.get("*", (req: any, res: any) => {
+  res.status(404).json({
+    message: "Page not found, are you lost?",
+  });
+});
+
 // Server
 const server = http.createServer(app);
 
