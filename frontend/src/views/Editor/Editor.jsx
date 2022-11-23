@@ -203,7 +203,7 @@ const Editor = () => {
 
     document.open();
     document.write(documentContents);
-    setPreviewTitle(document.title);
+    setPreviewTitle(document.title ? document.title : "Preview");
     document.close();
   };
 
