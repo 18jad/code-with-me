@@ -102,7 +102,7 @@ const FileStructure = ({ className, socket, fileFn }) => {
   }, [fileStructure]);
   return (
     <div className={className}>
-      <h2 className='p-4 border-b-2 border-[#232526] mb-2'>Project Name</h2>
+      <h2 className='p-4 border-b-2 border-[#232526] mb-2'>File Explorer</h2>
       <Tree data={data} onUpdate={handleUpdate} onNodeClick={handleClick} />
     </div>
   );
