@@ -139,7 +139,8 @@ const Authentication = () => {
                       dispatch(setLogin({ user: result, token: authToken }));
                       routes[2].condition = true;
                       setTimeout(() => {
-                        navigate("/profile");
+                        // go to profile page
+                        window.location.href = "/profile";
                       }, 1700);
                     },
                   )
