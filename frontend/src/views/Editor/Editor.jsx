@@ -10,6 +10,7 @@ import useKey from "hooks/useKey";
 import useToast from "hooks/useToast";
 import {
   Chats,
+  Command,
   GearSix,
   LinkSimple,
   Play,
@@ -435,6 +436,22 @@ const Editor = () => {
                 <div className={styles.selectLine}></div>
                 <label htmlFor='overview' className={styles.toolIcon}>
                   <Voice width={22} />
+                </label>
+              </button>
+              <button className={styles.sidebar_tools_tool}>
+                <input
+                  type='radio'
+                  id='overview'
+                  name='sectionSwitcher'
+                  onClick={() => {
+                    if (sidebarContent !== "shortcuts")
+                      setSidebarContent("shortcuts");
+                  }}
+                  className={styles.radioSelection}
+                />
+                <div className={styles.selectLine}></div>
+                <label htmlFor='overview' className={styles.toolIcon}>
+                  <Command size={24} />
                 </label>
               </button>
             </div>
