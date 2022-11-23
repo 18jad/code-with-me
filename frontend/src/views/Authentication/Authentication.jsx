@@ -139,12 +139,16 @@ const Authentication = () => {
                       dispatch(setLogin({ user: result, token: authToken }));
                       routes[2].condition = true;
                       setTimeout(() => {
-                        navigate("/profile");
+                        // go to profile page
+                        window.location.href = "/profile";
                       }, 1700);
                     },
                   )
                   .catch((error) => {
-                    notificationToaster(error.response.data.error, true);
+                    notificationToaster(
+                      error?.response?.data?.error || error,
+                      true,
+                    );
                   });
               }}>
               <h1 className='text-white text-4xl'>{langComp.login}</h1>

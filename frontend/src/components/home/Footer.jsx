@@ -41,7 +41,9 @@ const Footer = ({ contact }) => {
         <div className='downloads flex-grow'>
           <span className='title'>{langComp.download.title}</span>
           <ul>
-            <ListChild>{langComp.download.web}</ListChild>
+            <ListChild className='line-through'>
+              {langComp.download.web}
+            </ListChild>
             <ListChild className='line-through'>Android</ListChild>
             <ListChild className='line-through'>IOS</ListChild>
           </ul>
@@ -52,7 +54,14 @@ const Footer = ({ contact }) => {
             <ListChild className='line-through'>
               {langComp.about.docs}
             </ListChild>
-            <ListChild>{langComp.about.us}</ListChild>
+            <ListChild>
+              <a
+                href='https://github.com/18jad'
+                target='_blank'
+                rel='noreferrer'>
+                {langComp.about.us}
+              </a>
+            </ListChild>
             <ListChild onClick={contact}>{langComp.about.contact}</ListChild>
           </ul>
         </div>

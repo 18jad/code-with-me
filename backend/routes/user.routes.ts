@@ -29,7 +29,7 @@ router.get("/check_like", async (request: Request, response: Response) => {
 });
 
 // Like user
-router.post(
+router.put(
   "/update_user_like",
   authMiddleware,
   (request: Request, response: Response) => {
@@ -41,5 +41,13 @@ router.post(
 router.post("/contact_me", (request: Request, response: Response) => {
   contactController.sendEmail(request, response);
 });
+
+// Get collabed projects
+router.get(
+  "/collabed_projects",
+  async (request: Request, response: Response) => {
+    userController.getCollabProjects(request, response);
+  },
+);
 
 module.exports = router;

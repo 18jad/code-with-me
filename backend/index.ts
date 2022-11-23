@@ -49,20 +49,32 @@ namespace Socket {
     emit: (arg1: string, arg2: (param: any) => void) => void;
     to: (arg1: string | number) => any;
     once: (arg1: string, arg2: (param: any) => void) => void;
+    broadcast: any;
+    username: string;
+    room: string;
   }
 }
 
-let users = [] as any;
+let users = {} as Array<Object>[];
 
 io.on("connection", (socket: Socket.Controller) => {
   console.log("User connected", socket.id);
 
   socket.on("join_room", (data) => {
     socket.join(data.room);
-    users.filter((e: any) => e.user == data.username && e.room == data.room)
-      .length > 0
+    socket.username = data.username;
+    socket.room = data.room;
+    users[data.room] = users[data.room] || [];
+    users[data.room].filter(
+      (e: any) => e.user == data.username && e.room == data.room,
+    ).length > 0
       ? null
-      : users.push({ id: socket.id, room: data.room, user: data.username });
+      : users[data.room].push({
+          id: socket.id,
+          room: data.room,
+          user: data.username,
+        });
+    console.log("users", users);
     io.to(data.room).emit("user_joined", { users, user: data.username });
   });
 
@@ -83,17 +95,20 @@ io.on("connection", (socket: Socket.Controller) => {
   });
 
   socket.on("code_edit", (data) => {
-    socket.to(data.room).emit("code_edit", data);
+    socket.broadcast.to(data.room).emit("code_edit", data);
   });
 
-  socket.once("disconnect", () => {
-    const index = users.findIndex((user: any) => user.id === socket.id);
-    const leftUser = users[index];
-    if (index !== -1) {
-      users.splice(index, 1)[0];
+  socket.once("disconnect", (data) => {
+    console.log("User disconnected", socket.id);
+    for (const [room, roomUsers] of Object.entries(users)) {
+      if (room === socket.room) {
+        users[room as any] = roomUsers.filter(
+          ({ user }: { [user: string]: any }) => user !== socket.username,
+        );
+        io.to(room).emit("user_disconnected", socket.username);
+        break;
+      }
     }
-    io.to(leftUser?.room).emit("user_disconnected", leftUser);
-    console.log("User disconnected", users);
   });
 });
 

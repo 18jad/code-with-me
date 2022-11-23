@@ -13,7 +13,11 @@ Cookies.defaults = {
 
 const persistConfig = {
   key: "user",
-  storage: new CookieStorage(Cookies),
+  storage: new CookieStorage(Cookies, {
+    setCookieOptions: {
+      path: "/",
+    },
+  }),
 };
 
 const persistedReducer = persistReducer(persistConfig, loginReducer);
@@ -26,4 +30,10 @@ export const store = configureStore({
   middleware: [thunk],
 });
 
-export const persistor = persistStore(store);
+export const persistor = persistStore(store, {
+  storage: new CookieStorage(Cookies, {
+    setCookieOptions: {
+      path: "/",
+    },
+  }),
+});

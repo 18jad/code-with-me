@@ -192,6 +192,17 @@ class UserController {
                     decrement: 1, // decrement likes counter by 1
                   },
                 },
+                select: {
+                  id: true,
+                  likes: true,
+                  likesCount: true,
+                  username: true,
+                  headline: true,
+                  projectsCount: true,
+                  avatar: true,
+                  projects: true,
+                  name: true,
+                },
               })
               .then((result) => {
                 sendResponse(response, true, "User unliked successfully", {
@@ -221,6 +232,17 @@ class UserController {
                     increment: 1, // increase likes counter by 1
                   },
                 },
+                select: {
+                  id: true,
+                  likes: true,
+                  likesCount: true,
+                  username: true,
+                  headline: true,
+                  avatar: true,
+                  projectsCount: true,
+                  projects: true,
+                  name: true,
+                },
               })
               .then((result) => {
                 sendResponse(response, true, "User liked successfully", {
@@ -235,6 +257,41 @@ class UserController {
       })
       .catch((error) => {
         sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  /**
+   * @description Get the projects that logged in user is collabed with
+   * @param Request {Request}
+   * @param Response {Response}
+   */
+  // This would have been redundant and much simpler if we save the project that user is collabed with in his database table, but whatever...
+  getCollabProjects(Request: Request, Response: Response) {
+    this.decodeToken(Request)
+      .then(async (token: any) => {
+        if (token) {
+          // logged in user id
+          const { id } = token as { id: number };
+          prisma.project
+            .findMany({
+              where: {
+                allowedUsers: {
+                  hasEvery: [id], // get all projects that allowed user contains logged in user id
+                },
+              },
+            })
+            .then((result) => {
+              sendResponse(Response, true, "Collab projects", {
+                projects: result, // send them back in project object
+              });
+            })
+            .catch((error) => {
+              sendResponse(Response, false, "Something went wrong", error);
+            });
+        }
+      })
+      .catch((error) => {
+        sendResponse(Response, false, "Unauthorized user", error);
       });
   }
 }
