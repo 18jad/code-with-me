@@ -96,7 +96,7 @@ export class ProfileController {
             .put(this.#edit_profile_url, qs.stringify(result))
             .then(async (response) => {
               if (response.status === 200 && response.data.success) {
-                let newProfile;
+                let newProfile = null;
                 if (avatar) {
                   newProfile = await axiosUser
                     .post(
@@ -113,7 +113,9 @@ export class ProfileController {
                     });
                 }
                 const { updatedUser: user } = response.data;
-                user.avatar = newProfile.data.url;
+                if (newProfile) {
+                  user.avatar = newProfile?.data.url;
+                }
                 resolve({ response, user });
               } else {
                 reject(response.message);

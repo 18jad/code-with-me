@@ -457,7 +457,6 @@ const Profile = () => {
                     const { updatedUser: user, newToken: token } = data;
                     notificationToaster(data.message);
                     dispatch(setLogin({ user, token }));
-                    console.log(data);
                   })
                   .catch((error) =>
                     notificationToaster(
