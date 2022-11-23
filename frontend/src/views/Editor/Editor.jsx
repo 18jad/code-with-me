@@ -43,9 +43,6 @@ const ParticipantsCircle = tw.img`
     select-none
 `;
 
-// Socket io connection
-const socket = io.connect("http://localhost:2121");
-
 const editorLanguage = {
   html: "html",
   css: "css",
@@ -60,6 +57,14 @@ const editorLanguage = {
   md: "markdown",
   json: "json",
 };
+
+// Socket io connection
+let socket =
+  window.location.href.split("/")[3] === "project"
+    ? io.connect("http://localhost:2121/project", {
+        transports: ["websocket"],
+      })
+    : null;
 
 const Editor = () => {
   const [participants, setParticipants] = useState([]);
@@ -93,6 +98,12 @@ const Editor = () => {
   const editorRef = useRef(null);
 
   const iframeRef = useRef(null);
+
+  if (!socket && !socket?.connected) {
+    socket = io.connect("http://localhost:2121/project", {
+      transports: ["websocket"],
+    });
+  }
 
   useEffect(() => {
     socket.on("user_joined", ({ users, user: joinedUser }) => {
@@ -149,6 +160,13 @@ const Editor = () => {
   }, [allowed]);
 
   useEffect(() => {
+    // Disconnect from socket on back button
+    window.onpopstate = (e) => {
+      socket?.close();
+      socket?.disconnect(true);
+      socket = null;
+    };
+
     editorController
       .checkIfAllowed(id)
       .then(({ project, success }) => {
