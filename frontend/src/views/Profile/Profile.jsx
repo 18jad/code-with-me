@@ -139,8 +139,6 @@ const Profile = () => {
   document.body.style.overflow =
     editModalStatus || projectModalStatus ? "hidden" : "auto";
 
-  console.log(useSelector((state) => state));
-
   // Logged in user
   const loggedUser = useSelector((state) => state.user.user);
   const {
@@ -422,10 +420,11 @@ const Profile = () => {
                     if (user.username === username) return false; // dont show current logged in user in search results
                     return true;
                   })
-                  .map(({ username, name, avatar }) => (
-                    <Link to={`/user/${username}`}>
+                  .map(({ username, name, avatar }, i) => (
+                    <Link to={`/user/${username}`} key={i}>
                       <SearchUser
                         name={name}
+                        key={i}
                         username={username}
                         profile={avatar}
                       />
