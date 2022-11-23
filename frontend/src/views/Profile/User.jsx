@@ -267,9 +267,14 @@ const User = () => {
               }`}>
               {usersList.length ? (
                 <>
-                  {usersList.map(({ username, name }) => (
-                    <Link to={`/user/${username}`}>
-                      <SearchUser name={name} username={username} />
+                  {usersList.map(({ avatar, username, name }, i) => (
+                    <Link to={`/user/${username}`} key={i}>
+                      <SearchUser
+                        name={name}
+                        username={username}
+                        key={i}
+                        profile={avatar}
+                      />
                     </Link>
                   ))}
                 </>
