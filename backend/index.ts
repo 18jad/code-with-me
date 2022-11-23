@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
+const fs = require("fs");
 
 // Configuration
 require("dotenv").config();
@@ -16,6 +17,7 @@ const userRoutes = require("./routes/user.routes");
 const infoRoutes = require("./routes/info.routes");
 const projectRoutes = require("./routes/project.routes");
 const githubRoutes = require("./routes/github.routes");
+const filesRoutes = require("./routes/files.routes");
 const apiVersion: number = 1.0;
 const prefix: string = String("/api/v" + apiVersion.toFixed(1));
 
@@ -29,6 +31,7 @@ app.use(prefix + "/user", userRoutes);
 app.use(prefix + "/info", infoRoutes);
 app.use(prefix + "/project", projectRoutes);
 app.use(prefix + "/github", githubRoutes);
+app.use("/", filesRoutes);
 
 // Server
 const server = http.createServer(app);
