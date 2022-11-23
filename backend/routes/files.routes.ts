@@ -2,6 +2,7 @@
 const { Router } = require("express");
 import { Request, Response } from "express";
 const fs = require("fs");
+const path = require("path");
 
 // Variables
 const router = Router();
@@ -19,7 +20,7 @@ router.get("/image/:dir/:id", (request: Request, response: Response) => {
       message: "Id is missing",
     });
   }
-  const imagePath = `${__dirname}/public/images/${dir}/${id}`;
+  const imagePath = path.join(__dirname, "..", "public", "images", dir, id);
   // check if directory exists on the server
   if (fs.existsSync(imagePath)) {
     response.sendFile(imagePath);
@@ -43,7 +44,15 @@ router.get("/file/:project/:file", (request: Request, response: Response) => {
       message: "File is missing",
     });
   }
-  const filePath = `${__dirname}/public/projects/${project}/${file}`;
+  const filePath = path.join(
+    __dirname,
+    "..",
+    "public",
+    "projects",
+    project,
+    file,
+  );
+
   // check if directory exists on the server
   if (fs.existsSync(filePath)) {
     response.sendFile(filePath);
