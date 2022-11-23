@@ -166,6 +166,8 @@ const Editor = () => {
       socket?.disconnect(true);
       socket = null;
     };
+    // Change page title to project title
+    document.title = `${id} | CWM`;
 
     editorController
       .checkIfAllowed(id)
