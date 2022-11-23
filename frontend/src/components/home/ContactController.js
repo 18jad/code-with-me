@@ -1,9 +1,8 @@
 import { axiosInstance } from "utils/axiosInstance";
 
 export class ContactController {
-  #email_regex = new RegExp(
-    "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
-  );
+  // eslint-disable-next-line no-useless-escape
+  #emailFilter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   #send_email_url = "/user/contact_me";
 
   /**
@@ -39,7 +38,11 @@ export class ContactController {
 
   // Validate email input value
   validateEmail(email) {
-    return this.checkLength(7, 200)(email) && this.#email_regex.test(email);
+    console.log(
+      this.checkLength(5, 200)(email),
+      !!this.#emailFilter.test(email),
+    );
+    return this.checkLength(5, 200)(email) && !!this.#emailFilter.test(email);
   }
 
   // Validate message input value
@@ -56,7 +59,7 @@ export class ContactController {
     const { name, email, subject, message } = elements;
     return new Promise((resolve, reject) => {
       if (this.validateName(name.value)) {
-        if (this.validateEmail(email.valie)) {
+        if (this.validateEmail(email.value)) {
           if (this.validateSubject(subject.value)) {
             if (this.validateMessage(message.value)) {
               resolve({
