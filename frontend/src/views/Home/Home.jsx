@@ -5,6 +5,7 @@ import IdeInfo from "components/home/IdeInfo";
 import Navbar from "components/home/Navbar";
 import Transitions from "components/Transition";
 import { motion, useAnimation } from "framer-motion";
+import Cookies from "js-cookie";
 import { useEffect, useReducer, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 import { useNavigate } from "react-router-dom";
@@ -84,7 +85,21 @@ const Home = () => {
     },
   };
 
-  /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////x
+
+  // Check if user is authenticated
+  const authCookies = Cookies.get("persist:user"),
+    { loggedIn, user } = (authCookies && JSON.parse(authCookies)) || {
+      loggedIn: false,
+      user: null,
+    },
+    isAuthenticated = Boolean(
+      loggedIn &&
+        loggedIn !== "undefined" &&
+        loggedIn === "true" &&
+        !!loggedIn &&
+        !!user,
+    );
 
   return (
     <Transitions>
@@ -222,23 +237,10 @@ const Home = () => {
                 }}
                 transition={{ duration: 0.2 }}
                 onClick={() => {
-                  navigate("/authenticate");
+                  navigate(isAuthenticated ? "/profile" : "/authenticate");
                 }}>
-                {langComp.start}
+                {isAuthenticated ? langComp.app : langComp.start}
               </motion.button>
-              {/* <div className={styles.mobileDownload}>
-                <p>
-                  {langComp.mobile}
-                  <br />
-                  <span className={styles.platformSelection}>
-                    <b>Android</b>
-                  </span>
-                  {langComp.and}
-                  <span className={styles.platformSelection}>
-                    <b>IOS</b>
-                  </span>
-                </p>
-              </div> */}
             </div>
           </div>
         </div>
