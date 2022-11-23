@@ -172,6 +172,9 @@ const Profile = () => {
 
   // Self fetch profile
   useEffect(() => {
+    // Edit page title
+    document.title = "My Profile | CWM";
+
     profile.fetchUser(username).then((res) => {
       dispatch(setLogin({ user: res, token: authToken }));
     });
