@@ -1,4 +1,6 @@
+import Cookies from "cookies-js";
 import qs from "qs";
+import routes from "routes";
 import { axiosInstance, axiosUser } from "utils/axiosInstance";
 
 export class ProfileController {
@@ -107,6 +109,19 @@ export class ProfileController {
           reject(error);
         });
     });
+  };
+
+  /**
+   * @description Logout logged in user, expire the cookie, make routes strictly protected and redirect to login page
+   * @param {useNavigate: react-route-dom} navigate
+   * @returns {void}
+   */
+  logout = (navigate) => {
+    Cookies.expire("persist:user");
+    routes.forEach((route) => {
+      route.condition = !!(route.path === "/authenticate");
+    });
+    navigate("/authenticate");
   };
 
   searchUser = (username) => {

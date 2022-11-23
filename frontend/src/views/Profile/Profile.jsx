@@ -21,7 +21,6 @@ import { setLogin } from "store/slices/loginSlice";
 import formatNumber from "utils/formatNumber";
 import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
-import { logout } from "./logout";
 import styles from "./Profile.module.scss";
 import { ProfileController } from "./profileController";
 
@@ -219,7 +218,7 @@ const Profile = () => {
             <button
               className={styles.signOutBtn}
               onClick={() => {
-                logout(navigate);
+                profile.logout(navigate);
               }}>
               <span>
                 <SignOut size={20} color='#fff' mirrored={true} />
