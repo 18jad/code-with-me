@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { tw } from "utils/TailwindComponent";
 import navStore from "../lang/navStore";
 
-const Navbar = ({ contact, fn }) => {
+const Navbar = ({ contact, fn, auth }) => {
   const [nav, setNav] = useState(false);
 
   // link element styling
@@ -60,8 +60,8 @@ const Navbar = ({ contact, fn }) => {
           <Link onClick={contact} className={linkCss}>
             {langComp.contact}
           </Link>
-          <Link to='/authenticate' className={linkCss}>
-            {langComp.goapp}
+          <Link to={auth ? "/profile" : "/authenticate"} className={linkCss}>
+            {auth ? langComp.goapp : langComp.register}
           </Link>
         </li>
       </div>

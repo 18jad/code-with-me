@@ -106,7 +106,11 @@ const Home = () => {
       <main className={styles.mainContainer}>
         <div className={styles.topContainer}>
           {/* Navbar */}
-          <Navbar contact={scrollToContact} fn={handleLanguageSwitch} />
+          <Navbar
+            contact={scrollToContact}
+            fn={handleLanguageSwitch}
+            auth={isAuthenticated}
+          />
 
           {/* Hidden div to seperate navbar and body content */}
           <div className='mt-20 pointer-events-none opacity-0 '></div>
