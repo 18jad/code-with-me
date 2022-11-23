@@ -1,3 +1,5 @@
+import { axiosInstance } from "utils/axiosInstance";
+
 export class ContactController {
   #email_regex = new RegExp(
     "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$",
@@ -76,5 +78,26 @@ export class ContactController {
         reject("Please enter a valid name, between 2 and 30 characters");
       }
     });
+  }
+
+  sendEmail(e) {
+    e.preventDefault();
+    const elements = e.target.elements;
+    return this.validate(elements)
+      .then((data) => {
+        axiosInstance
+          .post(this.#send_email_url, data)
+          .then((response) => {
+            if (response.status === 200) {
+              return response.data;
+            }
+          })
+          .catch((error) => {
+            throw error;
+          });
+      })
+      .catch((error) => {
+        throw error;
+      });
   }
 }
