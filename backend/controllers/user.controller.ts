@@ -131,6 +131,41 @@ class UserController {
   }
 
   /**
+   * @description Upload user profile picture to the server, store new link in database
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async uploadProfile(request: any, response: any) {
+    const imageURL = `http://localhost:${process.env.PORT}/image/profiles/${request.file.originalname}`;
+    this.decodeToken(request)
+      .then(async (token: any) => {
+        const { id } = token;
+        prisma.user
+          .update({
+            where: {
+              id: id,
+            },
+            data: {
+              avatar: imageURL,
+            },
+          })
+          .then((result) => {
+            sendResponse(response, true, "Profile image uploaded", {
+              result,
+              url: imageURL,
+            });
+          })
+          .catch((error) => {
+            sendResponse(response, false, "Something went wrong", error);
+          });
+      })
+      .catch((error) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  /**
    * @description Check if user already liking another user
    * @param id {number | string} logged in user id
    * @param userId {number | string} likked user id
