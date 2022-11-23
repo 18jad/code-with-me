@@ -99,6 +99,7 @@ io.on("connection", (socket: Socket.Controller) => {
   });
 
   socket.once("disconnect", (data) => {
+    console.log("User disconnected", socket.id);
     for (const [room, roomUsers] of Object.entries(users)) {
       if (room === socket.room) {
         users[room as any] = roomUsers.filter(

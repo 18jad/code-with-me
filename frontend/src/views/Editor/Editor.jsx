@@ -61,7 +61,7 @@ const editorLanguage = {
 // Socket io connection
 let socket =
   window.location.href.split("/")[3] === "project"
-    ? io.connect("http://localhost:2121", { forceNew: true })
+    ? io("http://localhost:2121", { forceNew: true, autoConnect: false })
     : null;
 
 const Editor = () => {
@@ -98,7 +98,7 @@ const Editor = () => {
   const iframeRef = useRef(null);
 
   if (!socket && !socket?.connected) {
-    socket = io.connect("http://localhost:2121", { forceNew: true });
+    socket = io("http://localhost:2121", { forceNew: true });
   }
 
   useEffect(() => {
@@ -156,6 +156,8 @@ const Editor = () => {
   }, [allowed]);
 
   useEffect(() => {
+    socket?.connect();
+
     // Disconnect from socket on back button
     window.onpopstate = (e) => {
       socket?.close();
