@@ -199,7 +199,9 @@ const Editor = () => {
   const runCode = () => {
     const document = iframeRef.current.contentDocument;
     const documentContents = `
-              ${editorRef.current.getValue()}
+              ${editorRef.current
+                .getValue()
+                .replaceAll("$cwm-link", `http://localhost:2121/file/${id}`)}
         `;
 
     document.open();
