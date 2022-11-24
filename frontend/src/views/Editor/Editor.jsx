@@ -2,7 +2,6 @@
 import { default as IDE } from "@monaco-editor/react";
 import GithubTool from "assets/icons/GithubTool";
 import ShareIcon from "assets/icons/ShareIcon";
-import Voice from "assets/icons/Voice";
 import SidebarContent from "components/editor/SidebarContent";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
@@ -425,7 +424,7 @@ const Editor = () => {
                   <Chats size={28} color='currentColor' />
                 </label>
               </button>
-              <button className={styles.sidebar_tools_tool}>
+              {/* <button className={styles.sidebar_tools_tool}>
                 <input
                   type='radio'
                   id='overview'
@@ -439,7 +438,7 @@ const Editor = () => {
                 <label htmlFor='overview' className={styles.toolIcon}>
                   <Voice width={22} />
                 </label>
-              </button>
+              </button> */}
               <button className={styles.sidebar_tools_tool}>
                 <input
                   type='radio'

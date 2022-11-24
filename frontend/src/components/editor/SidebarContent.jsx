@@ -2,7 +2,6 @@ import ChatConversation from "components/ChatConversation";
 import FileStructure from "./FileStructure";
 import GithubTool from "./GithubTool";
 import Shortcuts from "./Shortcuts";
-import VoiceChat from "./VoiceChat";
 
 const swapContent = (content, compare) => {
   return content === compare
@@ -27,7 +26,7 @@ const SidebarContent = ({ content, socket, fileFn }) => {
         className={swapContent(content, "chat")}
         socket={socket}
       />
-      <VoiceChat className={swapContent(content, "voice")} socket={socket} />
+      {/* <VoiceChat className={swapContent(content, "voice")} socket={socket} /> */}
       <Shortcuts className={swapContent(content, "shortcuts")} />
     </>
   );
