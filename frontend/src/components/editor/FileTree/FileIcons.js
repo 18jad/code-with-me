@@ -1,3 +1,5 @@
+// file type icon, if you need more file type icon support just add the language slang here and the icon svg, very simplified
+
 const FILE_ICONS = {
   js: (
     <svg

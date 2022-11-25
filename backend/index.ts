@@ -66,8 +66,6 @@ namespace Socket {
 let users = {} as Array<Object>[];
 
 io.on("connection", (socket: Socket.Controller) => {
-  console.log("User connected", socket.id);
-
   socket.on("join_room", (data) => {
     socket.join(data.room);
     socket.username = data.username;
@@ -82,12 +80,11 @@ io.on("connection", (socket: Socket.Controller) => {
           room: data.room,
           user: data.username,
         });
-    console.log("users", users);
+
     io.to(data.room).emit("user_joined", { users, user: data.username });
   });
 
   socket.on("send_message", (data) => {
-    console.log(data);
     io.to(data.room).emit("receive_message", data);
   });
 
@@ -107,7 +104,6 @@ io.on("connection", (socket: Socket.Controller) => {
   });
 
   socket.once("disconnect", (data) => {
-    console.log("User disconnected", socket.id);
     for (const [room, roomUsers] of Object.entries(users)) {
       if (room === socket.room) {
         users[room as any] = roomUsers.filter(
@@ -122,8 +118,6 @@ io.on("connection", (socket: Socket.Controller) => {
 
 server.listen(port, (error: any) => {
   if (error) {
-    console.log("Error log:", error);
     throw new Error(error.message);
   }
-  console.log("Server running on port " + port);
 });

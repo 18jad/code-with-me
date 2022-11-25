@@ -42,12 +42,10 @@ const ChatConversation = ({ className, socket }) => {
 
   useEffect(() => {
     socket.on("receive_message", (message) => {
-      console.log("received message", message);
       receiveMessage(message);
     });
 
     socket.on("user_joined", ({ users, user: joinedUser }) => {
-      console.log("user joined", joinedUser);
       setMessages((messages) => [
         ...messages,
         {
@@ -63,12 +61,10 @@ const ChatConversation = ({ className, socket }) => {
     });
 
     socket.on("stop_typing", () => {
-      console.log("stopped");
       setTyping(false);
     });
 
     socket.on("user_disconnected", (user) => {
-      console.log("user disconnected", user);
       setMessages((messages) => [
         ...messages,
         {

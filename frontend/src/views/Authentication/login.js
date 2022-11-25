@@ -18,7 +18,6 @@ class Login {
       if (!email || email.value === "" || !password || password.value === "") {
         reject("Please fill in all fields");
       } else {
-        console.log(validator._validateEmail(email.value));
         if (!validator._validateEmail(email.value)) {
           reject("Please enter a valid email address");
           email.style.borderColor = "#c64d43";

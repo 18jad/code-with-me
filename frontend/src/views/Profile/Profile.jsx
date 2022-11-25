@@ -186,7 +186,9 @@ const Profile = () => {
       .then(({ projects }) => {
         setCollabs(projects);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert(err);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

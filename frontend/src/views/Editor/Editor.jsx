@@ -127,8 +127,10 @@ const Editor = () => {
     socket.on("user_joined", ({ users, user: joinedUser }) => {
       const roomUsers = users[id];
 
+      // If user joined recently, notify everyone
       newJoin
         ? roomUsers.forEach(({ user }) => {
+            // update with unique and no duplicated participants, and store their information such as avatar pic, id and username
             if (!user) return null;
             profileController
               .fetchUser(user)
@@ -144,7 +146,7 @@ const Editor = () => {
                   ]);
                 }
               })
-              .catch((error) => console.log(error));
+              .catch((error) => alert(error));
           })
         : profileController
             .fetchUser(joinedUser)
@@ -190,6 +192,7 @@ const Editor = () => {
     // Change page title to project title
     document.title = `${id} | CWM`;
 
+    // Check if user is allowed to participate in the project
     editorController
       .checkIfAllowed(id)
       .then(({ project, success }) => {
@@ -199,12 +202,15 @@ const Editor = () => {
               project?.allowedUsers?.includes(loggedUser.id) ||
               false,
           );
+          // Update project store to hold current project data
           dispatch(
             setProject({
               project: project,
               link: `http://localhost:3000/invite/${project.inviteToken}`,
             }),
           );
+
+          // Emit joining room on success allowance
           socket.emit("join_room", {
             room: id,
             username: loggedUser.username,
@@ -214,22 +220,23 @@ const Editor = () => {
       })
       .catch((err) => {
         setAllowed(false);
-        console.log(err);
       });
   }, []);
 
+  // Run html code inside the previewer
   const runCode = () => {
     const document = iframeRef.current.contentDocument;
     const documentContents = `
               ${editorRef.current
                 .getValue()
-                .replaceAll("$cwm-link", `http://localhost:2121/file/${id}`)}
-        `;
+                // in order to link external script or stylsheet files you have to use this format: $cwm-link/file-name.extension
+                // here this format is being replaced by the proper link that will grab your external file content
+                .replaceAll("$cwm-link", `http://localhost:2121/file/${id}`)}`;
 
-    document.open();
-    document.write(documentContents);
-    setPreviewTitle(document.title ? document.title : "Preview");
-    document.close();
+    document.open(); // open the iframe document
+    document.write(documentContents); // write the html code inside the iframe
+    setPreviewTitle(document.title ? document.title : "Preview"); // replace preview title if any was provided in the html head code
+    document.close(); // close the iframe document
   };
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -246,15 +253,17 @@ const Editor = () => {
     });
   };
 
+  // Change code editor content when a file is opened or changed
   useEffect(() => {
     editorController
       .readFile(id, openedFile)
       .then(({ message, file_content }) => {
         setFileCode({ code: file_content, isMe: true });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   }, [openedFile]);
 
+  // Handle the code change events
   const handleCodeChange = (value) => {
     setFileCode({ code: value, isMe: true });
     socket.emit("code_edit", {
@@ -265,6 +274,7 @@ const Editor = () => {
     });
   };
 
+  // Handle file saving, using the save icon or ctrl + s
   const handleFileSave = () => {
     if (!openedFile) return;
     editorController
@@ -272,12 +282,13 @@ const Editor = () => {
       .then(({ message }) => {
         notificationToaster(message);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err));
   };
 
   // CTRL + S callback
   useKey("ctrls", handleFileSave);
 
+  // Listener on code change
   socket.on("code_edit", ({ code, file, user }) => {
     file === openedFile &&
       user !== loggedUser.username &&
@@ -294,6 +305,7 @@ const Editor = () => {
   const [inviteModalStatus, setInviteModalStatus] = useState(false);
   const [previewModalStatus, setPreviewModalStatus] = useState(false);
 
+  // Editor saved settings
   const storedSetting = localStorage.getItem("editor-setting");
 
   // Editor settings
@@ -303,6 +315,7 @@ const Editor = () => {
     darkMode: storedSetting ? JSON.parse(storedSetting).darkMode : true,
   });
 
+  // Update saved settings
   const updateStoredSetting = (newSetting) => {
     localStorage.setItem("editor-setting", JSON.stringify(newSetting));
     setEditorSetting(newSetting);
@@ -326,6 +339,7 @@ const Editor = () => {
     });
   };
 
+  // Update terminal output + text color based on output type (error, success)
   const updateTerminal = (show, output = "", error = false) => {
     setTerminal(show);
     terminalRef.current.innerText = output;
@@ -447,21 +461,6 @@ const Editor = () => {
                   <Chats size={28} color='currentColor' />
                 </label>
               </button>
-              {/* <button className={styles.sidebar_tools_tool}>
-                <input
-                  type='radio'
-                  id='overview'
-                  name='sectionSwitcher'
-                  onClick={() => {
-                    if (sidebarContent !== "voice") setSidebarContent("voice");
-                  }}
-                  className={styles.radioSelection}
-                />
-                <div className={styles.selectLine}></div>
-                <label htmlFor='overview' className={styles.toolIcon}>
-                  <Voice width={22} />
-                </label>
-              </button> */}
               <button className={styles.sidebar_tools_tool}>
                 <input
                   type='radio'
@@ -515,7 +514,6 @@ const Editor = () => {
                     editorController
                       .excuteCode(id, openedFile)
                       .then((res) => {
-                        console.log(res);
                         updateTerminal(true, res.stdout);
                       })
                       .catch((err) => {
@@ -527,7 +525,6 @@ const Editor = () => {
                           "C:\\Users\\Jad Yahya\\Documents\\SE Factory\\Web Development\\Projects\\FINAL PROJECT\\code-with-me\\backend\\public\\projects\\",
                           "",
                         );
-                        console.log(err.response?.data?.stderr);
                         updateTerminal(true, exc_error || "Error", true);
                       });
                   }}

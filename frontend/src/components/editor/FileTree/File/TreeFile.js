@@ -1,30 +1,33 @@
-import React, { useRef, useState } from "react";
-import { AiOutlineDelete, AiOutlineEdit, AiOutlineFile } from "react-icons/ai";
+// NOTE YOU WILL NOTICE A LOT OF COMMENTED CODE, SOME FEATURE WAS IMPLEMENTED ON FRONTEND FIRST VERS BUT WAS CAUSING A LOT OF PROBLEMS BACKEND.
+// SO I COMMENTED IT OUT FOR FUTURE REFERENCE ONLY
+
+import React, { useRef } from "react";
+import { AiOutlineFile } from "react-icons/ai";
 
 import { StyledFile } from "../File/TreeFile.style";
 import { useTreeContext } from "../state/TreeContext";
 import { ActionsWrapper, StyledName } from "../Tree.style.js";
-import { PlaceholderInput } from "../TreePlaceholderInput";
+// import { PlaceholderInput } from "../TreePlaceholderInput";
 
 import FILE_ICONS from "../FileIcons";
-import { FILE } from "../state/constants";
+// import { FILE } from "../state/constants";
 
 const File = ({ name, id, node }) => {
   const { dispatch, isImparative, onNodeClick } = useTreeContext();
-  const [isEditing, setEditing] = useState(false);
+  // const [isEditing, setEditing] = useState(false);
   const ext = useRef("");
 
   let splitted = name?.split(".");
   ext.current = splitted[splitted.length - 1];
 
-  const toggleEditing = () => setEditing(!isEditing);
-  const commitEditing = (name) => {
-    dispatch({ type: FILE.EDIT, payload: { id, name } });
-    setEditing(false);
-  };
-  const commitDelete = () => {
-    dispatch({ type: FILE.DELETE, payload: { id } });
-  };
+  // const toggleEditing = () => setEditing(!isEditing);
+  // const commitEditing = (name) => {
+  //   dispatch({ type: FILE.EDIT, payload: { id, name } });
+  //   setEditing(false);
+  // };
+  // const commitDelete = () => {
+  //   dispatch({ type: FILE.DELETE, payload: { id } });
+  // };
   const handleNodeClick = React.useCallback(
     (e) => {
       e.stopPropagation();
@@ -32,13 +35,13 @@ const File = ({ name, id, node }) => {
     },
     [node],
   );
-  const handleCancel = () => {
-    setEditing(false);
-  };
+  // const handleCancel = () => {
+  //   setEditing(false);
+  // };
 
   return (
     <StyledFile onClick={handleNodeClick} className='tree__file'>
-      {isEditing ? (
+      {/* {isEditing ? (
         <PlaceholderInput
           type='file'
           style={{ paddingLeft: 0 }}
@@ -46,24 +49,24 @@ const File = ({ name, id, node }) => {
           onSubmit={commitEditing}
           onCancel={handleCancel}
         />
-      ) : (
-        <ActionsWrapper>
-          <StyledName>
-            {FILE_ICONS[ext.current] ? (
-              FILE_ICONS[ext.current]
-            ) : (
-              <AiOutlineFile />
-            )}
-            &nbsp;&nbsp;{name}
-          </StyledName>
-          {isImparative && (
+      ) : ( */}
+      <ActionsWrapper>
+        <StyledName>
+          {FILE_ICONS[ext.current] ? (
+            FILE_ICONS[ext.current]
+          ) : (
+            <AiOutlineFile />
+          )}
+          &nbsp;&nbsp;{name}
+        </StyledName>
+        {/* {isImparative && (
             <div className='actions'>
               <AiOutlineEdit onClick={toggleEditing} />
               <AiOutlineDelete onClick={commitDelete} />
             </div>
-          )}
-        </ActionsWrapper>
-      )}
+          )} */}
+      </ActionsWrapper>
+      {/* )} */}
     </StyledFile>
   );
 };

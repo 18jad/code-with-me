@@ -38,10 +38,6 @@ export class ContactController {
 
   // Validate email input value
   validateEmail(email) {
-    console.log(
-      this.checkLength(5, 200)(email),
-      !!this.#emailFilter.test(email),
-    );
     return this.checkLength(5, 200)(email) && !!this.#emailFilter.test(email);
   }
 

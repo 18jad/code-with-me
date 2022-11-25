@@ -253,7 +253,7 @@ class UserController {
             const uniqueLikes = Array.from(
               (new Set<number[]>([...likedUsers, id]) as any).values(),
             ) as number[];
-            console.log(uniqueLikes, id, [...likedUsers, id]);
+
             prisma.user
               .update({
                 where: {

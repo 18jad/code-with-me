@@ -40,7 +40,6 @@ const GithubTool = ({ className }) => {
   const githubForm = useRef(null);
 
   const { project } = useSelector((state) => state.project);
-  console.log(project);
 
   let octokit = new Octokit({ auth: accessToken });
 
@@ -56,19 +55,18 @@ const GithubTool = ({ className }) => {
           setGithubLogin(true);
         }, 300);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   useEffect(() => {
     if (accessToken) {
       editorController.githubUserData(accessToken).then((data) => {
-        console.log(data);
         setAuthUser(data);
       });
     }
   }, [accessToken]);
-
-  console.log(authUser);
 
   const onClose = () => {};
 
@@ -107,7 +105,7 @@ const GithubTool = ({ className }) => {
                     <img src="https://i.pinimg.com/originals/2d/8e/e8/2d8ee815146390d567706f2c7b5c2916.gif" style="width: 200px; border-radius: 7px;" />
                   `;
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => alert(err));
             }}
             ref={githubForm}>
             <div className='input flex flex-col gap-1 w-full items-center text-left'>

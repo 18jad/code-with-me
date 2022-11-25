@@ -1,3 +1,5 @@
+// Disclaimer: This is a very simple implementation of a file tree. It is not meant to be used in production.
+
 import { useLayoutEffect, useReducer } from "react";
 import { ThemeProvider } from "styled-components";
 import { v4 } from "uuid";
@@ -47,8 +49,6 @@ const Tree = ({ children, data, onNodeClick, onUpdate }) => {
 
 const TreeRecusive = ({ data, parentNode }) => {
   return data.map((item, i) => {
-    console.log(data[i]);
-    // TODO: FIX UPDATE DELETE FILE ERROR
     if (!parentNode) {
       item = Object.assign({}, item, { parentNode: data });
       // data[i] = item;
