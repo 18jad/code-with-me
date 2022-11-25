@@ -15,8 +15,8 @@ class Register {
     [email, username, password, passwordConfirm].forEach((element) => {
       element.style.borderColor = "#6c7280";
     });
-    email.value = email.value.trim().toLowerCase();
-    username.value = username.value.trim().toLowerCase();
+    email.value = email.value.trim().toLowerCase(); // remove any trailing spaces and convert to lower case
+    username.value = username.value.trim().toLowerCase(); // remove any trailing spaces and convert to lower case
     return new Promise((resolve, reject) => {
       if (
         !email ||
@@ -51,6 +51,7 @@ class Register {
               reject("Passwords do not match");
             } else {
               resolve({
+                // resolve values
                 name: name.value,
                 email: email.value,
                 username: username.value,

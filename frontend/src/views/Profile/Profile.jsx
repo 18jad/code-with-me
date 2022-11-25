@@ -69,7 +69,7 @@ const ModalTextarea = tw.textarea`
 `;
 
 // Stats card component for profile stats
-const StatsCard = ({ count, text }) => {
+export const StatsCard = ({ count, text }) => {
   return (
     <div className={styles.statsCard}>
       <span className={styles.cardCount}>{count}</span>
@@ -157,6 +157,7 @@ const Profile = () => {
     projects: [],
   };
 
+  // Update projects array holder
   useEffect(() => {
     if (projects && projects.length) {
       setMyProject(projects);
@@ -166,7 +167,7 @@ const Profile = () => {
   // Authentication token
   const authToken = useSelector((state) => state.user.token);
 
-  // Search user
+  // Search user debouncer
   const debouncedQuery = useDebounce(searchTerm, 500);
 
   // Self fetch profile
@@ -174,15 +175,19 @@ const Profile = () => {
     // Edit page title
     document.title = "My Profile | CWM";
 
+    // Fetch logged in user information and save them in redux persist storage
     profile.fetchUser(username).then((res) => {
       dispatch(setLogin({ user: res, token: authToken }));
     });
+
+    // Get gollabed projects list (the projects you collabed with)
     profile
       .getCollabProjects()
       .then(({ projects }) => {
         setCollabs(projects);
       })
       .catch((err) => console.log(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(
@@ -202,6 +207,41 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [debouncedQuery], // Only call effect if debounced query term changes
   );
+
+  // Functions
+  // Create new project function
+  const createNewProject = (e) => {
+    // e is the event object and it should contain the following properties: project_title, project_description inputs
+    profile
+      .createProject(e)
+      .then((res) => {
+        notificationToaster(
+          res.data.message + ". Redirecting to project page...",
+        );
+        setTimeout(() => {
+          navigate(`/project/${res.data.project.title}`); // redirect to project page
+          window.location.reload(); // reload the page to reflect new data and connections
+        }, 2000);
+      })
+      .catch((error) =>
+        notificationToaster(error.response?.data?.message || error, true),
+      );
+  };
+
+  // Edit profile function
+  const editProfile = (e) => {
+    // e is the event object and it should contain the following properties: name, username and headline. avatar image is optional
+    profile
+      .editProfile(e)
+      .then(({ response: { data } }) => {
+        const { updatedUser: user, newToken: token } = data;
+        notificationToaster(data.message);
+        dispatch(setLogin({ user, token })); // dispatch the new user information state
+      })
+      .catch((error) =>
+        notificationToaster(error.response?.data?.message || error, true),
+      );
+  };
 
   return (
     <Transition>
@@ -450,21 +490,7 @@ const Profile = () => {
           <div className='content flex flex-col md:flex-row gap-14 items-center'>
             <form
               className='inputs flex flex-row items-center justify-center gap-10 w-full'
-              onSubmit={(e) => {
-                profile
-                  .editProfile(e)
-                  .then(({ response: { data } }) => {
-                    const { updatedUser: user, newToken: token } = data;
-                    notificationToaster(data.message);
-                    dispatch(setLogin({ user, token }));
-                  })
-                  .catch((error) =>
-                    notificationToaster(
-                      error.response?.data?.message || error,
-                      true,
-                    ),
-                  );
-              }}>
+              onSubmit={editProfile}>
               <div
                 className='profile text-center h-fit w-[100px] bg-center bg-cover object-cover rounded'
                 style={{
@@ -535,24 +561,7 @@ const Profile = () => {
           }}>
           <form
             className='inputs flex flex-col gap-4 w-full'
-            onSubmit={(e) => {
-              profile
-                .createProject(e)
-                .then((res) => {
-                  notificationToaster(
-                    res.data.message + ". Redirecting to project page...",
-                  );
-                  setTimeout(() => {
-                    navigate(`/project/${res.data.project.title}`);
-                  }, 2000);
-                })
-                .catch((error) =>
-                  notificationToaster(
-                    error.response?.data?.message || error,
-                    true,
-                  ),
-                );
-            }}>
+            onSubmit={createNewProject}>
             <div className='flex flex-col gap-3'>
               <ModalInput
                 type='text'

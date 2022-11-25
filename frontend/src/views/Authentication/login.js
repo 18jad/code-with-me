@@ -12,9 +12,8 @@ class Login {
    */
   validate = (elements) => {
     let { email, password } = elements;
-    email.value = email.value.trim().toLowerCase();
-    console.log(email.value);
-    email.style.borderColor = "#6c7280";
+    email.value = email.value.trim().toLowerCase(); // remove any trailing spaces and convert to lower case
+    email.style.borderColor = "#6c7280"; // reset border to initial color in case it was red
     return new Promise((resolve, reject) => {
       if (!email || email.value === "" || !password || password.value === "") {
         reject("Please fill in all fields");

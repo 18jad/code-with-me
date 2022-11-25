@@ -23,6 +23,7 @@
       flex-direction: column;
       gap: 10px;
       margin: 0 auto;
+
       @include breakpoint(mobile) {
         align-items: flex-start;
       }
@@ -38,9 +39,9 @@
 
         @include breakpoint(mobile) {
           max-width: 300px;
-
           text-align: left;
         }
+
         span {
           font-size: calc(1.5em + 3vw);
           font-weight: bold;
@@ -55,7 +56,6 @@
           -webkit-text-fill-color: $tcolor;
 
           @include breakpoint(mobile) {
-            // width: 300px;
             text-align: left;
           }
         }
@@ -79,6 +79,7 @@
         flex-direction: column;
         margin-top: 25px;
         gap: 15px;
+
         @include breakpoint(mobile) {
           align-items: flex-start;
         }
@@ -127,6 +128,7 @@
           font-weight: 200;
           font-size: 0.9em;
           color: $lighgray;
+
           @include breakpoint(mobile) {
             text-align: left;
           }
@@ -162,6 +164,7 @@
     animation-duration: 3s;
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
+
     @include breakpoint(mobile) {
       height: 100%;
       width: 150vw;
@@ -190,6 +193,7 @@
   }
 }
 
+// Text shinning animation
 @keyframes textShine {
   0% {
     background-position: -500%;
@@ -199,6 +203,7 @@
   }
 }
 
+// Drop animation
 @keyframes drop {
   0% {
     translate: 0 -5px;
@@ -219,6 +224,7 @@
   }
 }
 
+// Floating animation
 @keyframes floating {
   0% {
     box-shadow: 0 5px 15px 0px rgba(0, 0, 0, 0.6);

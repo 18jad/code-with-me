@@ -10,18 +10,9 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import formatNumber from "utils/formatNumber";
 import NotFound from "views/NotFound/NotFound";
+import { StatsCard } from "./Profile";
 import styles from "./Profile.module.scss";
 import { ProfileController } from "./profileController";
-
-// Stats card component for profile stats
-const StatsCard = ({ count, text }) => {
-  return (
-    <div className={styles.statsCard}>
-      <span className={styles.cardCount}>{count}</span>
-      <span className={styles.cardText}>{text}</span>
-    </div>
-  );
-};
 
 const User = () => {
   // User controller
@@ -30,25 +21,43 @@ const User = () => {
   // User id passed in url
   let { id } = useParams();
 
+  // React dom navigator, to navigate between pages
   const navigate = useNavigate();
 
+  // The user that we are currently viewing informations and states
   const [profileUser, setProfileUser] = useState({ user: true, isLiked: null });
+  const user = profileUser.user;
 
   // Hold the data of user created projects
   const [projects, setProjects] = useState([0]);
 
+  // Get user likes amount, this is stored here to be manipulated by logged in user to like and unlike
   const [userLikes, setUserLikes] = useState(0);
 
+  // Logged in user details
   const { user: loggedUser } = useSelector((state) => state.user);
+
+  // Search data result
+  let [usersList, setUsersList] = useState([]);
+
+  // Search bar value setter and state
+  const [searchState, setSearchState] = useState(false);
+
+  // Search term state
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Search user
+  const debouncedQuery = useDebounce(searchTerm, 500);
 
   // Fetch user info
   useEffect(() => {
     userController
       .fetchUser(id)
       .then((user) => {
-        // Edit page title to user name
+        // Edit page title to user name | CWM
         document.title = `${user.name} | CWM`;
 
+        // Check if logged in user has already liked the visited user
         userController
           .checkIfLiked(loggedUser.id, user.id)
           .then(({ isLiked: { isLiked } }) => {
@@ -63,20 +72,8 @@ const User = () => {
       .catch((error) => {
         setProfileUser({ user: false, isLiked: false });
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  let [usersList, setUsersList] = useState([]);
-
-  // Search bar value setter and state
-  const [searchState, setSearchState] = useState(false);
-
-  // Search term state
-  const [searchTerm, setSearchTerm] = useState("");
-
-  // Search user
-  const debouncedQuery = useDebounce(searchTerm, 500);
-
-  const user = profileUser.user;
 
   useEffect(
     () => {
@@ -91,6 +88,20 @@ const User = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [debouncedQuery], // Only call effect if debounced query term changes
   );
+
+  // Functions
+  // Function to like/dislike a user
+  const updateLike = () => {
+    userController
+      .updateLike(user.id)
+      .then(({ message, success, result: user }) => {
+        setUserLikes(user.likesCount);
+        setProfileUser({ user, isLiked: !profileUser.isLiked });
+      })
+      .catch((err) => {
+        setProfileUser({ user, isLiked: false });
+      });
+  };
 
   return (
     <Transition>
@@ -151,18 +162,7 @@ const User = () => {
                     ? "bg-red-400 hover:bg-red-600"
                     : "bg-blue-500 hover:bg-blue-600"
                 }`}
-                onClick={() => {
-                  userController
-                    .updateLike(user.id)
-                    .then(({ message, success, result: user }) => {
-                      setUserLikes(user.likesCount);
-                      setProfileUser({ user, isLiked: !profileUser.isLiked });
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                      // setProfileUser({ user, isLiked: false });
-                    });
-                }}
+                onClick={updateLike}
                 data-liked={true}>
                 <Heart
                   size={20}
@@ -208,21 +208,28 @@ const User = () => {
             <div className={styles.projectsOverview}>
               {/* Projects */}
               {projects.length ? (
-                <div className={styles.projectsContainer}>
-                  <>
-                    {projects.map(
-                      ({ title, description, updatedAt }, index) => (
-                        <ProjectCard
-                          title={title}
-                          description={description}
-                          updated={moment(updatedAt).fromNow()}
-                          link={`/project/${title}`}
-                          key={index}
-                        />
-                      ),
-                    )}
-                  </>
-                </div>
+                <>
+                  <div className={styles.interBar}>
+                    <h1 className={styles.sectionTitle}>
+                      {user?.name} created projects:
+                    </h1>
+                  </div>
+                  <div className={styles.projectsContainer}>
+                    <>
+                      {projects.map(
+                        ({ title, description, updatedAt }, index) => (
+                          <ProjectCard
+                            title={title}
+                            description={description}
+                            updated={moment(updatedAt).fromNow()}
+                            link={`/project/${title}`}
+                            key={index}
+                          />
+                        ),
+                      )}
+                    </>
+                  </div>
+                </>
               ) : (
                 <p className='text-white text-3xl text-center mt-20 px-48 whitespace-nowrap'>
                   No projects created :(

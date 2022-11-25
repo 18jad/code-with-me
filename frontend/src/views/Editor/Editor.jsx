@@ -65,40 +65,62 @@ let socket =
     : null;
 
 const Editor = () => {
+  // Project title, grabbed from URL param
+  const { id } = useParams();
+
+  // Variable to hold the participants users state
   const [participants, setParticipants] = useState([]);
 
+  // Controllers for editor and profile
   const profileController = new ProfileController();
   const editorController = new EditorController();
 
+  // Variable to hold the current opened file name
   const [openedFile, setOpenedFile] = useState(null);
+
+  // Variable to hold the current opened file content
   const [fileCode, setFileCode] = useState("");
 
+  // Terminal state, weither it's hidden or visible
   const [terminal, setTerminal] = useState(false);
 
+  // HTML Previewer fullscreen state, weither it's full or no
   const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // HTML Previewer title state
   const [previewTitle, setPreviewTitle] = useState("Preview");
 
+  // Hook to limit the number of toaster notifications on the page
+  // eslint-disable-next-line no-unused-vars
   const toast = useToast();
 
+  // Detect if user joined recently
   let newJoin = true;
 
+  // Redux dispatcher
   const dispatch = useDispatch();
 
+  // Terminal reference
   const terminalRef = useRef(null);
 
-  const { id } = useParams();
-
+  // Current logged in user data
   const { user: loggedUser } = useSelector((state) => state.user);
   const { project } = useSelector((state) => state);
 
+  // Is user allowed in project
   const [allowed, setAllowed] = useState(true);
 
+  // Code editor reference
   const editorRef = useRef(null);
 
+  // HTML Previewer reference
   const iframeRef = useRef(null);
 
+  // Socket io reinstantiation
   if (!socket && !socket?.connected) {
-    socket = io("http://localhost:2121", { forceNew: true });
+    socket = io("http://localhost:2121", {
+      forceNew: true, // force new connection to avoid reusing old broken/unstable connection
+    });
   }
 
   useEffect(() => {
@@ -164,6 +186,7 @@ const Editor = () => {
       socket?.disconnect(true);
       socket = null;
     };
+
     // Change page title to project title
     document.title = `${id} | CWM`;
 
@@ -480,23 +503,6 @@ const Editor = () => {
         <div className='flex flex-col w-full'>
           <div className={styles.editor}>
             <div className={styles.tabs}>
-              {/* <EditorTab
-              name='index.html'
-              isSelected={true}
-              // onClick={(e) => {
-              //   this.isSelected = true;
-              // }}
-            />
-            <EditorTab
-              name='script.js'
-              isSelected={false}
-              // onClick={(e) => {
-              //   // change is selected to true
-              //   e.target.dataset.selected = true;
-              //   console.log(e.target);
-              // }}
-            />
-            <EditorTab name='styles.csss' isSelected={false} /> */}
               <p className='text-white'>{openedFile}</p>
               <div className='h-[34px]' readOnly></div>
               {openedFile && openedFile.split(".").pop() === "js" && (

@@ -15,16 +15,16 @@ import { initEngine, starsOptions } from "../particles/StarsParticles";
 import styles from "./Home.module.scss";
 
 const Home = () => {
+  // Edit page title
+  useEffect(() => {
+    document.title = "Code With Me | CWM";
+  }, []);
+
   // To navigate through pages
   const navigate = useNavigate();
 
   // Reference for contact element
   const contactRef = useRef(null);
-
-  // Edit page title
-  useEffect(() => {
-    document.title = "Code With Me | CWM";
-  }, []);
 
   // Scroll to contact me components reference
   const scrollToContact = () => {
