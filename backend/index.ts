@@ -16,6 +16,7 @@ const userRoutes = require("./routes/user.routes");
 const infoRoutes = require("./routes/info.routes");
 const projectRoutes = require("./routes/project.routes");
 const githubRoutes = require("./routes/github.routes");
+const filesRoutes = require("./routes/files.routes");
 const apiVersion: number = 1.0;
 const prefix: string = String("/api/v" + apiVersion.toFixed(1));
 
@@ -29,6 +30,13 @@ app.use(prefix + "/user", userRoutes);
 app.use(prefix + "/info", infoRoutes);
 app.use(prefix + "/project", projectRoutes);
 app.use(prefix + "/github", githubRoutes);
+app.use("/", filesRoutes);
+
+app.get("*", (req: any, res: any) => {
+  res.status(404).json({
+    message: "Page not found, are you lost?",
+  });
+});
 
 // Server
 const server = http.createServer(app);

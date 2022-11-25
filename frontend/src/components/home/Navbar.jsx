@@ -56,7 +56,7 @@ const Navbar = ({ contact, fn, auth }) => {
         </div>
       </Link>
       <div className='hidden md:flex '>
-        <li className='flex items-center justify-center gap-10'>
+        <li className='flex items-center justify-center gap-10 mr-14'>
           <Link onClick={contact} className={linkCss}>
             {langComp.contact}
           </Link>

@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import formatNumber from "utils/formatNumber";
 import NotFound from "views/NotFound/NotFound";
-import { logout } from "./logout";
 import styles from "./Profile.module.scss";
 import { ProfileController } from "./profileController";
 
@@ -122,9 +121,8 @@ const User = () => {
               <button
                 className={styles.signOutBtn}
                 onClick={() => {
-                  logout(navigate);
+                  userController.logout(navigate);
                 }}>
-                {/* Sign out btn */}
                 <span>
                   <SignOut size={20} color='#fff' mirrored={true} />
                 </span>

@@ -134,14 +134,17 @@ $dark-bg: #3e3e3e;
         border-radius: 100px;
         border: 7px solid $white;
         border-radius: 100000px;
+        aspect-ratio: 1/1;
         -webkit-user-drag: none;
         -webkit-user-select: none;
         user-select: none;
 
         img {
           height: 100%;
-          -webkit-user-drag: none;
+          aspect-ratio: 1/1;
+          object-fit: cover;
           border-radius: 100000px;
+          -webkit-user-drag: none;
         }
       }
 

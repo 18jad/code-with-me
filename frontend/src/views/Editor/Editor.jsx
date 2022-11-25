@@ -2,7 +2,6 @@
 import { default as IDE } from "@monaco-editor/react";
 import GithubTool from "assets/icons/GithubTool";
 import ShareIcon from "assets/icons/ShareIcon";
-import Voice from "assets/icons/Voice";
 import SidebarContent from "components/editor/SidebarContent";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
@@ -10,6 +9,7 @@ import useKey from "hooks/useKey";
 import useToast from "hooks/useToast";
 import {
   Chats,
+  Command,
   GearSix,
   LinkSimple,
   Play,
@@ -198,12 +198,14 @@ const Editor = () => {
   const runCode = () => {
     const document = iframeRef.current.contentDocument;
     const documentContents = `
-              ${editorRef.current.getValue()}
+              ${editorRef.current
+                .getValue()
+                .replaceAll("$cwm-link", `http://localhost:2121/file/${id}`)}
         `;
 
     document.open();
     document.write(documentContents);
-    setPreviewTitle(document.title);
+    setPreviewTitle(document.title ? document.title : "Preview");
     document.close();
   };
 
@@ -422,7 +424,7 @@ const Editor = () => {
                   <Chats size={28} color='currentColor' />
                 </label>
               </button>
-              <button className={styles.sidebar_tools_tool}>
+              {/* <button className={styles.sidebar_tools_tool}>
                 <input
                   type='radio'
                   id='overview'
@@ -435,6 +437,22 @@ const Editor = () => {
                 <div className={styles.selectLine}></div>
                 <label htmlFor='overview' className={styles.toolIcon}>
                   <Voice width={22} />
+                </label>
+              </button> */}
+              <button className={styles.sidebar_tools_tool}>
+                <input
+                  type='radio'
+                  id='overview'
+                  name='sectionSwitcher'
+                  onClick={() => {
+                    if (sidebarContent !== "shortcuts")
+                      setSidebarContent("shortcuts");
+                  }}
+                  className={styles.radioSelection}
+                />
+                <div className={styles.selectLine}></div>
+                <label htmlFor='overview' className={styles.toolIcon}>
+                  <Command size={24} />
                 </label>
               </button>
             </div>

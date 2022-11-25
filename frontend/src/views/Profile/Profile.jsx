@@ -21,7 +21,6 @@ import { setLogin } from "store/slices/loginSlice";
 import formatNumber from "utils/formatNumber";
 import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
-import { logout } from "./logout";
 import styles from "./Profile.module.scss";
 import { ProfileController } from "./profileController";
 
@@ -219,7 +218,7 @@ const Profile = () => {
             <button
               className={styles.signOutBtn}
               onClick={() => {
-                logout(navigate);
+                profile.logout(navigate);
               }}>
               <span>
                 <SignOut size={20} color='#fff' mirrored={true} />
@@ -444,41 +443,13 @@ const Profile = () => {
         <Modal
           title='Edit profile'
           isOpen={editModalStatus}
-          className='bg-[#333]'
+          className='bg-[#333] w-[500px]'
           onClick={() => {
             setEditModalStatus(false);
           }}>
           <div className='content flex flex-col md:flex-row gap-14 items-center'>
-            <div
-              className='profile text-center h-fit  bg-center bg-cover object-cover rounded'
-              style={{
-                backgroundImage: modalProfile ? `url(${modalProfile})` : "",
-              }}>
-              <input
-                type='file'
-                id='changedProfile'
-                hidden
-                onChange={(e) => changeImage(e)}
-              />
-              <label
-                htmlFor='changedProfile'
-                className='cursor-pointer flex flex-col items-center'>
-                <UserFocus
-                  size={100}
-                  color='#fff'
-                  weight='fill'
-                  className={`${modalProfile ? "opacity-0" : "opacity-1"}`}
-                />
-                <span
-                  className={`text-sm text-center text-white ${
-                    modalProfile ? "hidden" : "block"
-                  }`}>
-                  Change profile picture
-                </span>
-              </label>
-            </div>
             <form
-              className='inputs flex flex-col gap-4 w-full'
+              className='inputs flex flex-row items-center justify-center gap-10 w-full'
               onSubmit={(e) => {
                 profile
                   .editProfile(e)
@@ -487,10 +458,42 @@ const Profile = () => {
                     notificationToaster(data.message);
                     dispatch(setLogin({ user, token }));
                   })
-                  .catch(({ response: { data } }) =>
-                    notificationToaster(data.message, true),
+                  .catch((error) =>
+                    notificationToaster(
+                      error.response?.data?.message || error,
+                      true,
+                    ),
                   );
               }}>
+              <div
+                className='profile text-center h-fit w-[100px] bg-center bg-cover object-cover rounded'
+                style={{
+                  backgroundImage: modalProfile ? `url(${modalProfile})` : "",
+                }}>
+                <input
+                  type='file'
+                  id='changedProfile'
+                  name='avatar'
+                  hidden
+                  onChange={(e) => changeImage(e)}
+                />
+                <label
+                  htmlFor='changedProfile'
+                  className='cursor-pointer flex flex-col items-center'>
+                  <UserFocus
+                    size={100}
+                    color='#fff'
+                    weight='fill'
+                    className={`${modalProfile ? "opacity-0" : "opacity-1"}`}
+                  />
+                  <span
+                    className={`text-sm text-center text-white ${
+                      modalProfile ? "hidden" : "block"
+                    }`}>
+                    Change profile picture
+                  </span>
+                </label>
+              </div>
               <div className='flex flex-col md:flex-row gap-3'>
                 <div className='flex flex-col gap-4 w-full'>
                   <ModalInput
