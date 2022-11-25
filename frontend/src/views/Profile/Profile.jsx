@@ -336,7 +336,7 @@ const Profile = () => {
                   </>
                 </div>
               ) : (
-                <p className='text-white text-3xl text-center my-20 md:px-48'>
+                <p className='text-white text-3xl text-center my-20 md:px-48 whitespace-nowrap'>
                   No projects created :(
                 </p>
               )}
@@ -370,7 +370,7 @@ const Profile = () => {
                   </div>
                 </>
               ) : (
-                <p className='text-white text-3xl text-center p-0 my-20 md:px-60'>
+                <p className='text-white text-3xl text-center p-0 my-20 md:px-60 whitespace-nowrap'>
                   No collabs found {":("}
                 </p>
               )}

@@ -224,7 +224,7 @@ const User = () => {
                   </>
                 </div>
               ) : (
-                <p className='text-white text-3xl text-center mt-20 px-48'>
+                <p className='text-white text-3xl text-center mt-20 px-48 whitespace-nowrap'>
                   No projects created :(
                 </p>
               )}
