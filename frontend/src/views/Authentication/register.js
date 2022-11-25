@@ -1,10 +1,8 @@
 import qs from "qs";
 import { axiosInstance } from "utils/axiosInstance";
+import validator from "utils/Validator";
 
 class Register {
-  // eslint-disable-next-line no-useless-escape
-  #emailFilter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
   #registeration_url = "/auth/register";
 
   constructor(toaster, setIsLogin) {
@@ -12,23 +10,13 @@ class Register {
     this.setIsLogin = setIsLogin;
   }
 
-  validateEmail = (email) => {
-    return !!this.#emailFilter.test(email);
-  };
-
-  validatePassword = (password) => {
-    return !!(password.length >= 8);
-  };
-
-  validateConfirmPassword = (password, confirmPassword) => {
-    return !!(password === confirmPassword);
-  };
-
   validate = (elements) => {
-    const { name, username, email, password, passwordConfirm } = elements;
+    let { name, username, email, password, passwordConfirm } = elements;
     [email, username, password, passwordConfirm].forEach((element) => {
       element.style.borderColor = "#6c7280";
     });
+    email = email.trim().toLowerCase();
+    username = username.trim().toLowerCase();
     return new Promise((resolve, reject) => {
       if (
         !email ||
@@ -44,16 +32,16 @@ class Register {
       ) {
         reject("Please fill in all fields");
       } else {
-        if (!this.validateEmail(email.value)) {
+        if (!validator._validateEmail(email.value)) {
           reject("Please enter a valid email address");
           email.style.borderColor = "#c64d43";
         } else {
-          if (!this.validatePassword(password.value)) {
+          if (!validator._validatePassword(password.value)) {
             password.style.borderColor = "#c64d43";
             reject("Password must be at least 8 characters");
           } else {
             if (
-              !this.validateConfirmPassword(
+              !validator._validateConfirmPassword(
                 password.value,
                 passwordConfirm.value,
               )
