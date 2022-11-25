@@ -1,22 +1,22 @@
-import qs from "qs";
 import { axiosInstance } from "utils/axiosInstance";
 import validator from "utils/Validator";
 
 class Register {
+  // HTTP Requests URLs
   #registeration_url = "/auth/register";
 
-  constructor(toaster, setIsLogin) {
-    this.toaster = toaster;
-    this.setIsLogin = setIsLogin;
-  }
-
+  /**
+   * @desciption Validate register user input fields
+   * @param {EventTarget.HTMLElements} elements
+   * @returns {Promise<string | object>}
+   */
   validate = (elements) => {
     let { name, username, email, password, passwordConfirm } = elements;
     [email, username, password, passwordConfirm].forEach((element) => {
       element.style.borderColor = "#6c7280";
     });
-    email = email.trim().toLowerCase();
-    username = username.trim().toLowerCase();
+    email.value = email.value.trim().toLowerCase();
+    username.value = username.value.trim().toLowerCase();
     return new Promise((resolve, reject) => {
       if (
         !email ||
@@ -63,29 +63,33 @@ class Register {
     });
   };
 
+  /**
+   * @description Send register request to the server and create a new user if no conflicts found
+   * @param {EventTarget} e
+   * @returns {Promise<object | unkown>}
+   */
   handleRegister = (e) => {
     e.preventDefault();
-    this.validate(e.target.elements)
-      .then((result) => {
-        axiosInstance
-          .post(this.#registeration_url, qs.stringify(result))
-          .then((response) => {
-            if (response.status === 200 && response.data.success) {
-              this.toaster(`${response.data.message}, please login.`);
-              setTimeout(() => {
-                this.setIsLogin(true);
-              }, 2000);
-            } else {
-              this.toaster(response.message, true);
-            }
-          })
-          .catch((error) => {
-            this.toaster(error.response.data.error, true);
-          });
-      })
-      .catch((error) => {
-        this.toaster(error, true);
-      });
+    return new Promise((resolve, reject) => {
+      this.validate(e.target.elements)
+        .then((result) => {
+          axiosInstance
+            .post(this.#registeration_url, { ...result })
+            .then((response) => {
+              if (response.status === 200 && response.data.success) {
+                resolve(`${response.data.message}, please login.`);
+              } else {
+                reject(response.message);
+              }
+            })
+            .catch((error) => {
+              reject(error.response.data.error);
+            });
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   };
 }
 
