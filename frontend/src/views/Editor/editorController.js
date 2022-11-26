@@ -34,7 +34,7 @@ export class EditorController {
   shareProject(e) {
     e.preventDefault();
     const { link, email } = e.target.elements;
-    console.log(link.value, email.value);
+
     return new Promise((resolve, reject) => {
       if (!this.#emailFilter.test(email.value)) {
         reject("Please enter a valid email");

@@ -6,22 +6,13 @@ import useDebounce from "hooks/useDebounce";
 import moment from "moment";
 import { Heart, MagnifyingGlass, SignOut, UserCircle } from "phosphor-react";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import formatNumber from "utils/formatNumber";
 import NotFound from "views/NotFound/NotFound";
-import { logout } from "./logout";
+import { StatsCard } from "./Profile";
 import styles from "./Profile.module.scss";
 import { ProfileController } from "./profileController";
-
-// Stats card component for profile stats
-const StatsCard = ({ count, text }) => {
-  return (
-    <div className={styles.statsCard}>
-      <span className={styles.cardCount}>{count}</span>
-      <span className={styles.cardText}>{text}</span>
-    </div>
-  );
-};
 
 const User = () => {
   // User controller
@@ -30,27 +21,23 @@ const User = () => {
   // User id passed in url
   let { id } = useParams();
 
+  // React dom navigator, to navigate between pages
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({ user: null });
+  // The user that we are currently viewing informations and states
+  const [profileUser, setProfileUser] = useState({ user: true, isLiked: null });
+  const user = profileUser.user;
 
   // Hold the data of user created projects
   const [projects, setProjects] = useState([0]);
 
-  // Fetch user info
-  useEffect(() => {
-    userController
-      .fetchUser(id)
-      .then((user) => {
-        console.log(user);
-        setUser(user);
-        setProjects(user.projects);
-      })
-      .catch((error) => {
-        setUser(false);
-      });
-  }, []);
+  // Get user likes amount, this is stored here to be manipulated by logged in user to like and unlike
+  const [userLikes, setUserLikes] = useState(0);
 
+  // Logged in user details
+  const { user: loggedUser } = useSelector((state) => state.user);
+
+  // Search data result
   let [usersList, setUsersList] = useState([]);
 
   // Search bar value setter and state
@@ -61,6 +48,32 @@ const User = () => {
 
   // Search user
   const debouncedQuery = useDebounce(searchTerm, 500);
+
+  // Fetch user info
+  useEffect(() => {
+    userController
+      .fetchUser(id)
+      .then((user) => {
+        // Edit page title to user name | CWM
+        document.title = `${user.name} | CWM`;
+
+        // Check if logged in user has already liked the visited user
+        userController
+          .checkIfLiked(loggedUser.id, user.id)
+          .then(({ isLiked: { isLiked } }) => {
+            setProfileUser({ user, isLiked });
+          })
+          .catch((err) => {
+            setProfileUser({ user, isLiked: false });
+          });
+        setProjects(user.projects);
+        setUserLikes(user.likesCount);
+      })
+      .catch((error) => {
+        setProfileUser({ user: false, isLiked: false });
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(
     () => {
@@ -75,6 +88,20 @@ const User = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [debouncedQuery], // Only call effect if debounced query term changes
   );
+
+  // Functions
+  // Function to like/dislike a user
+  const updateLike = () => {
+    userController
+      .updateLike(user.id)
+      .then(({ message, success, result: user }) => {
+        setUserLikes(user.likesCount);
+        setProfileUser({ user, isLiked: !profileUser.isLiked });
+      })
+      .catch((err) => {
+        setProfileUser({ user, isLiked: false });
+      });
+  };
 
   return (
     <Transition>
@@ -105,9 +132,8 @@ const User = () => {
               <button
                 className={styles.signOutBtn}
                 onClick={() => {
-                  logout(navigate);
+                  userController.logout(navigate);
                 }}>
-                {/* Sign out btn */}
                 <span>
                   <SignOut size={20} color='#fff' mirrored={true} />
                 </span>
@@ -130,12 +156,20 @@ const User = () => {
                 </div>
                 <span className={styles.headline}>{user?.headline}</span>
               </div>
-              {/* TODO: if liked set value to liked and change functionality */}
               <button
-                className='absolute -bottom-4 text-white flex flex-row gap-2 bg-blue-500 py-1 px-4 rounded-md hover:bg-blue-600 transition duration-200'
-                data-liked={false}>
-                <Heart size={20} color='#fff' />
-                <span>Like</span>
+                className={`absolute -bottom-4 text-white flex flex-row gap-2  py-1 px-4 rounded-md  transition duration-200 ${
+                  profileUser.isLiked
+                    ? "bg-red-400 hover:bg-red-600"
+                    : "bg-blue-500 hover:bg-blue-600"
+                }`}
+                onClick={updateLike}
+                data-liked={true}>
+                <Heart
+                  size={20}
+                  color='#fff'
+                  weight={`${profileUser.isLiked ? "fill" : "bold"}`}
+                />
+                <span>{profileUser.isLiked ? "Unlike" : "Like"}</span>
               </button>
             </div>
 
@@ -146,10 +180,9 @@ const User = () => {
                 text='projects'
               />
               <StatsCard
-                count={formatNumber(user.likesCount, 1)}
+                count={formatNumber(user.likesCount, userLikes)}
                 text='likes'
               />
-              <StatsCard count={formatNumber(2193, 1)} text='favorited' />
             </div>
 
             {/* Section Switcher */}
@@ -175,23 +208,30 @@ const User = () => {
             <div className={styles.projectsOverview}>
               {/* Projects */}
               {projects.length ? (
-                <div className={styles.projectsContainer}>
-                  <>
-                    {projects.map(
-                      ({ title, description, updatedAt }, index) => (
-                        <ProjectCard
-                          title={title}
-                          description={description}
-                          updated={moment(updatedAt).fromNow()}
-                          link={`/project/${title}`}
-                          key={index}
-                        />
-                      ),
-                    )}
-                  </>
-                </div>
+                <>
+                  <div className={styles.interBar}>
+                    <h1 className={styles.sectionTitle}>
+                      {user?.name} created projects:
+                    </h1>
+                  </div>
+                  <div className={styles.projectsContainer}>
+                    <>
+                      {projects.map(
+                        ({ title, description, updatedAt }, index) => (
+                          <ProjectCard
+                            title={title}
+                            description={description}
+                            updated={moment(updatedAt).fromNow()}
+                            link={`/project/${title}`}
+                            key={index}
+                          />
+                        ),
+                      )}
+                    </>
+                  </div>
+                </>
               ) : (
-                <p className='text-white text-3xl text-center mt-20 px-48'>
+                <p className='text-white text-3xl text-center mt-20 px-48 whitespace-nowrap'>
                   No projects created :(
                 </p>
               )}
@@ -235,9 +275,14 @@ const User = () => {
               }`}>
               {usersList.length ? (
                 <>
-                  {usersList.map(({ username, name }) => (
-                    <Link to={`/user/${username}`}>
-                      <SearchUser name={name} username={username} />
+                  {usersList.map(({ avatar, username, name }, i) => (
+                    <Link to={`/user/${username}`} key={i}>
+                      <SearchUser
+                        name={name}
+                        username={username}
+                        key={i}
+                        profile={avatar}
+                      />
                     </Link>
                   ))}
                 </>

@@ -3,7 +3,7 @@ import Transitions from "components/Transition";
 import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Particles from "react-tsparticles";
 import routes from "routes";
 import { setLogin } from "store/slices/loginSlice";
@@ -17,22 +17,19 @@ import Login from "./login";
 import Register from "./register";
 
 const Authentication = () => {
-  // Login and sign up state (for switching between the two)
-  const [isLogin, setIsLogin] = useState(true);
-  const [forget, setForget] = useState(false);
-
-  // Authentication controlleres
-  const registerController = new Register(notificationToaster, setIsLogin);
-  const loginController = new Login();
-  const forgetController = new ForgetController();
-
-  // Navigator, to navigate through pages
-  const navigate = useNavigate();
-
   // Edit page title
   useEffect(() => {
     document.title = "Authentication | CWM";
   }, []);
+
+  // Login, sign up and forget state (for switching between the three)
+  const [isLogin, setIsLogin] = useState(true);
+  const [forget, setForget] = useState(false);
+
+  // Authentication controlleres
+  const registerController = new Register();
+  const loginController = new Login();
+  const forgetController = new ForgetController();
 
   // Handle form switching
   const handleFormSwitch = () => {
@@ -40,10 +37,11 @@ const Authentication = () => {
     setForget(false); // set forget state to false if switching between login and sign up
   };
 
-  // Multi lang
+  // Multi language support
   const lang = localStorage.getItem("lang-preference") || "english";
   const langComp = authStore[lang];
 
+  // Dispatcher
   const dispatch = useDispatch();
 
   // Form tailwind styled component
@@ -139,12 +137,16 @@ const Authentication = () => {
                       dispatch(setLogin({ user: result, token: authToken }));
                       routes[2].condition = true;
                       setTimeout(() => {
-                        navigate("/profile");
+                        // go to profile page
+                        window.location.href = "/profile";
                       }, 1700);
                     },
                   )
                   .catch((error) => {
-                    notificationToaster(error.response.data.error, true);
+                    notificationToaster(
+                      error?.response?.data?.error || error,
+                      true,
+                    );
                   });
               }}>
               <h1 className='text-white text-4xl'>{langComp.login}</h1>
@@ -246,7 +248,17 @@ const Authentication = () => {
                   marginTop: "-80px",
                 }}
                 onSubmit={(e) => {
-                  registerController.handleRegister(e);
+                  registerController
+                    .handleRegister(e)
+                    .then((result) => {
+                      notificationToaster(result);
+                      setTimeout(() => {
+                        setIsLogin(true);
+                      }, 2000);
+                    })
+                    .catch((error) => {
+                      notificationToaster(error, true);
+                    });
                 }}>
                 <h1 className='text-white text-4xl'>{langComp.register}</h1>
                 <div className='flex flex-col gap-4 w-full'>

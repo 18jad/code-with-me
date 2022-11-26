@@ -7,6 +7,7 @@ const homeInfo = {
     mobile: "Mobile app available for both",
     and: "and",
     start: "Get Started",
+    app: "Enter the app",
   },
   french: {
     title: "Un IDE en ligne collaboratif.",
@@ -17,6 +18,7 @@ const homeInfo = {
     mobile: "Application mobile disponible pour",
     and: "et",
     start: "Commencer",
+    app: "Entrer dans l'application",
   },
   chinese: {
     title: "一个在线协作的IDE",
@@ -25,6 +27,7 @@ const homeInfo = {
     mobile: "移动端应用程序可用于",
     and: "和",
     start: "开始",
+    app: "进入应用",
   },
 };
 

@@ -77,6 +77,7 @@ export const useDidMountEffect = (func, deps) => {
 
 export const createFile = ({ name, path }) => ({ path, name, type: "file" });
 export const createFolder = ({ path, name }) => ({
+  // Deprecated
   path,
   name,
   type: "folder",

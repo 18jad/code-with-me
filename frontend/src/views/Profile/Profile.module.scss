@@ -108,10 +108,14 @@ $dark-bg: #3e3e3e;
   .profileFeedSection {
     background: transparent;
     height: 100%;
+    width: 600px;
     flex-grow: 1;
     border-top: none;
     border-bottom: none;
     align-self: stretch;
+    @include breakpoint(laptop) {
+      width: unset;
+    }
 
     .profileContainer {
       display: flex;
@@ -130,14 +134,17 @@ $dark-bg: #3e3e3e;
         border-radius: 100px;
         border: 7px solid $white;
         border-radius: 100000px;
+        aspect-ratio: 1/1;
         -webkit-user-drag: none;
         -webkit-user-select: none;
         user-select: none;
 
         img {
           height: 100%;
-          -webkit-user-drag: none;
+          aspect-ratio: 1/1;
+          object-fit: cover;
           border-radius: 100000px;
+          -webkit-user-drag: none;
         }
       }
 

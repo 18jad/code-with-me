@@ -1,9 +1,10 @@
 import TextLogo from "components/TextLogo";
 import Transitions from "components/Transition";
 import { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { Link, useParams } from "react-router-dom";
 import Particles from "react-tsparticles";
+import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
 import NotFound from "views/NotFound/NotFound";
 import { initEngine, starsOptions } from "../particles/StarsParticles";
@@ -11,45 +12,49 @@ import styles from "./Authentication.module.scss";
 import ForgetController from "./forgetPassword";
 
 const ResetPassword = () => {
-  // Toaster function
-  const notiToaster = (message, error = false) => {
-    toast[error ? "error" : "success"](message, {
-      style: {
-        borderRadius: "8px",
-        background: "#fff2",
-        border: "1px solid #fff6",
-        backdropFilter: "blur(10px)",
-        color: "#fff",
-        fontSize: "14px",
-      },
-    });
-  };
-
-  const [isValid, setIsValid] = useState(true);
-
-  const { token } = useParams();
-
-  // Navigator, to navigate through pages
-  const navigate = useNavigate();
-
   // Edit page title
   useEffect(() => {
     document.title = "Reset Password | CWM";
   }, []);
 
+  // Store reset token validation state
+  const [isValid, setIsValid] = useState(true);
+
+  // Grab the reset token from URL param
+  const { token } = useParams();
+
   // Authentication controlleres
   const forgetController = new ForgetController();
 
+  // Validate the reset token
   forgetController
     .validateResetToken(token)
-    .then((res) => {
-      const { success } = res;
+    .then(({ success }) => {
       setIsValid(success);
     })
-    .catch((error) => {
-      const { success } = error;
-      setIsValid(success);
+    .catch(({ success }) => {
+      setIsValid(success || false);
     });
+
+  // Reset password function
+  const resetPassword = (e) => {
+    forgetController
+      .handleReset(e, token)
+      .then((response) => {
+        const { success, message } = response;
+        if (success) {
+          notificationToaster(message + ". Redirecting to login page...");
+          setTimeout(() => {
+            window.location.href = "/authenticate"; // redirect to auth page
+          }, 2000);
+        } else {
+          notificationToaster("Something went wrong", true);
+        }
+      })
+      .catch((error) => {
+        notificationToaster(error.response?.data?.message || error, true);
+      });
+  };
 
   // Form tailwind styled component
   const Form = tw.form`
@@ -133,24 +138,7 @@ const ResetPassword = () => {
                 justifyContent: "space-between",
                 marginTop: "-100px",
               }}
-              onSubmit={(e) => {
-                forgetController
-                  .handleReset(e, token)
-                  .then((response) => {
-                    const { success, message } = response;
-                    if (success) {
-                      notiToaster(message + ". Redirecting to login page...");
-                      setTimeout(() => {
-                        window.location.href = "/authenticate";
-                      }, 2000);
-                    } else {
-                      notiToaster("Something went wrong", true);
-                    }
-                  })
-                  .catch((error) => {
-                    notiToaster(error.response?.data?.message || error, true);
-                  });
-              }}>
+              onSubmit={resetPassword}>
               <h1 className='text-white text-4xl text-center'>
                 Reset Password
               </h1>

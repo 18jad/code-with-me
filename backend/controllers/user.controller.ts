@@ -131,6 +131,41 @@ class UserController {
   }
 
   /**
+   * @description Upload user profile picture to the server, store new link in database
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async uploadProfile(request: any, response: any) {
+    const imageURL = `http://localhost:${process.env.PORT}/image/profiles/${request.file.filename}`;
+    this.decodeToken(request)
+      .then(async (token: any) => {
+        const { id } = token;
+        prisma.user
+          .update({
+            where: {
+              id: id,
+            },
+            data: {
+              avatar: imageURL,
+            },
+          })
+          .then((result) => {
+            sendResponse(response, true, "Profile image uploaded", {
+              result,
+              url: imageURL,
+            });
+          })
+          .catch((error) => {
+            sendResponse(response, false, "Something went wrong", error);
+          });
+      })
+      .catch((error) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  /**
    * @description Check if user already liking another user
    * @param id {number | string} logged in user id
    * @param userId {number | string} likked user id
@@ -192,6 +227,17 @@ class UserController {
                     decrement: 1, // decrement likes counter by 1
                   },
                 },
+                select: {
+                  id: true,
+                  likes: true,
+                  likesCount: true,
+                  username: true,
+                  headline: true,
+                  projectsCount: true,
+                  avatar: true,
+                  projects: true,
+                  name: true,
+                },
               })
               .then((result) => {
                 sendResponse(response, true, "User unliked successfully", {
@@ -207,7 +253,7 @@ class UserController {
             const uniqueLikes = Array.from(
               (new Set<number[]>([...likedUsers, id]) as any).values(),
             ) as number[];
-            console.log(uniqueLikes, id, [...likedUsers, id]);
+
             prisma.user
               .update({
                 where: {
@@ -220,6 +266,17 @@ class UserController {
                   likesCount: {
                     increment: 1, // increase likes counter by 1
                   },
+                },
+                select: {
+                  id: true,
+                  likes: true,
+                  likesCount: true,
+                  username: true,
+                  headline: true,
+                  avatar: true,
+                  projectsCount: true,
+                  projects: true,
+                  name: true,
                 },
               })
               .then((result) => {
@@ -235,6 +292,41 @@ class UserController {
       })
       .catch((error) => {
         sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  /**
+   * @description Get the projects that logged in user is collabed with
+   * @param Request {Request}
+   * @param Response {Response}
+   */
+  // This would have been redundant and much simpler if we save the project that user is collabed with in his database table, but whatever...
+  getCollabProjects(Request: Request, Response: Response) {
+    this.decodeToken(Request)
+      .then(async (token: any) => {
+        if (token) {
+          // logged in user id
+          const { id } = token as { id: number };
+          prisma.project
+            .findMany({
+              where: {
+                allowedUsers: {
+                  hasEvery: [id], // get all projects that allowed user contains logged in user id
+                },
+              },
+            })
+            .then((result) => {
+              sendResponse(Response, true, "Collab projects", {
+                projects: result, // send them back in project object
+              });
+            })
+            .catch((error) => {
+              sendResponse(Response, false, "Something went wrong", error);
+            });
+        }
+      })
+      .catch((error) => {
+        sendResponse(Response, false, "Unauthorized user", error);
       });
   }
 }

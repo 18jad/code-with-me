@@ -1,24 +1,24 @@
-import qs from "qs";
 import { axiosInstance } from "utils/axiosInstance";
+import validator from "utils/Validator";
 
 class Login {
-  // eslint-disable-next-line no-useless-escape
-  #emailFilter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
+  // HTTP Requests URLs
   #login_url = "/auth/login";
 
-  validateEmail = (email) => {
-    return !!this.#emailFilter.test(email);
-  };
-
+  /**
+   * @desciption Validate login user input fields
+   * @param {EventTarget.HTMLElements} elements
+   * @returns {Promise<string | object>}
+   */
   validate = (elements) => {
-    const { email, password } = elements;
-    email.style.borderColor = "#6c7280";
+    let { email, password } = elements;
+    email.value = email.value.trim().toLowerCase(); // remove any trailing spaces and convert to lower case
+    email.style.borderColor = "#6c7280"; // reset border to initial color in case it was red
     return new Promise((resolve, reject) => {
       if (!email || email.value === "" || !password || password.value === "") {
         reject("Please fill in all fields");
       } else {
-        if (!this.validateEmail(email.value)) {
+        if (!validator._validateEmail(email.value)) {
           reject("Please enter a valid email address");
           email.style.borderColor = "#c64d43";
         } else {
@@ -31,13 +31,18 @@ class Login {
     });
   };
 
+  /**
+   * @description Send login request to the server to validate credentials
+   * @param {EventTarget} e
+   * @returns {Promise<object | unkown>}
+   */
   handleLogin = (e) => {
     e.preventDefault();
     return new Promise((resolve, reject) => {
       this.validate(e.target.elements)
         .then((result) => {
           axiosInstance
-            .post(this.#login_url, qs.stringify(result))
+            .post(this.#login_url, { ...result })
             .then((response) => {
               if (response.status === 200 && response.data.success) {
                 const { user } = response.data;
@@ -56,4 +61,5 @@ class Login {
     });
   };
 }
+
 export default Login;

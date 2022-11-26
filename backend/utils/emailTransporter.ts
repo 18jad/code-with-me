@@ -32,9 +32,9 @@ const transporter = nodemailer.createTransport(
  *    html: "<h1>Example HTML</h1>",
  *  }, (error, info) => {
  *    if (error) {
- *      console.log(error);
+ *
  *    } else {
- *      console.log(info);
+ *
  *  }
  */
 const sendEmail = (mailOptions: Object, cb: Function) => {

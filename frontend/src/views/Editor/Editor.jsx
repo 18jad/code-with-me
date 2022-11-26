@@ -2,15 +2,16 @@
 import { default as IDE } from "@monaco-editor/react";
 import GithubTool from "assets/icons/GithubTool";
 import ShareIcon from "assets/icons/ShareIcon";
-import Voice from "assets/icons/Voice";
 import SidebarContent from "components/editor/SidebarContent";
 import Modal from "components/Modal";
 import TextLogo from "components/TextLogo";
 import useKey from "hooks/useKey";
+import useToast from "hooks/useToast";
 import {
   Chats,
+  Command,
   GearSix,
-  Link,
+  LinkSimple,
   Play,
   Presentation,
   Stack,
@@ -21,7 +22,7 @@ import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { AiFillSave } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import { setProject } from "store/slices/projectSlice";
 import { notificationToaster } from "utils/notificationToaster";
@@ -42,9 +43,6 @@ const ParticipantsCircle = tw.img`
     select-none
 `;
 
-// Socket io connection
-const socket = io.connect("http://localhost:2121");
-
 const editorLanguage = {
   html: "html",
   css: "css",
@@ -60,44 +58,79 @@ const editorLanguage = {
   json: "json",
 };
 
+// Socket io connection
+let socket =
+  window.location.href.split("/")[3] === "project"
+    ? io("http://localhost:2121", { forceNew: true, autoConnect: false })
+    : null;
+
 const Editor = () => {
+  // Project title, grabbed from URL param
+  const { id } = useParams();
+
+  // Variable to hold the participants users state
   const [participants, setParticipants] = useState([]);
 
+  // Controllers for editor and profile
   const profileController = new ProfileController();
   const editorController = new EditorController();
 
+  // Variable to hold the current opened file name
   const [openedFile, setOpenedFile] = useState(null);
+
+  // Variable to hold the current opened file content
   const [fileCode, setFileCode] = useState("");
 
+  // Terminal state, weither it's hidden or visible
   const [terminal, setTerminal] = useState(false);
 
-  console.log(
-    "Opened file",
-    openedFile,
-    editorLanguage[openedFile?.split(".").pop()],
-  );
+  // HTML Previewer fullscreen state, weither it's full or no
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
+  // HTML Previewer title state
+  const [previewTitle, setPreviewTitle] = useState("Preview");
+
+  // Hook to limit the number of toaster notifications on the page
+  // eslint-disable-next-line no-unused-vars
+  const toast = useToast();
+
+  // Detect if user joined recently
   let newJoin = true;
 
+  // Redux dispatcher
   const dispatch = useDispatch();
 
+  // Terminal reference
   const terminalRef = useRef(null);
 
-  const { id } = useParams();
-
+  // Current logged in user data
   const { user: loggedUser } = useSelector((state) => state.user);
   const { project } = useSelector((state) => state);
 
+  // Is user allowed in project
   const [allowed, setAllowed] = useState(true);
 
+  // Code editor reference
   const editorRef = useRef(null);
 
+  // HTML Previewer reference
   const iframeRef = useRef(null);
+
+  // Socket io reinstantiation
+  if (!socket && !socket?.connected) {
+    socket = io("http://localhost:2121", {
+      forceNew: true, // force new connection to avoid reusing old broken/unstable connection
+    });
+  }
 
   useEffect(() => {
     socket.on("user_joined", ({ users, user: joinedUser }) => {
+      const roomUsers = users[id];
+
+      // If user joined recently, notify everyone
       newJoin
-        ? users.forEach(({ user }) => {
+        ? roomUsers.forEach(({ user }) => {
+            // update with unique and no duplicated participants, and store their information such as avatar pic, id and username
             if (!user) return null;
             profileController
               .fetchUser(user)
@@ -113,7 +146,7 @@ const Editor = () => {
                   ]);
                 }
               })
-              .catch((error) => console.log(error));
+              .catch((error) => alert(error));
           })
         : profileController
             .fetchUser(joinedUser)
@@ -130,10 +163,12 @@ const Editor = () => {
               }
             });
       newJoin = false;
-      !newJoin && notificationToaster(joinedUser + " joined the project");
+      !newJoin &&
+        joinedUser !== loggedUser.username &&
+        notificationToaster(joinedUser + " joined the project");
     });
 
-    socket.on("user_disconnected", ({ user }) => {
+    socket.on("user_disconnected", (user) => {
       setParticipants((prev) => {
         const newParticipants = prev.filter(
           (participant) => participant.username !== user,
@@ -145,18 +180,37 @@ const Editor = () => {
   }, [allowed]);
 
   useEffect(() => {
+    socket?.connect();
+
+    // Disconnect from socket on back button
+    window.onpopstate = (e) => {
+      socket?.close();
+      socket?.disconnect(true);
+      socket = null;
+    };
+
+    // Change page title to project title
+    document.title = `${id} | CWM`;
+
+    // Check if user is allowed to participate in the project
     editorController
       .checkIfAllowed(id)
-      .then((res) => {
-        if (res.success) {
-          setAllowed(true);
-          console.log(res);
+      .then(({ project, success }) => {
+        if (success) {
+          setAllowed(
+            project.authorId === loggedUser.id ||
+              project?.allowedUsers?.includes(loggedUser.id) ||
+              false,
+          );
+          // Update project store to hold current project data
           dispatch(
             setProject({
-              project: res.project,
-              link: `http://localhost:3000/invite/${res.project.inviteToken}`,
+              project: project,
+              link: `http://localhost:3000/invite/${project.inviteToken}`,
             }),
           );
+
+          // Emit joining room on success allowance
           socket.emit("join_room", {
             room: id,
             username: loggedUser.username,
@@ -166,21 +220,23 @@ const Editor = () => {
       })
       .catch((err) => {
         setAllowed(false);
-        console.log(err);
       });
   }, []);
 
+  // Run html code inside the previewer
   const runCode = () => {
     const document = iframeRef.current.contentDocument;
     const documentContents = `
-          
-              ${editorRef.current.getValue()}
-            
-        `;
+              ${editorRef.current
+                .getValue()
+                // in order to link external script or stylsheet files you have to use this format: $cwm-link/file-name.extension
+                // here this format is being replaced by the proper link that will grab your external file content
+                .replaceAll("$cwm-link", `http://localhost:2121/file/${id}`)}`;
 
-    document.open();
-    document.write(documentContents);
-    document.close();
+    document.open(); // open the iframe document
+    document.write(documentContents); // write the html code inside the iframe
+    setPreviewTitle(document.title ? document.title : "Preview"); // replace preview title if any was provided in the html head code
+    document.close(); // close the iframe document
   };
 
   const handleEditorDidMount = (editor, monaco) => {
@@ -197,19 +253,28 @@ const Editor = () => {
     });
   };
 
+  // Change code editor content when a file is opened or changed
   useEffect(() => {
     editorController
       .readFile(id, openedFile)
       .then(({ message, file_content }) => {
-        setFileCode(file_content);
+        setFileCode({ code: file_content, isMe: true });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   }, [openedFile]);
 
+  // Handle the code change events
   const handleCodeChange = (value) => {
-    socket.emit("code_edit", { room: id, code: value, file: openedFile });
+    setFileCode({ code: value, isMe: true });
+    socket.emit("code_edit", {
+      room: id,
+      code: value,
+      file: openedFile,
+      user: loggedUser.username,
+    });
   };
 
+  // Handle file saving, using the save icon or ctrl + s
   const handleFileSave = () => {
     if (!openedFile) return;
     editorController
@@ -217,16 +282,19 @@ const Editor = () => {
       .then(({ message }) => {
         notificationToaster(message);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err));
   };
 
   // CTRL + S callback
   useKey("ctrls", handleFileSave);
 
-  socket.on("code_edit", ({ code, file }) => {
-    console.log("Code change", code);
-    file === openedFile && setFileCode(code);
-    // setOpenedFile(code);
+  // Listener on code change
+  socket.on("code_edit", ({ code, file, user }) => {
+    file === openedFile &&
+      user !== loggedUser.username &&
+      fileCode !== code &&
+      fileCode.isMe &&
+      setFileCode({ code, isMe: false });
   });
 
   // Sidebar content switcher
@@ -237,6 +305,7 @@ const Editor = () => {
   const [inviteModalStatus, setInviteModalStatus] = useState(false);
   const [previewModalStatus, setPreviewModalStatus] = useState(false);
 
+  // Editor saved settings
   const storedSetting = localStorage.getItem("editor-setting");
 
   // Editor settings
@@ -246,6 +315,7 @@ const Editor = () => {
     darkMode: storedSetting ? JSON.parse(storedSetting).darkMode : true,
   });
 
+  // Update saved settings
   const updateStoredSetting = (newSetting) => {
     localStorage.setItem("editor-setting", JSON.stringify(newSetting));
     setEditorSetting(newSetting);
@@ -269,6 +339,7 @@ const Editor = () => {
     });
   };
 
+  // Update terminal output + text color based on output type (error, success)
   const updateTerminal = (show, output = "", error = false) => {
     setTerminal(show);
     terminalRef.current.innerText = output;
@@ -284,12 +355,15 @@ const Editor = () => {
       {/* Navbar */}
       <div className={styles.navbar}>
         <div className={styles.logoWrapper}>
-          <TextLogo
-            text='Editor playground'
-            width={50}
-            mainSize='xl'
-            textSize='sm'
-          />
+          <Link to='/profile'>
+            <TextLogo
+              text='Editor playground'
+              className='hover:drop-shadow-vc'
+              width={44}
+              mainSize='lg'
+              textSize='xs'
+            />
+          </Link>
         </div>
         <div className={styles.navbarTools}>
           {/* Voice chat bubbles wrapper */}
@@ -321,11 +395,11 @@ const Editor = () => {
         {/* Sidebar */}
         <Resizable
           defaultSize={{
-            width: "22  %",
+            width: "350px",
             height: "100%",
           }}
-          maxWidth='25%'
-          minWidth='20vw'
+          maxWidth='400px'
+          minWidth='300px'
           enable={{
             top: false,
             right: true,
@@ -393,13 +467,14 @@ const Editor = () => {
                   id='overview'
                   name='sectionSwitcher'
                   onClick={() => {
-                    if (sidebarContent !== "voice") setSidebarContent("voice");
+                    if (sidebarContent !== "shortcuts")
+                      setSidebarContent("shortcuts");
                   }}
                   className={styles.radioSelection}
                 />
                 <div className={styles.selectLine}></div>
                 <label htmlFor='overview' className={styles.toolIcon}>
-                  <Voice width={22} />
+                  <Command size={24} />
                 </label>
               </button>
             </div>
@@ -427,23 +502,6 @@ const Editor = () => {
         <div className='flex flex-col w-full'>
           <div className={styles.editor}>
             <div className={styles.tabs}>
-              {/* <EditorTab
-              name='index.html'
-              isSelected={true}
-              // onClick={(e) => {
-              //   this.isSelected = true;
-              // }}
-            />
-            <EditorTab
-              name='script.js'
-              isSelected={false}
-              // onClick={(e) => {
-              //   // change is selected to true
-              //   e.target.dataset.selected = true;
-              //   console.log(e.target);
-              // }}
-            />
-            <EditorTab name='styles.csss' isSelected={false} /> */}
               <p className='text-white'>{openedFile}</p>
               <div className='h-[34px]' readOnly></div>
               {openedFile && openedFile.split(".").pop() === "js" && (
@@ -456,7 +514,6 @@ const Editor = () => {
                     editorController
                       .excuteCode(id, openedFile)
                       .then((res) => {
-                        console.log(res);
                         updateTerminal(true, res.stdout);
                       })
                       .catch((err) => {
@@ -468,7 +525,6 @@ const Editor = () => {
                           "C:\\Users\\Jad Yahya\\Documents\\SE Factory\\Web Development\\Projects\\FINAL PROJECT\\code-with-me\\backend\\public\\projects\\",
                           "",
                         );
-                        console.log(err.response?.data?.stderr);
                         updateTerminal(true, exc_error || "Error", true);
                       });
                   }}
@@ -510,9 +566,7 @@ const Editor = () => {
                   top: 5,
                 },
               }}
-              // TODO: MAKE CODE SAVE IN JSON SETTING FOR TAB SWITCHING FUNCTIONALITY
-              // value={editorSettings.code}
-              value={fileCode}
+              value={fileCode.code}
               language={
                 editorLanguage[openedFile?.split(".").pop()] ||
                 openedFile?.split(".").pop()
@@ -697,7 +751,9 @@ const Editor = () => {
             </button>
           </form>
         </div>
-        <span className='seperator text-white'>OR</span>
+        <span className='seperator text-white text-center m-auto flex items-center justify-center my-5'>
+          OR
+        </span>
         <div className='copy-link flex flex-col gap-2 items-center justify-center w-full'>
           <button
             className='bg-blue-500 border shadow-sm px-2 py-1  border-blue-500 outline-none rounded-sm transition duration-150 text-white cursor-pointer hover:bg-blue-500/80 flex flex-row items-center justify-center gap-2 w-[300px]'
@@ -709,20 +765,29 @@ const Editor = () => {
                 e.target.innerText = "Copy invitation link";
               }, 1300);
             }}>
-            <Link color='#fff' size={20} />
+            <LinkSimple color='#fff' size={20} />
             <span>Copy invitation link</span>
           </button>
         </div>
       </Modal>
       <Modal
         isOpen={previewModalStatus}
-        className='w-[900px] h-[600px]'
+        className={`${
+          isFullscreen ? "w-[100vw] h-[100vh]" : "w-[1000px] h-[700px]"
+        }`}
         bgDrop='bg-black/30'
-        bg='#1e1e1e'
+        title={previewTitle}
+        onFull={() => {
+          setIsFullscreen(!isFullscreen);
+        }}
         onClick={() => {
           setPreviewModalStatus(false);
         }}>
-        <iframe title='result' className='iframe' ref={iframeRef} />
+        <iframe
+          title='result'
+          className='w-full h-full border-t-2 border-white/20'
+          ref={iframeRef}
+        />
       </Modal>
       <Toaster position='bottom-center' reverseOrder={false} />
     </div>

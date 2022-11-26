@@ -1,31 +1,35 @@
 import Icon from "assets/icons/icons";
-import { axiosInstance } from "utils/axiosInstance";
+import { Toaster } from "react-hot-toast";
 import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
 import contactStore from "../lang/contactStore";
+import { ContactController } from "./ContactController";
 
-const sendEmail = (e) => {
-  e.preventDefault();
-  const { name, email, subject, message } = e.target.elements;
-  axiosInstance
-    .post("/user/contact_me", {
-      name: name.value,
-      email: email.value,
-      subject: subject.value,
-      message: message.value,
-    })
-    .then((res) => {
-      notificationToaster(res.data.message);
-      e.target.reset();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+// const sendEmail = (e) => {
+//   e.preventDefault();
+//   const { name, email, subject, message } = e.target.elements;
+//   axiosInstance
+//     .post("/user/contact_me", {
+//       name: name.value,
+//       email: email.value,
+//       subject: subject.value,
+//       message: message.value,
+//     })
+//     .then((res) => {
+//       notificationToaster(res.data.message);
+//       e.target.reset();
+//     })
+//     .catch((error) => {
+//       notificationToaster(error.response?.data?.message || error, true);
+//
+//     });
+// };
 
 const ContactForm = () => {
   const lang = localStorage.getItem("lang-preference") || "english";
   const langComp = contactStore[lang];
+
+  const contactController = new ContactController();
 
   const FormInput = tw.input`
     bg-white/10
@@ -70,12 +74,22 @@ const ContactForm = () => {
     `;
 
   return (
-    <div className='bg-white/10 rounded-md md:w-2/3 mx-auto flex flex-col items-center r p-10 border border-white/30 backdrop-blur-sm gap-14 w-11/12  h-full'>
+    <div className='bg-white/10 rounded-md md:w-2/3 mx-auto overflow-hidden flex flex-col items-center r p-10 border border-white/30 backdrop-blur-sm gap-14 w-11/12  h-full'>
       <h1 className='text-3xl md:text-5xl text-white'>{langComp.title}</h1>
       <form
         className='inputs flex flex-col w-full m-auto justify-center items-end md:gap-14'
-        onSubmit={(e) => {
-          sendEmail(e);
+        onSubmit={async (e) => {
+          contactController
+            .sendEmail(e)
+            .then((result) => {
+              notificationToaster(result.message);
+            })
+            .catch((error) => {
+              notificationToaster(
+                error?.response?.data?.message || error,
+                true,
+              );
+            });
         }}>
         <div className='flex flex-col md:flex-row w-full h-full gap-10 my-10 justify-center'>
           <div className='left_inputs flex flex-col gap-14 w-full md:w-1/3'>
@@ -110,6 +124,7 @@ const ContactForm = () => {
           <div className='w-4/5 hidden md:block'></div>
         </div>
       </form>
+      <Toaster position='bottom-center' reverseOrder={false} />
     </div>
   );
 };

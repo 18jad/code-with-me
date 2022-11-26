@@ -21,7 +21,6 @@ import { setLogin } from "store/slices/loginSlice";
 import formatNumber from "utils/formatNumber";
 import { notificationToaster } from "utils/notificationToaster";
 import { tw } from "utils/TailwindComponent";
-import { logout } from "./logout";
 import styles from "./Profile.module.scss";
 import { ProfileController } from "./profileController";
 
@@ -70,7 +69,7 @@ const ModalTextarea = tw.textarea`
 `;
 
 // Stats card component for profile stats
-const StatsCard = ({ count, text }) => {
+export const StatsCard = ({ count, text }) => {
   return (
     <div className={styles.statsCard}>
       <span className={styles.cardCount}>{count}</span>
@@ -80,7 +79,7 @@ const StatsCard = ({ count, text }) => {
 };
 
 const Profile = () => {
-  // TODO: use state and store searched user data inside it
+  // Searched user data
   let [usersList, setUsersList] = useState([]);
 
   // Search bar value setter and state
@@ -98,8 +97,8 @@ const Profile = () => {
   // To switch between tabs
   const [isOverview, setIsOverview] = useState(true);
 
-  // Hold the data of user favorites projects
-  const [favorites, setFavorites] = useState([]);
+  // Hold the data of user collabed projects
+  const [collabs, setCollabs] = useState([]);
 
   const [myProject, setMyProject] = useState([]);
 
@@ -139,8 +138,6 @@ const Profile = () => {
   document.body.style.overflow =
     editModalStatus || projectModalStatus ? "hidden" : "auto";
 
-  console.log(useSelector((state) => state));
-
   // Logged in user
   const loggedUser = useSelector((state) => state.user.user);
   const {
@@ -160,6 +157,7 @@ const Profile = () => {
     projects: [],
   };
 
+  // Update projects array holder
   useEffect(() => {
     if (projects && projects.length) {
       setMyProject(projects);
@@ -169,21 +167,40 @@ const Profile = () => {
   // Authentication token
   const authToken = useSelector((state) => state.user.token);
 
-  // Search user
+  // Search user debouncer
   const debouncedQuery = useDebounce(searchTerm, 500);
 
   // Self fetch profile
   useEffect(() => {
+    // Edit page title
+    document.title = "My Profile | CWM";
+
+    // Fetch logged in user information and save them in redux persist storage
     profile.fetchUser(username).then((res) => {
       dispatch(setLogin({ user: res, token: authToken }));
     });
+
+    // Get gollabed projects list (the projects you collabed with)
+    profile
+      .getCollabProjects()
+      .then(({ projects }) => {
+        setCollabs(projects);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(
     () => {
       if (debouncedQuery) {
         profile.searchUser(debouncedQuery).then((users) => {
-          setUsersList(users);
+          if (users.length) {
+            setUsersList(users);
+          } else {
+            setUsersList([]);
+          }
         });
       } else {
         setUsersList([]);
@@ -192,6 +209,41 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [debouncedQuery], // Only call effect if debounced query term changes
   );
+
+  // Functions
+  // Create new project function
+  const createNewProject = (e) => {
+    // e is the event object and it should contain the following properties: project_title, project_description inputs
+    profile
+      .createProject(e)
+      .then((res) => {
+        notificationToaster(
+          res.data.message + ". Redirecting to project page...",
+        );
+        setTimeout(() => {
+          navigate(`/project/${res.data.project.title}`); // redirect to project page
+          window.location.reload(); // reload the page to reflect new data and connections
+        }, 2000);
+      })
+      .catch((error) =>
+        notificationToaster(error.response?.data?.message || error, true),
+      );
+  };
+
+  // Edit profile function
+  const editProfile = (e) => {
+    // e is the event object and it should contain the following properties: name, username and headline. avatar image is optional
+    profile
+      .editProfile(e)
+      .then(({ response: { data } }) => {
+        const { updatedUser: user, newToken: token } = data;
+        notificationToaster(data.message);
+        dispatch(setLogin({ user, token })); // dispatch the new user information state
+      })
+      .catch((error) =>
+        notificationToaster(error.response?.data?.message || error, true),
+      );
+  };
 
   return (
     <Transition>
@@ -208,7 +260,7 @@ const Profile = () => {
             <button
               className={styles.signOutBtn}
               onClick={() => {
-                logout(navigate);
+                profile.logout(navigate);
               }}>
               <span>
                 <SignOut size={20} color='#fff' mirrored={true} />
@@ -250,7 +302,10 @@ const Profile = () => {
               text='projects'
             />
             <StatsCard count={formatNumber(likesCount || 0, 1)} text='likes' />
-            {/* <StatsCard count={formatNumber(2193, 1)} text='favorited' /> */}
+            <StatsCard
+              count={formatNumber(collabs?.length || 0, 1)}
+              text='collabs'
+            />
           </div>
 
           {/* Section Switcher */}
@@ -275,15 +330,15 @@ const Profile = () => {
             <button className={styles.sectionSwitcherBtn}>
               <input
                 type='radio'
-                id='favorites'
+                id='collabs'
                 name='sectionSwitcher'
                 className={styles.radioSelection}
                 onClick={() => setIsOverview(false)}
                 hidden
               />
               <div className={styles.selectLine}></div>
-              <label htmlFor='favorites' className={styles.switcherTitle}>
-                Favorites
+              <label htmlFor='collabs' className={styles.switcherTitle}>
+                Collabs
               </label>
             </button>
           </div>
@@ -304,18 +359,17 @@ const Profile = () => {
                 </button>
               </div>
 
-              {/* TODO: Fix profile feed width if it contains no cards */}
-
               {/* Projects */}
               {myProject?.length ? (
                 <div className={styles.projectsContainer}>
                   <>
                     {myProject.map(
-                      ({ title, description, updatedAt }, index) => (
+                      ({ title, description, updatedAt, createdAt }, index) => (
                         <ProjectCard
                           title={title}
                           description={description}
-                          updated={moment(updatedAt).fromNow()}
+                          updated={`Updated ${moment(updatedAt).fromNow()}`}
+                          created={`Created ${moment(createdAt).fromNow()}`}
                           link={`/project/${title}`}
                           key={index}
                         />
@@ -324,21 +378,45 @@ const Profile = () => {
                   </>
                 </div>
               ) : (
-                <p className='text-white text-3xl text-center my-20 md:px-48'>
+                <p className='text-white text-3xl text-center my-20 md:px-48 whitespace-nowrap'>
                   No projects created :(
                 </p>
               )}
             </div>
           ) : (
-            <span>
-              {favorites?.length ? (
-                <>{/* TODO: Add favorites cards */}</>
+            <div className={styles.projectsOverview}>
+              {/* Toolbar */}
+              {collabs?.length ? (
+                <>
+                  <div className={styles.interBar}>
+                    Project you have collaborated and have access to:
+                  </div>
+                  <div className={styles.projectsContainer}>
+                    <>
+                      {collabs.map(
+                        (
+                          { title, description, updatedAt, createdAt },
+                          index,
+                        ) => (
+                          <ProjectCard
+                            title={title}
+                            description={description}
+                            updated={`Updated ${moment(updatedAt).fromNow()}`}
+                            created={`Created ${moment(createdAt).fromNow()}`}
+                            link={`/project/${title}`}
+                            key={index}
+                          />
+                        ),
+                      )}
+                    </>
+                  </div>
+                </>
               ) : (
-                <p className='text-white text-3xl text-center p-0 my-20 md:px-60'>
-                  No favorites found :(
+                <p className='text-white text-3xl text-center p-0 my-20 md:px-60 whitespace-nowrap'>
+                  No collabs found {":("}
                 </p>
               )}
-            </span>
+            </div>
           )}
         </div>
 
@@ -375,16 +453,25 @@ const Profile = () => {
             className={`${styles.searchResultWrapper} transition duration-300 ${
               searchState ? "opacity-1 h-auto" : "opacity-0 h-0"
             }`}>
-            {usersList?.length ? (
+            {usersList &&
+            usersList.filter((user) => {
+              if (user.username === username) return false;
+              return true;
+            })?.length ? (
               <>
                 {usersList
                   .filter((user) => {
                     if (user.username === username) return false; // dont show current logged in user in search results
                     return true;
                   })
-                  .map(({ username, name }) => (
-                    <Link to={`/user/${username}`}>
-                      <SearchUser name={name} username={username} />
+                  .map(({ username, name, avatar }, i) => (
+                    <Link to={`/user/${username}`} key={i}>
+                      <SearchUser
+                        name={name}
+                        key={i}
+                        username={username}
+                        profile={avatar}
+                      />
                     </Link>
                   ))}
               </>
@@ -398,65 +485,55 @@ const Profile = () => {
         <Modal
           title='Edit profile'
           isOpen={editModalStatus}
-          className='bg-[#333]'
+          className='bg-[#333] w-[500px]'
           onClick={() => {
             setEditModalStatus(false);
           }}>
           <div className='content flex flex-col md:flex-row gap-14 items-center'>
-            <div
-              className='profile text-center h-fit  bg-center bg-cover object-cover rounded'
-              style={{
-                backgroundImage: modalProfile ? `url(${modalProfile})` : "",
-              }}>
-              <input
-                type='file'
-                id='changedProfile'
-                hidden
-                onChange={(e) => changeImage(e)}
-              />
-              <label
-                htmlFor='changedProfile'
-                className='cursor-pointer flex flex-col items-center'>
-                <UserFocus
-                  size={100}
-                  color='#fff'
-                  weight='fill'
-                  className={`${modalProfile ? "opacity-0" : "opacity-1"}`}
-                />
-                <span
-                  className={`text-sm text-center text-white ${
-                    modalProfile ? "hidden" : "block"
-                  }`}>
-                  Change profile picture
-                </span>
-              </label>
-            </div>
             <form
-              className='inputs flex flex-col gap-4 w-full'
-              onSubmit={(e) => {
-                profile
-                  .editProfile(e)
-                  .then(({ response: { data } }) => {
-                    const { updatedUser: user, newToken: token } = data;
-                    notificationToaster(data.message);
-                    dispatch(setLogin({ user, token }));
-                  })
-                  .catch(({ response: { data } }) =>
-                    notificationToaster(data.message, true),
-                  );
-              }}>
+              className='inputs flex flex-row items-center justify-center gap-10 w-full'
+              onSubmit={editProfile}>
+              <div
+                className='profile text-center h-fit w-[100px] bg-center bg-cover object-cover rounded'
+                style={{
+                  backgroundImage: modalProfile ? `url(${modalProfile})` : "",
+                }}>
+                <input
+                  type='file'
+                  id='changedProfile'
+                  name='avatar'
+                  hidden
+                  onChange={(e) => changeImage(e)}
+                />
+                <label
+                  htmlFor='changedProfile'
+                  className='cursor-pointer flex flex-col items-center'>
+                  <UserFocus
+                    size={100}
+                    color='#fff'
+                    weight='fill'
+                    className={`${modalProfile ? "opacity-0" : "opacity-1"}`}
+                  />
+                  <span
+                    className={`text-sm text-center text-white ${
+                      modalProfile ? "hidden" : "block"
+                    }`}>
+                    Change profile picture
+                  </span>
+                </label>
+              </div>
               <div className='flex flex-col md:flex-row gap-3'>
                 <div className='flex flex-col gap-4 w-full'>
                   <ModalInput
                     type='text'
-                    placeholder='Full name'
+                    placeholder='*Full name'
                     defaultValue={name}
                     name='name'
                     required
                   />
                   <ModalInput
                     type='text'
-                    placeholder='Username'
+                    placeholder='*Username'
                     defaultValue={username}
                     name='username'
                     required
@@ -486,35 +563,18 @@ const Profile = () => {
           }}>
           <form
             className='inputs flex flex-col gap-4 w-full'
-            onSubmit={(e) => {
-              profile
-                .createProject(e)
-                .then((res) => {
-                  notificationToaster(
-                    res.data.message + ". Redirecting to project page...",
-                  );
-                  setTimeout(() => {
-                    navigate(`/project/${res.data.project.title}`);
-                  }, 2000);
-                })
-                .catch((error) =>
-                  notificationToaster(
-                    error.response?.data?.message || error,
-                    true,
-                  ),
-                );
-            }}>
+            onSubmit={createNewProject}>
             <div className='flex flex-col gap-3'>
               <ModalInput
                 type='text'
-                placeholder='Project title'
+                placeholder='*Project title'
                 name='title'
                 required
               />
               <ModalTextarea
                 type='text'
                 name='description'
-                placeholder='Project description'
+                placeholder='*Project description'
                 required
               />
               <p className='text-xs text-gray'>

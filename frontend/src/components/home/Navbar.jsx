@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { tw } from "utils/TailwindComponent";
 import navStore from "../lang/navStore";
 
-const Navbar = ({ contact, fn }) => {
+const Navbar = ({ contact, fn, auth }) => {
   const [nav, setNav] = useState(false);
 
   // link element styling
@@ -56,21 +56,12 @@ const Navbar = ({ contact, fn }) => {
         </div>
       </Link>
       <div className='hidden md:flex '>
-        <li className='flex items-center justify-center gap-10'>
-          <Link
-            to='/docs'
-            className={linkCss}
-            onClick={(e) => e.preventDefault()}>
-            {langComp.docs}
-          </Link>
-          <Link
-            to='/downloads'
-            className={linkCss}
-            onClick={(e) => e.preventDefault()}>
-            {langComp.download}
-          </Link>
+        <li className='flex items-center justify-center gap-10 mr-14'>
           <Link onClick={contact} className={linkCss}>
             {langComp.contact}
+          </Link>
+          <Link to={auth ? "/profile" : "/authenticate"} className={linkCss}>
+            {auth ? langComp.goapp : langComp.register}
           </Link>
         </li>
       </div>

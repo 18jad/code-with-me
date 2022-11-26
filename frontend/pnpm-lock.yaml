@@ -29,6 +29,7 @@ specifiers:
   react-icons: ^4.6.0
   react-intersection-observer: ^9.4.0
   react-oauth-popup: ^1.0.5
+  react-parallax-tilt: ^1.7.69
   react-redux: ^8.0.5
   react-router-dom: '6'
   react-scripts: 5.0.1
@@ -72,6 +73,7 @@ dependencies:
   react-icons: 4.6.0_react@18.2.0
   react-intersection-observer: 9.4.0_react@18.2.0
   react-oauth-popup: 1.0.5_biqbaboplfbrettd7655fr4n2y
+  react-parallax-tilt: 1.7.69_biqbaboplfbrettd7655fr4n2y
   react-redux: 8.0.5_e42enmjmqb4imi3q3iaq2rrebm
   react-router-dom: 6.4.2_biqbaboplfbrettd7655fr4n2y
   react-scripts: 5.0.1_xuoaqsm7nopglivb2rynqbguqi
@@ -9745,6 +9747,16 @@ packages:
     peerDependencies:
       react: '>16'
       react-dom: '>16'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /react-parallax-tilt/1.7.69_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-FwqBQZ/MKESxazjpDdVNIdL4WVH/DfnKoseF7gGg0hMljiLjfRUx2XbpudqSaYXX0d9niF3zc+5TNgguoNOt1g==}
+    peerDependencies:
+      react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
