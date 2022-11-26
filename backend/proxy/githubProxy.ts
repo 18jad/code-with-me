@@ -75,18 +75,17 @@ class GithubProxy {
         );
         const contentEncoded = Base64.encode(content);
         const { data } = await octokit.rest.repos.createOrUpdateFileContents({
-          // replace the owner and email with your own details
           owner: owner_username,
           repo: repository_name,
           path: file,
           message: commit_message,
           content: contentEncoded,
           committer: {
-            name: `Octokit Bot`,
+            name: owner_username,
             email: owner_email,
           },
           author: {
-            name: "Octokit Bot",
+            name: owner_username,
             email: owner_email,
           },
         });
