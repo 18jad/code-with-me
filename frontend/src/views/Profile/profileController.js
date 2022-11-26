@@ -132,7 +132,7 @@ export class ProfileController {
   };
 
   /**
-   * @description Logout logged in user, expire the cookie, make routes strictly protected and redirect to login page
+   * @description Logout logged in user, expire the cookie, make routes strictly protected then redirect to login page
    * @param {useNavigate: react-route-dom} navigate
    * @returns {void}
    */

@@ -1,3 +1,6 @@
+// NOTE YOU WILL NOTICE A LOT OF COMMENTED CODE, SOME FEATURE WAS IMPLEMENTED ON FRONTEND FIRST VERS BUT WAS CAUSING A LOT OF PROBLEMS BACKEND.
+// SO I COMMENTED IT OUT FOR FUTURE REFERENCE ONLY
+
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Tree from "./FileTree/Tree";
@@ -8,6 +11,7 @@ const structure = [
     name: "project",
     path: "/projects/project",
     files: [
+      // Example of how files are structured, note nested files and folder feature has been removed
       //     {
       //       type: "folder",
       //       name: "ui",
@@ -26,7 +30,6 @@ const structure = [
       //       ],
       //     },
       //     { type: "file", name: "setup.js" },
-      //     { type: "file", name: "setupTests.js" },
       //   ],
       // },
       // {
@@ -49,42 +52,37 @@ const FileStructure = ({ className, socket, fileFn }) => {
   let [data, setData] = useState(structure);
 
   // Recursion file path update
-  const updatePath = (fileStorage, mainPath) => {
-    const files = fileStorage[0]?.files || fileStorage?.files;
-    files.length > 0 &&
-      files.forEach((file) => {
-        console.log("This files", file);
-        if (file.type === "file") {
-          // copy file
-          const copyFile = { ...file };
-          copyFile.path = `${mainPath}/${file.name}`;
-          // file.path = `${mainPath}/${file.name}`; //TODO: handle file not extensible error
-        } else if (file.type === "folder") {
-          updatePath(file, `${mainPath}/${file.name}`);
-        }
-      });
-  };
+  // const updatePath = (fileStorage, mainPath) => {
+  //   const files = fileStorage[0]?.files || fileStorage?.files;
+  //   files.length > 0 &&
+  //     files.forEach((file) => {
+  //       if (file.type === "file") {
+  //         // copy file
+  //         const copyFile = { ...file };
+  //         copyFile.path = `${mainPath}/${file.name}`;
+  //         // file.path = `${mainPath}/${file.name}`; //TODO: handle file not extensible error
+  //       } else if (file.type === "folder") {
+  //         updatePath(file, `${mainPath}/${file.name}`);
+  //       }
+  //     });
+  // };
 
   const handleClick = (node) => {
     if (node.node.type === "file") {
-      console.log(node.node.type);
       fileFn(node.node.name);
     }
-    const filePath = node.node.path;
-    console.log("Clicked file path: ", filePath);
+    // const filePath = node.node.path;
   };
   const handleUpdate = (state) => {
-    const mainState = state[0];
-    const mainPath = mainState.path;
-    updatePath(mainState, mainPath);
+    // const mainState = state[0];
+    // const mainPath = mainState.path;
+    // updatePath(mainState, mainPath);
     socket.emit("create_file", { newStructure: state, room: state[0].name });
-    console.log("bew file", state);
   };
 
   useEffect(() => {
     let incept = 0;
     socket.on("create_file", (data) => {
-      console.log(data);
       incept === 0 && setData(data.newStructure);
       incept++;
       setTimeout(() => {
@@ -96,9 +94,7 @@ const FileStructure = ({ className, socket, fileFn }) => {
   useLayoutEffect(() => {
     try {
       setData([fileStructure]);
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   }, [fileStructure]);
   return (
     <div className={className}>

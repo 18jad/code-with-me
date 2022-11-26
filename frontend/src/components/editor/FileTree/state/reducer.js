@@ -1,7 +1,7 @@
 import _cloneDeep from "lodash.clonedeep";
 import { EditorController } from "views/Editor/editorController";
-import { createFile, createFolder, searchDFS } from "../utils";
-import { FILE, FOLDER } from "./constants";
+import { createFile, searchDFS } from "../utils";
+import { FILE } from "./constants";
 
 const editorController = new EditorController();
 
@@ -13,15 +13,10 @@ const reducer = (state, action) => {
     let foundNode = searchDFS({
       data: newState,
       cond: (item) => {
-        console.log(item, action.payload.id);
         return item.id === action.payload.id;
       },
     });
-    // TODO: HANDLE FILE RENAME DELETE ERROR
-    console.log(foundNode);
-
     node = foundNode.item;
-    console.log(node);
     parent = node.parentNode;
   }
 
@@ -39,40 +34,44 @@ const reducer = (state, action) => {
 
       editorController
         .createFile(node.name, action.payload.name)
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          alert(err);
+        });
 
       editorController
         .updateProjectStructure(node.name, JSON.stringify(ustate))
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          alert(err);
+        });
 
       return newState;
 
-    case FOLDER.CREATE:
-      node.files.push(
-        createFolder({ name: action.payload.name, path: action.payload.path }),
-      );
-      return newState;
+    // CREATING FOLDER FEATURE HAS BEEN REMOVED, KEEPING THE CODE HERE FOR FUTURE REFERENCE
 
-    case FOLDER.EDIT:
-    case FILE.EDIT:
-      node.name = action.payload.name;
-      return newState;
+    // case FOLDER.CREATE:
+    //   node.files.push(
+    //     createFolder({ name: action.payload.name, path: action.payload.path }),
+    //   );
+    //   return newState;
 
-    case FOLDER.DELETE:
-    case FILE.DELETE:
-      if (!parent || Array.isArray(parent)) {
-        newState = newState.filter((file) => file.id !== action.payload.id);
-        return newState;
-      } else {
-        parent.files = parent.files.filter(
-          (file) => file.id !== action.payload.id,
-        );
-      }
-      return newState;
+    // UPDATING NAME AND DELETING FILES FEATURE HAS BEEN REMOVED, KEEPING THE CODE HERE FOR FUTURE REFERENCE
+
+    // case FOLDER.EDIT:
+    // case FILE.EDIT:
+    //   node.name = action.payload.name;
+    //   return newState;
+
+    // case FOLDER.DELETE:
+    // case FILE.DELETE:
+    //   if (!parent || Array.isArray(parent)) {
+    //     newState = newState.filter((file) => file.id !== action.payload.id);
+    //     return newState;
+    //   } else {
+    //     parent.files = parent.files.filter(
+    //       (file) => file.id !== action.payload.id,
+    //     );
+    //   }
+    //   return newState;
 
     default:
       return state;

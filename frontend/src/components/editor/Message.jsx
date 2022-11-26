@@ -1,3 +1,5 @@
+// Message bubble
+
 const Message = ({ message, time, senderName, isMe, type }) => {
   return type === "user" ? (
     <div

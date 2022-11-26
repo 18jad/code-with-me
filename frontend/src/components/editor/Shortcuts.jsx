@@ -1,5 +1,7 @@
 import { tw } from "utils/TailwindComponent";
 
+// Keyboard shortcuts for editor
+
 const Key = tw.p`
     text-xs
     bg-white/10

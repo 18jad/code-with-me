@@ -1,34 +1,22 @@
-import qs from "qs";
 import { axiosInstance } from "utils/axiosInstance";
+import validator from "utils/Validator";
 
 class Register {
-  // eslint-disable-next-line no-useless-escape
-  #emailFilter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
+  // HTTP Requests URLs
   #registeration_url = "/auth/register";
 
-  constructor(toaster, setIsLogin) {
-    this.toaster = toaster;
-    this.setIsLogin = setIsLogin;
-  }
-
-  validateEmail = (email) => {
-    return !!this.#emailFilter.test(email);
-  };
-
-  validatePassword = (password) => {
-    return !!(password.length >= 8);
-  };
-
-  validateConfirmPassword = (password, confirmPassword) => {
-    return !!(password === confirmPassword);
-  };
-
+  /**
+   * @desciption Validate register user input fields
+   * @param {EventTarget.HTMLElements} elements
+   * @returns {Promise<string | object>}
+   */
   validate = (elements) => {
-    const { name, username, email, password, passwordConfirm } = elements;
+    let { name, username, email, password, passwordConfirm } = elements;
     [email, username, password, passwordConfirm].forEach((element) => {
       element.style.borderColor = "#6c7280";
     });
+    email.value = email.value.trim().toLowerCase(); // remove any trailing spaces and convert to lower case
+    username.value = username.value.trim().toLowerCase(); // remove any trailing spaces and convert to lower case
     return new Promise((resolve, reject) => {
       if (
         !email ||
@@ -44,16 +32,16 @@ class Register {
       ) {
         reject("Please fill in all fields");
       } else {
-        if (!this.validateEmail(email.value)) {
+        if (!validator._validateEmail(email.value)) {
           reject("Please enter a valid email address");
           email.style.borderColor = "#c64d43";
         } else {
-          if (!this.validatePassword(password.value)) {
+          if (!validator._validatePassword(password.value)) {
             password.style.borderColor = "#c64d43";
             reject("Password must be at least 8 characters");
           } else {
             if (
-              !this.validateConfirmPassword(
+              !validator._validateConfirmPassword(
                 password.value,
                 passwordConfirm.value,
               )
@@ -63,6 +51,7 @@ class Register {
               reject("Passwords do not match");
             } else {
               resolve({
+                // resolve values
                 name: name.value,
                 email: email.value,
                 username: username.value,
@@ -75,29 +64,33 @@ class Register {
     });
   };
 
+  /**
+   * @description Send register request to the server and create a new user if no conflicts found
+   * @param {EventTarget} e
+   * @returns {Promise<object | unkown>}
+   */
   handleRegister = (e) => {
     e.preventDefault();
-    this.validate(e.target.elements)
-      .then((result) => {
-        axiosInstance
-          .post(this.#registeration_url, qs.stringify(result))
-          .then((response) => {
-            if (response.status === 200 && response.data.success) {
-              this.toaster(`${response.data.message}, please login.`);
-              setTimeout(() => {
-                this.setIsLogin(true);
-              }, 2000);
-            } else {
-              this.toaster(response.message, true);
-            }
-          })
-          .catch((error) => {
-            this.toaster(error.response.data.error, true);
-          });
-      })
-      .catch((error) => {
-        this.toaster(error, true);
-      });
+    return new Promise((resolve, reject) => {
+      this.validate(e.target.elements)
+        .then((result) => {
+          axiosInstance
+            .post(this.#registeration_url, { ...result })
+            .then((response) => {
+              if (response.status === 200 && response.data.success) {
+                resolve(`${response.data.message}, please login.`);
+              } else {
+                reject(response.message);
+              }
+            })
+            .catch((error) => {
+              reject(error.response.data.error);
+            });
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   };
 }
 

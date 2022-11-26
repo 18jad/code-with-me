@@ -1,17 +1,15 @@
+// NOTE YOU WILL NOTICE A LOT OF COMMENTED CODE, SOME FEATURE WAS IMPLEMENTED ON FRONTEND FIRST VERS BUT WAS CAUSING A LOT OF PROBLEMS BACKEND.
+// SO I COMMENTED IT OUT FOR FUTURE REFERENCE ONLY
+
 import React, { useEffect, useState } from "react";
-import {
-  AiOutlineDelete,
-  AiOutlineEdit,
-  AiOutlineFileAdd,
-  AiOutlineFolderAdd,
-} from "react-icons/ai";
+import { AiOutlineFileAdd } from "react-icons/ai";
 
 import { ActionsWrapper, Collapse, StyledName } from "../Tree.style";
 import { StyledFolder } from "./TreeFolder.style";
 
 import FolderClosed from "assets/icons/FolderClosed";
 import FolderOpened from "assets/icons/FolderOpened";
-import { FILE, FOLDER } from "../state/constants";
+import { FILE } from "../state/constants";
 import { useTreeContext } from "../state/TreeContext";
 import { PlaceholderInput } from "../TreePlaceholderInput";
 
@@ -36,19 +34,19 @@ const Folder = ({ id, name, children, node }) => {
     setChilds([children]);
   }, [children]);
 
-  const commitFolderCreation = (name) => {
-    dispatch({ type: FOLDER.CREATE, payload: { id, name } });
-  };
+  // const commitFolderCreation = (name) => {
+  //   dispatch({ type: FOLDER.CREATE, payload: { id, name } });
+  // };
   const commitFileCreation = (name) => {
     dispatch({ type: FILE.CREATE, payload: { id, name } });
   };
-  const commitDeleteFolder = () => {
-    dispatch({ type: FOLDER.DELETE, payload: { id } });
-  };
-  const commitFolderEdit = (name) => {
-    dispatch({ type: FOLDER.EDIT, payload: { id, name } });
-    setEditing(false);
-  };
+  // const commitDeleteFolder = () => {
+  //   dispatch({ type: FOLDER.DELETE, payload: { id } });
+  // };
+  // const commitFolderEdit = (name) => {
+  //   dispatch({ type: FOLDER.EDIT, payload: { id, name } });
+  //   setEditing(false);
+  // };
 
   const handleCancel = () => {
     setEditing(false);
@@ -76,28 +74,28 @@ const Folder = ({ id, name, children, node }) => {
     ]);
   };
 
-  const handleFolderCreation = (event) => {
-    event.stopPropagation();
-    setIsOpen(true);
-    setChilds([
-      ...childs,
-      <PlaceholderInput
-        type='folder'
-        onSubmit={commitFolderCreation}
-        onCancel={handleCancel}
-      />,
-    ]);
-  };
+  // const handleFolderCreation = (event) => {
+  //   event.stopPropagation();
+  //   setIsOpen(true);
+  //   setChilds([
+  //     ...childs,
+  //     <PlaceholderInput
+  //       type='folder'
+  //       onSubmit={commitFolderCreation}
+  //       onCancel={handleCancel}
+  //     />,
+  //   ]);
+  // };
 
-  const handleFolderRename = () => {
-    setIsOpen(true);
-    setEditing(true);
-  };
+  // const handleFolderRename = () => {
+  //   setIsOpen(true);
+  //   setEditing(true);
+  // };
 
   return (
     <StyledFolder id={id} onClick={handleNodeClick} className='tree__folder'>
       <ActionsWrapper>
-        {isEditing ? (
+        {/* {isEditing ? (
           <PlaceholderInput
             type='folder'
             style={{ paddingLeft: 0 }}
@@ -105,20 +103,20 @@ const Folder = ({ id, name, children, node }) => {
             onCancel={handleCancel}
             onSubmit={commitFolderEdit}
           />
-        ) : (
-          <FolderName
-            name={name}
-            isOpen={isOpen}
-            handleClick={() => setIsOpen(!isOpen)}
-          />
-        )}
+        ) : ( */}
+        <FolderName
+          name={name}
+          isOpen={isOpen}
+          handleClick={() => setIsOpen(!isOpen)}
+        />
+        {/* )} */}
 
         {isImparative && (
           <div className='actions'>
-            <AiOutlineEdit onClick={handleFolderRename} />
+            {/* <AiOutlineEdit onClick={handleFolderRename} /> */}
             <AiOutlineFileAdd onClick={handleFileCreation} />
-            <AiOutlineFolderAdd onClick={handleFolderCreation} />
-            <AiOutlineDelete onClick={commitDeleteFolder} />
+            {/* <AiOutlineFolderAdd onClick={handleFolderCreation} /> */}
+            {/* <AiOutlineDelete onClick={commitDeleteFolder} /> */}
           </div>
         )}
       </ActionsWrapper>

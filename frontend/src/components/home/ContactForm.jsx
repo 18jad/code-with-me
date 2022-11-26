@@ -21,7 +21,7 @@ import { ContactController } from "./ContactController";
 //     })
 //     .catch((error) => {
 //       notificationToaster(error.response?.data?.message || error, true);
-//       console.log(error);
+//
 //     });
 // };
 

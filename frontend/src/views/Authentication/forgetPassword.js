@@ -1,19 +1,23 @@
 import qs from "qs";
 import { axiosInstance } from "utils/axiosInstance";
-import Register from "./register";
+import validator from "utils/Validator";
 
 class ForgetController {
+  // HTTP Requests URLs
   #forget_url = "/auth/generate_reset";
   #validate_url = "/auth/verify_token";
   #reset_url = "/auth/reset_password";
-  // eslint-disable-next-line no-useless-escape
-  #emailFilter = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
+  /**
+   * @desciption Validate reset password user input fields
+   * @param {EventTarget.HTMLElements} elements
+   * @returns {Promise<string | object>}
+   */
   validate = (elements) => {
     const { email } = elements;
     email.style.borderColor = "#6c7280";
     return new Promise((resolve, reject) => {
-      if (!email || !email.value || !this.#emailFilter.test(email.value)) {
+      if (!email || !email.value || validator._validateEmail(email.value)) {
         reject("Please enter a valid email address");
         email.style.borderColor = "#c64d43";
       } else {
@@ -24,6 +28,11 @@ class ForgetController {
     });
   };
 
+  /**
+   * @description Validate the reset password token to see if it's valid token or expired/invalid
+   * @param {string} token
+   * @returns {Promise<string | object>}
+   */
   validateResetToken = (token) => {
     return new Promise((resolve, reject) => {
       axiosInstance
@@ -41,6 +50,11 @@ class ForgetController {
     });
   };
 
+  /**
+   * @description Handle reset password email request
+   * @param {EventTarget} e
+   * @returns
+   */
   handleForget = (e) => {
     e.preventDefault();
     return new Promise((resolve, reject) => {
@@ -65,11 +79,17 @@ class ForgetController {
     });
   };
 
+  /**
+   * @description Handle password reseting and changing
+   * @param {EventTarget} e
+   * @param {string} token
+   * @returns
+   */
   handleReset = (e, token) => {
     e.preventDefault();
     return new Promise((resolve, reject) => {
       const { password } = e.target.elements;
-      const validatePassowrd = new Register().validatePassword(password.value);
+      const validatePassowrd = validator._validatePassword(password.value);
       if (validatePassowrd) {
         axiosInstance
           .post(

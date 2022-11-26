@@ -181,7 +181,7 @@ class ProjectController {
       .then((token: any) => {
         const { id } = token;
         const { title, fileStructure } = request.body;
-        console.log(fileStructure);
+
         const parsedfileStructure = JSON.parse(fileStructure);
 
         prisma.project
@@ -239,7 +239,7 @@ class ProjectController {
     decodeToken(request)
       .then((token: any) => {
         const { title, file_name, file_content } = request.body;
-        console.log(file_content);
+
         const projectDirectory = path.join(
           __dirname,
           `../public/projects/${title}`,
