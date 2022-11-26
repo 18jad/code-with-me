@@ -52,5 +52,7 @@ socket.init().then((io: typeof server) => {
 server.listen(port, (error: any) => {
   if (error) {
     throw new Error(error.message);
+  } else {
+    console.log(`Server running on port ${port}`);
   }
 });
