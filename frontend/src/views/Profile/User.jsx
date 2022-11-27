@@ -221,7 +221,7 @@ const User = () => {
                           <ProjectCard
                             title={title}
                             description={description}
-                            updated={moment(updatedAt).fromNow()}
+                            updated={"Updated " + moment(updatedAt).fromNow()}
                             link={`/project/${title}`}
                             key={index}
                           />
