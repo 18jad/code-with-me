@@ -49,50 +49,101 @@
 
 Here's a brief high-level overview of the tech stack the Well app uses:
 
-- This project uses the [Flutter app development framework](https://flutter.dev/). Flutter is a cross-platform hybrid app development platform which allows us to use a single codebase for apps on mobile, desktop, and the web.
-- For persistent storage (database), the app uses the [Hive](https://hivedb.dev/) package which allows the app to create a custom storage schema and save it to a local database.
-- To send local push notifications, the app uses the [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications) package which supports Android, iOS, and macOS.
-  - 🚨 Currently, notifications aren't working on macOS. This is a known issue that we are working to resolve!
-- The app uses the font ["Work Sans"](https://fonts.google.com/specimen/Work+Sans) as its main font, and the design of the app adheres to the material design guidelines.
+## Frontend:
+
+- This project uses the [React JS development framework](https://reactjs.org/). React is a declarative, efficient, and flexible JavaScript library for building SPA (single web application) and user interfaces or UI components. It lets you compose complex UIs from small and isolated pieces of code called “components”.
+- For styling i used [SCSS Modules](https://sass-lang.com/) a long side with [TailwindCSS](https://tailwindcss.com/) which provided a flexible design pattern with pure CSS properties and no crazy ready components.
+
+## Backend:
+
+- This project rely on [Node.js](https://nodejs.org/) a JavaScript runtime built on Chrome's V8 JavaScript engine as a backend infrastructure and [Express](https://expressjs.com/) framework which is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
+- For database, the app uses the [PostgreSQL](https://www.postgresql.org/) which is an open-source, highly stable database system that provides support to different functions of SQL (relational) and JSON (non-relational)
+- To control the database this app use [Prisma](https://www.prisma.io/) a next generation ORM, which provides a powerful database toolkit to help you build and scale your database easily and fast.
+- As for the live events such as live coding editing and live chatting... the app use [Socket.io](https://socket.io/) which is a library that enables real-time, bidirectional and event-based communication between the browser and the server.
+- The app uses the font ["Josefin Sans"](https://fonts.adobe.com/fonts/josefin-sans) as its main font, and the design of the app adheres to the material design guidelines.
 
 <br><br>
 <img src="./demo/readme/title5.svg"/>
 
 > Uing the above mentioned tecch stacks and the wireframes build with figma from the user sotries we have, the implementation of the app is shown as below, these are screenshots from the real app
 
-| Landing                                                                                | Home/Search                                                                               |
-| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| ![Landing](https://github.com/julescript/spotifyndr/blob/master/demo/Landing_Page.jpg) | ![Home/Search](https://github.com/julescript/spotifyndr/blob/master/demo/Search_Page.jpg) |
+| Landing                                                       | Login                                                   |
+| ------------------------------------------------------------- | ------------------------------------------------------- |
+| [<img src="./demo/homepage.png" width="1600"/>](homepage.png) | [<img src="./demo/login.png" width="1620"/>](login.png) |
+
+| Register                                                  | Profile                                                     |
+| --------------------------------------------------------- | ----------------------------------------------------------- |
+| [<img src="./demo/signup.png" width="1600"/>](signup.png) | [<img src="./demo/profile.png" width="1600"/>](profile.png) |
+
+| User search results                                     | IDE                                                 |
+| ------------------------------------------------------- | --------------------------------------------------- |
+| [<img src="./demo/guest.png" width="1600"/>](guest.png) | [<img src="./demo/ide.png" width="1600"/>](ide.png) |
 
 <br><br>
 <img src="./demo/readme/title6.svg"/>
 
-> This is an example of how you may give instructions on setting up your project locally.
 > To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+- Download and install [Node.js](https://nodejs.org/en/download/)
 
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
+- Download and install [PostgreSQL](https://www.postgresql.org/download/)
+
+- (Optional) This project is using [pnpm](https://pnpm.io/) as a package manager which is much faster than npm, you can install it by running: `npm install -g pnpm`
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+1. Clone the repo
+   ```sh
+   git clone https://github.com/18jad/code-with-me.git
+   ```
+2. Install required packages
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   # frontend:
+   cd code-with-me/frontend # cd into the generated folder
+   npm install #OR pnpm install
+
+   # backend:
+   cd code-with-me/backend # cd into the generated folder
+   npm install #OR pnpm install
    ```
-3. Install NPM packages
+
+3. Copy the .env.example files from both backend and frontend, rename them to .env and edit the values
    ```sh
-   npm install
+   cp .env.example .env
+   code .env # to open it in vscode. open it manually if it doesn't work
+   # then edit each variable based on it's nane and example
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = "ENTER YOUR API";
+4. Migrate database:
+
+   ```sh
+   cd code-with-me/backend
+   npx prisma migrate dev
+
+   # then if you want to open a simple database viewer that run inside your browser:
+   npx prisma studio
    ```
+
+5. Start the app
+
+   ```sh
+   #frontend:
+   cd code-with-me/frontend
+   npm start #OR pnpm start
+
+   #backend:
+   cd code-with-me/backend
+   npm run start:prod #OR pnpm run start:prod
+   ```
+
+   Note: All projects and files and images that are created will be saved in backend folder on your machine so you may notice a new files and folders appear on you machine if you did any of this actions:
+
+   - Uploaded a new profile picture (will save image in backend/public/images)
+   - Created a project (will generate a new folder in backend/public/projects)
+   - Created a new file (will generate a new file with the give name and extension in backend/public/projects/project_name)
+
+   <br />
+
+6. Enjoy ;)
