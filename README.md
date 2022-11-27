@@ -29,15 +29,19 @@
 <img src="./demo/readme/title3.svg"/>
 
 > This design was planned before on paper, then moved to Figma app for the fine details.
-> Note that i didn't use any styling library or theme, all from scratch and using pure scss modules and TailwindCSS
+> Note that i didn't use any styling library or theme, all from scratch and using pure SCSS modules and TailwindCSS
 
-| Landing                                                                                | Home/Search                                                                               |
-| -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| ![Landing](https://github.com/julescript/spotifyndr/blob/master/demo/Landing_Page.jpg) | ![Home/Search](https://github.com/julescript/spotifyndr/blob/master/demo/Search_Page.jpg) |
+| Landing                                                                     | Login                                                                 |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| [<img src="./demo/homepage_mockup.png" width="1500"/>](homepage_mockup.png) | [<img src="./demo/login_mockup.png" width="1360"/>](login_mockup.png) |
 
-| Artists results                                                                                | Artist's Albums                                                                               |
-| ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| ![Artists results](https://github.com/julescript/spotifyndr/blob/master/demo/Artists_Page.jpg) | ![Artist's Albums](https://github.com/julescript/spotifyndr/blob/master/demo/Albums_Page.jpg) |
+| Register                                                                | Profile                                                                   |
+| ----------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| [<img src="./demo/signup_mockup.png" width="1500"/>](signup_mockup.png) | [<img src="./demo/profile_mockup.png" width="1540"/>](profile_mockup.png) |
+
+| User search results                                            | IDE                                                               |
+| -------------------------------------------------------------- | ----------------------------------------------------------------- |
+| [<img src="./demo/guest_mockup.png" width="1500"/>](guest.png) | [<img src="./demo/ide_mockup.png" width="1500"/>](ide_mockup.png) |
 
 <br><br>
 
