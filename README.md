@@ -129,13 +129,17 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 | ------------------------------------------------------- |
 | [<img src="./demo/runjs.gif" width="100%"/>](guest.png) |
 
-| HTML Preview and external files linking                          |
-| ---------------------------------------------------------------- |
-| [<video src="./demo/html-preview.mp4" width="100%"/>](guest.png) |
-
 | Editor Setting (it save locally)                          |
 | --------------------------------------------------------- |
 | [<img src="./demo/setting.gif" width="100%"/>](guest.png) |
+
+| HTML Preview and external files linking                          |
+| ---------------------------------------------------------------- |
+| [<video src="https://user-images.githubusercontent.com/74220144/204306993-759ad1d9-a425-43d8-9e2b-e3c0e8d640f0.mp4" width="800px"/>](guest.png) |
+
+
+
+
 
 <br><br>
 
