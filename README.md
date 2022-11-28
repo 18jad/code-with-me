@@ -75,71 +75,67 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 
 ## Demo Screenshots:
 
-| Landing                                                       | Login                                                   |
-| ------------------------------------------------------------- | ------------------------------------------------------- |
-| [<img src="./demo/homepage.png" width="1600"/>](homepage.png) | [<img src="./demo/login.png" width="1620"/>](login.png) |
+| Landing                                                            | Login                                                   |
+| ------------------------------------------------------------------ | ------------------------------------------------------- |
+| [<img src="./demo/homepage.png" width="1600"/>](demo/homepage.png) | [<img src="./demo/login.png" width="1620"/>](login.png) |
 
-| Register                                                  | Profile                                                     |
-| --------------------------------------------------------- | ----------------------------------------------------------- |
-| [<img src="./demo/signup.png" width="1600"/>](signup.png) | [<img src="./demo/profile.png" width="1600"/>](profile.png) |
+| Register                                                       | Profile                                                     |
+| -------------------------------------------------------------- | ----------------------------------------------------------- |
+| [<img src="./demo/signup.png" width="1600"/>](demo/signup.png) | [<img src="./demo/profile.png" width="1600"/>](profile.png) |
 
-| User search results                                     | IDE                                                 |
-| ------------------------------------------------------- | --------------------------------------------------- |
-| [<img src="./demo/guest.png" width="1600"/>](guest.png) | [<img src="./demo/ide.png" width="1600"/>](ide.png) |
+| User search results                                          | IDE                                                 |
+| ------------------------------------------------------------ | --------------------------------------------------- |
+| [<img src="./demo/guest.png" width="1600"/>](demo/guest.png) | [<img src="./demo/ide.png" width="1600"/>](ide.png) |
 
 ## Demo GIF:
 
-| Landing page & Contact me email                                              |
+| Landing page & Contact me email                                                           |
+| ----------------------------------------------------------------------------------------- |
+| [<img src="./demo/landing_contact-gif.gif" width="800px"/>](demo/landing_contact-gif.gif) |
+
+| Login                                                                  |
+| ---------------------------------------------------------------------- |
+| [<img src="./demo/signin-gif.gif" width="100%"/>](demo/signin-gif.gif) |
+
+| Reset password                                                                          |
+| --------------------------------------------------------------------------------------- |
+| [<img src="./demo/reset-password-gif.gif" width="800px"/>](demo/reset-password-gif.gif) |
+
+| Edit profile                                                                       |
+| ---------------------------------------------------------------------------------- |
+| [<img src="./demo/edit-profile-gif.gif" width="100%"/>](demo/edit-profile-gif.gif) |
+
+| Search user & liking user & creating project                                                                  |
+| ------------------------------------------------------------------------------------------------------------- |
+| [<img src="./demo/search-like-createproject-gif.gif" width="800px"/>](demo/search-like-createproject-gif.gif) |
+
+| Invite / Allow user into a project (by email)                                     |
+| --------------------------------------------------------------------------------- |
+| [<img src="./demo/invite-user-gif.gif" width="800px"/>](demo/invite-user-gif.gif) |
+
+| Live coding                                                                  |
 | ---------------------------------------------------------------------------- |
-| [<img src="./demo/landing_contact-gif.gif" width="800px"/>](landing_contact) |
+| [<img src="./demo/live-code-gif.gif" width="100%"/>](demo/live-code-gif.gif) |
 
-| Login                                                        |
+| Github push integration                                                  |
+| ------------------------------------------------------------------------ |
+| [<img src="./demo/github-push.gif" width="100%"/>](demo/github-push.gif) |
+
+| Live Chatting                                                        |
+| -------------------------------------------------------------------- |
+| [<img src="./demo/live-chat.gif" width="100%"/>](demo/live-chat.gif) |
+
+| JS Compiler (ability to include some nodejs modules)         |
 | ------------------------------------------------------------ |
-| [<img src="./demo/signin-gif.gif" width="100%"/>](guest.png) |
+| [<img src="./demo/runjs.gif" width="100%"/>](demo/runjs.gif) |
 
-| Reset password                                                        |
-| --------------------------------------------------------------------- |
-| [<img src="./demo/reset-password-gif.gif" width="800px"/>](guest.png) |
-
-| Edit profile                                                       |
-| ------------------------------------------------------------------ |
-| [<img src="./demo/edit-profile-gif.gif" width="100%"/>](guest.png) |
-
-| Search user & liking user & creating project                                     |
-| -------------------------------------------------------------------------------- |
-| [<img src="./demo/search-like-createproject-gif.gif" width="800px"/>](guest.png) |
-
-| Invite / Allow user into a project (by email)                      |
-| ------------------------------------------------------------------ |
-| [<img src="./demo/invite-user-gif.gif" width="800px"/>](guest.png) |
-
-| Live coding                                                     |
-| --------------------------------------------------------------- |
-| [<img src="./demo/live-code-gif.gif" width="100%"/>](guest.png) |
-
-| Github push integration                                       |
-| ------------------------------------------------------------- |
-| [<img src="./demo/github-push.gif" width="100%"/>](guest.png) |
-
-| Live Chatting                                               |
-| ----------------------------------------------------------- |
-| [<img src="./demo/live-chat.gif" width="100%"/>](guest.png) |
-
-| JS Compiler (ability to include some nodejs modules)    |
-| ------------------------------------------------------- |
-| [<img src="./demo/runjs.gif" width="100%"/>](guest.png) |
-
-| Editor Setting (it save locally)                          |
-| --------------------------------------------------------- |
-| [<img src="./demo/setting.gif" width="100%"/>](guest.png) |
-
-| HTML Preview and external files linking                          |
+| Editor Setting (it save locally)                                 |
 | ---------------------------------------------------------------- |
-| [<video src="https://user-images.githubusercontent.com/74220144/204306993-759ad1d9-a425-43d8-9e2b-e3c0e8d640f0.mp4" width="800px"/>](guest.png) |
+| [<img src="./demo/setting.gif" width="100%"/>](demo/setting.gif) |
 
-
-
-
+| HTML Preview and external files linking                                                                                                |
+| -------------------------------------------------------------------------------------------------------------------------------------- |
+| [<video src="https://user-images.githubusercontent.com/74220144/204306993-759ad1d9-a425-43d8-9e2b-e3c0e8d640f0.mp4" width="800px"/>]() |
 
 <br><br>
 
