@@ -4,11 +4,10 @@
 
 > Hello world! This is the project’s summary that describes the project plain and simple, limited to the space available.
 
-**[PROJECT PHILOSOPHY](https://github.com/julescript/well_app#-project-philosophy) • [WIREFRAMES](https://github.com/julescript/well_app#-wireframes) • [TECH STACK](https://github.com/julescript/well_app#-tech-stack) • [IMPLEMENTATION](https://github.com/julescript/well_app#-impplementation) • [HOW TO RUN?](https://github.com/julescript/well_app#-how-to-run)**
+**[PROJECT PHILOSOPHY](#philosophy) • [WIREFRAMES](#prototyping) • [TECH STACK](#stack) • [IMPLEMENTATION](#implementation) • [HOW TO RUN?](#run)**
 
 </div>
-
-<br><br>
+<a name="philosophy" id="philosophy"></a>
 
 <img src="./demo/readme/title2.svg"/>
 
@@ -25,6 +24,8 @@
 - As a user, I want to push my code to github instantly when i finish coding
 
 <br><br>
+
+<a name="prototyping" id="prototyping"></a>
 
 <img src="./demo/readme/title3.svg"/>
 
@@ -45,6 +46,8 @@
 
 <br><br>
 
+<a name="stack" id="stack"></a>
+
 <img src="./demo/readme/title4.svg"/>
 
 Here's a brief high-level overview of the tech stack the Well app uses:
@@ -63,6 +66,9 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 - The app uses the font ["Josefin Sans"](https://fonts.adobe.com/fonts/josefin-sans) as its main font, and the design of the app adheres to the material design guidelines.
 
 <br><br>
+
+<a name="implementation" id="implementation"></a>
+
 <img src="./demo/readme/title5.svg"/>
 
 > Uing the above mentioned tecch stacks and the wireframes build with figma from the user sotries we have, the implementation of the app is shown as below, these are screenshots from the real app
@@ -80,6 +86,9 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 | [<img src="./demo/guest.png" width="1600"/>](guest.png) | [<img src="./demo/ide.png" width="1600"/>](ide.png) |
 
 <br><br>
+
+<a name="run" id="run"></a>
+
 <img src="./demo/readme/title6.svg"/>
 
 > To get a local copy up and running follow these simple example steps.
