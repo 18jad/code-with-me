@@ -73,6 +73,8 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 
 > Uing the above mentioned tecch stacks and the wireframes build with figma from the user sotries we have, the implementation of the app is shown as below, these are screenshots from the real app
 
+## Demo Screenshots:
+
 | Landing                                                       | Login                                                   |
 | ------------------------------------------------------------- | ------------------------------------------------------- |
 | [<img src="./demo/homepage.png" width="1600"/>](homepage.png) | [<img src="./demo/login.png" width="1620"/>](login.png) |
@@ -85,37 +87,39 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 | ------------------------------------------------------- | --------------------------------------------------- |
 | [<img src="./demo/guest.png" width="1600"/>](guest.png) | [<img src="./demo/ide.png" width="1600"/>](ide.png) |
 
-| Landing page & Contact me email                                               |
-| ----------------------------------------------------------------------------- |
-| [<img src="./demo/landing_contact-gif.gif" width="1500px"/>](landing_contact) |
+## Demo GIF:
 
-| Login                                                          |
-| -------------------------------------------------------------- |
-| [<img src="./demo/signin-gif.gif" width="1500px"/>](guest.png) |
+| Landing page & Contact me email                                             |
+| --------------------------------------------------------------------------- |
+| [<img src="./demo/landing_contact-gif.gif" width="100%"/>](landing_contact) |
 
-| Reset password                                                         |
-| ---------------------------------------------------------------------- |
-| [<img src="./demo/reset-password-gif.gif" width="1500px"/>](guest.png) |
+| Login                                                        |
+| ------------------------------------------------------------ |
+| [<img src="./demo/signin-gif.gif" width="100%"/>](guest.png) |
 
-| Edit profile                                                         |
+| Reset password                                                       |
 | -------------------------------------------------------------------- |
-| [<img src="./demo/edit-profile-gif.gif" width="1500px"/>](guest.png) |
+| [<img src="./demo/reset-password-gif.gif" width="100%"/>](guest.png) |
 
-| Search user & liking user & creating project                                      |
-| --------------------------------------------------------------------------------- |
-| [<img src="./demo/search-like-createproject-gif.gif" width="1500px"/>](guest.png) |
+| Edit profile                                                       |
+| ------------------------------------------------------------------ |
+| [<img src="./demo/edit-profile-gif.gif" width="100%"/>](guest.png) |
 
-| Invite / Allow user into a project (by email)                       |
-| ------------------------------------------------------------------- |
-| [<img src="./demo/invite-user-gif.gif" width="1500px"/>](guest.png) |
+| Search user & liking user & creating project                                    |
+| ------------------------------------------------------------------------------- |
+| [<img src="./demo/search-like-createproject-gif.gif" width="100%"/>](guest.png) |
 
-| Live coding                                                       |
+| Invite / Allow user into a project (by email)                     |
 | ----------------------------------------------------------------- |
-| [<img src="./demo/live-code-gif.gif" width="1500px"/>](guest.png) |
+| [<img src="./demo/invite-user-gif.gif" width="100%"/>](guest.png) |
 
-| Github push integration                                         |
+| Live coding                                                     |
 | --------------------------------------------------------------- |
-| [<img src="./demo/github-push.gif" width="1500px"/>](guest.png) |
+| [<img src="./demo/live-code-gif.gif" width="100%"/>](guest.png) |
+
+| Github push integration                                       |
+| ------------------------------------------------------------- |
+| [<img src="./demo/github-push.gif" width="100%"/>](guest.png) |
 
 <br><br>
 
