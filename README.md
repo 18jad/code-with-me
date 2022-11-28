@@ -121,6 +121,22 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 | ------------------------------------------------------------- |
 | [<img src="./demo/github-push.gif" width="100%"/>](guest.png) |
 
+| Live Chatting                                               |
+| ----------------------------------------------------------- |
+| [<img src="./demo/live-chat.gif" width="100%"/>](guest.png) |
+
+| JS Compiler (ability to include some nodejs modules)    |
+| ------------------------------------------------------- |
+| [<img src="./demo/runjs.gif" width="100%"/>](guest.png) |
+
+| HTML Preview and external files linking                          |
+| ---------------------------------------------------------------- |
+| [<video src="./demo/html-preview.mp4" width="100%"/>](guest.png) |
+
+| Editor Setting (it save locally)                          |
+| --------------------------------------------------------- |
+| [<img src="./demo/setting.gif" width="100%"/>](guest.png) |
+
 <br><br>
 
 <a name="run" id="run"></a>
