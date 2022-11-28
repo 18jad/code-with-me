@@ -17,7 +17,7 @@ class ForgetController {
     const { email } = elements;
     email.style.borderColor = "#6c7280";
     return new Promise((resolve, reject) => {
-      if (!email || !email.value || validator._validateEmail(email.value)) {
+      if (!email || !email.value || !validator._validateEmail(email.value)) {
         reject("Please enter a valid email address");
         email.style.borderColor = "#c64d43";
       } else {

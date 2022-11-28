@@ -38,7 +38,9 @@ const ParticipantsCircle = tw.img`
     w-8
     rounded-full
     ring-2
-    ring-white
+    ring-[#4e96fa]
+    shadow-lg
+    shadow-[#4e96fa]/20
     object-cover
     select-none
 `;
