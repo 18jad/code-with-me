@@ -32,17 +32,17 @@
 > This design was planned before on paper, then moved to Figma app for the fine details.
 > Note that i didn't use any styling library or theme, all from scratch and using pure SCSS modules and TailwindCSS
 
-| Landing                                                                     | Login                                                                 |
-| --------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| [<img src="./demo/homepage_mockup.png" width="1500"/>](homepage_mockup.png) | [<img src="./demo/login_mockup.png" width="1360"/>](login_mockup.png) |
+| Landing                                                                          | Login                                                                      |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [<img src="./demo/homepage_mockup.png" width="1500"/>](demo/homepage_mockup.png) | [<img src="./demo/login_mockup.png" width="1360"/>](demo/login_mockup.png) |
 
-| Register                                                                | Profile                                                                   |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| [<img src="./demo/signup_mockup.png" width="1500"/>](signup_mockup.png) | [<img src="./demo/profile_mockup.png" width="1540"/>](profile_mockup.png) |
+| Register                                                                     | Profile                                                                        |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| [<img src="./demo/signup_mockup.png" width="1500"/>](demo/signup_mockup.png) | [<img src="./demo/profile_mockup.png" width="1540"/>](demo/profile_mockup.png) |
 
-| User search results                                            | IDE                                                               |
-| -------------------------------------------------------------- | ----------------------------------------------------------------- |
-| [<img src="./demo/guest_mockup.png" width="1500"/>](guest.png) | [<img src="./demo/ide_mockup.png" width="1500"/>](ide_mockup.png) |
+| User search results                                                 | IDE                                                                    |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| [<img src="./demo/guest_mockup.png" width="1500"/>](demo/guest.png) | [<img src="./demo/ide_mockup.png" width="1500"/>](demo/ide_mockup.png) |
 
 <br><br>
 
@@ -75,17 +75,17 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 
 ## Demo Screenshots:
 
-| Landing                                                            | Login                                                   |
-| ------------------------------------------------------------------ | ------------------------------------------------------- |
-| [<img src="./demo/homepage.png" width="1600"/>](demo/homepage.png) | [<img src="./demo/login.png" width="1620"/>](login.png) |
+| Landing                                                            | Login                                                        |
+| ------------------------------------------------------------------ | ------------------------------------------------------------ |
+| [<img src="./demo/homepage.png" width="1600"/>](demo/homepage.png) | [<img src="./demo/login.png" width="1620"/>](demo/login.png) |
 
-| Register                                                       | Profile                                                     |
-| -------------------------------------------------------------- | ----------------------------------------------------------- |
-| [<img src="./demo/signup.png" width="1600"/>](demo/signup.png) | [<img src="./demo/profile.png" width="1600"/>](profile.png) |
+| Register                                                       | Profile                                                          |
+| -------------------------------------------------------------- | ---------------------------------------------------------------- |
+| [<img src="./demo/signup.png" width="1600"/>](demo/signup.png) | [<img src="./demo/profile.png" width="1600"/>](demo/profile.png) |
 
-| User search results                                          | IDE                                                 |
-| ------------------------------------------------------------ | --------------------------------------------------- |
-| [<img src="./demo/guest.png" width="1600"/>](demo/guest.png) | [<img src="./demo/ide.png" width="1600"/>](ide.png) |
+| User search results                                          | IDE                                                      |
+| ------------------------------------------------------------ | -------------------------------------------------------- |
+| [<img src="./demo/guest.png" width="1600"/>](demo/guest.png) | [<img src="./demo/ide.png" width="1600"/>](demo/ide.png) |
 
 ## Demo GIF:
 
