@@ -89,29 +89,29 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 
 ## Demo GIF:
 
-| Landing page & Contact me email                                             |
-| --------------------------------------------------------------------------- |
-| [<img src="./demo/landing_contact-gif.gif" width="100%"/>](landing_contact) |
+| Landing page & Contact me email                                              |
+| ---------------------------------------------------------------------------- |
+| [<img src="./demo/landing_contact-gif.gif" width="800px"/>](landing_contact) |
 
 | Login                                                        |
 | ------------------------------------------------------------ |
 | [<img src="./demo/signin-gif.gif" width="100%"/>](guest.png) |
 
-| Reset password                                                       |
-| -------------------------------------------------------------------- |
-| [<img src="./demo/reset-password-gif.gif" width="100%"/>](guest.png) |
+| Reset password                                                        |
+| --------------------------------------------------------------------- |
+| [<img src="./demo/reset-password-gif.gif" width="800px"/>](guest.png) |
 
 | Edit profile                                                       |
 | ------------------------------------------------------------------ |
 | [<img src="./demo/edit-profile-gif.gif" width="100%"/>](guest.png) |
 
-| Search user & liking user & creating project                                    |
-| ------------------------------------------------------------------------------- |
-| [<img src="./demo/search-like-createproject-gif.gif" width="100%"/>](guest.png) |
+| Search user & liking user & creating project                                     |
+| -------------------------------------------------------------------------------- |
+| [<img src="./demo/search-like-createproject-gif.gif" width="800px"/>](guest.png) |
 
-| Invite / Allow user into a project (by email)                     |
-| ----------------------------------------------------------------- |
-| [<img src="./demo/invite-user-gif.gif" width="100%"/>](guest.png) |
+| Invite / Allow user into a project (by email)                      |
+| ------------------------------------------------------------------ |
+| [<img src="./demo/invite-user-gif.gif" width="800px"/>](guest.png) |
 
 | Live coding                                                     |
 | --------------------------------------------------------------- |
