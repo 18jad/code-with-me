@@ -85,6 +85,38 @@ Here's a brief high-level overview of the tech stack the Well app uses:
 | ------------------------------------------------------- | --------------------------------------------------- |
 | [<img src="./demo/guest.png" width="1600"/>](guest.png) | [<img src="./demo/ide.png" width="1600"/>](ide.png) |
 
+| Landing page & Contact me email                                               |
+| ----------------------------------------------------------------------------- |
+| [<img src="./demo/landing_contact-gif.gif" width="1500px"/>](landing_contact) |
+
+| Login                                                          |
+| -------------------------------------------------------------- |
+| [<img src="./demo/signin-gif.gif" width="1500px"/>](guest.png) |
+
+| Reset password                                                         |
+| ---------------------------------------------------------------------- |
+| [<img src="./demo/reset-password-gif.gif" width="1500px"/>](guest.png) |
+
+| Edit profile                                                         |
+| -------------------------------------------------------------------- |
+| [<img src="./demo/edit-profile-gif.gif" width="1500px"/>](guest.png) |
+
+| Search user & liking user & creating project                                      |
+| --------------------------------------------------------------------------------- |
+| [<img src="./demo/search-like-createproject-gif.gif" width="1500px"/>](guest.png) |
+
+| Invite / Allow user into a project (by email)                       |
+| ------------------------------------------------------------------- |
+| [<img src="./demo/invite-user-gif.gif" width="1500px"/>](guest.png) |
+
+| Live coding                                                       |
+| ----------------------------------------------------------------- |
+| [<img src="./demo/live-code-gif.gif" width="1500px"/>](guest.png) |
+
+| Github push integration                                         |
+| --------------------------------------------------------------- |
+| [<img src="./demo/github-push.gif" width="1500px"/>](guest.png) |
+
 <br><br>
 
 <a name="run" id="run"></a>
