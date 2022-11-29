@@ -6,16 +6,15 @@ const prisma = new PrismaClient();
 const sendResponse = require("../utils/sendResponse");
 const sendEmail = require("../utils/emailTransporter");
 const AuthController = require("./auth.controller");
-const authController = new AuthController();
 const fs = require("fs");
 const path = require("path");
 const { uuid } = require("uuidv4");
 const { excuteJsFile } = require("../utils/compiler/childProccess");
 
+// Variables
 const userController = new UserController();
-
+const authController = new AuthController();
 const decodeToken = (request: Request) => userController.decodeToken(request);
-
 const validateEmail = (email: string): Boolean => {
   return authController.validateEmail(email);
 };
@@ -28,7 +27,7 @@ class ProjectController {
    * @param title {string} project title
    * @returns {boolean} true if title is valid
    */
-  public validateTitle(title: string) {
+  public validateTitle(title: string): boolean {
     const titleLength: number = Number(title?.length);
     return (
       titleLength >= 3 &&
@@ -42,7 +41,7 @@ class ProjectController {
    * @param title {string} project title
    * @returns {Promise<boolean>} true if title is found
    */
-  public async checkTitle(title: string) {
+  public async checkTitle(title: string): Promise<boolean> {
     const foundProject = await prisma.project.findFirst({
       where: {
         title: title,
@@ -56,7 +55,9 @@ class ProjectController {
    * @param data {Request} project data
    * @returns {Promise<boolean>} true if all project inputs are valid
    */
-  public async validate(data: Request) {
+  public async validate(
+    data: Request,
+  ): Promise<boolean | { title: string; description: string }> {
     const { title, description } = data.body as Project;
     return new Promise((resolve, reject) => {
       if (title && this.validateTitle(title)) {
@@ -85,7 +86,7 @@ class ProjectController {
    * @param description {string} project description
    * @returns {boolean} true if description is valid
    */
-  public validateDescription(description: string) {
+  public validateDescription(description: string): boolean {
     const descriptionLength: number = Number(description?.length);
     return descriptionLength > 10 && descriptionLength < 80; // min is 10 characters and max is 80 characters
   }
@@ -95,7 +96,7 @@ class ProjectController {
    * @param title {string} project title
    * @returns {void}
    */
-  private makeProjectDirectory(title: string) {
+  private makeProjectDirectory(title: string): void {
     const projectDirectory = path.join(
       __dirname,
       `../public/projects/${title}`,
@@ -112,7 +113,10 @@ class ProjectController {
    * @param response {Response}
    * @returns {void} Create the project
    */
-  public async createProject(request: Request, response: Response) {
+  public async createProject(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
     decodeToken(request)
       .then((token: any) => {
         const { id } = token;
@@ -175,15 +179,28 @@ class ProjectController {
       });
   }
 
-  // Update project file structure
-  public async updateProject(request: Request, response: Response) {
+  private getProjectPath(title: string): string {
+    return path.join(
+      // joining currrent directory with project directory
+      __dirname,
+      `../public/projects/${title}`,
+    );
+  }
+
+  /**
+   * @description Update a project file structure JSON
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async updateProject(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
     decodeToken(request)
-      .then((token: any) => {
-        const { id } = token;
+      .then(() => {
         const { title, fileStructure } = request.body;
-
-        const parsedfileStructure = JSON.parse(fileStructure);
-
+        const parsedfileStructure = JSON.parse(fileStructure); // parse the new file structure before storing it
         prisma.project
           .update({
             where: {
@@ -212,16 +229,19 @@ class ProjectController {
       });
   }
 
-  public async createFile(request: Request, response: Response) {
+  /**
+   * @description Create a new project file on server
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async createFile(request: Request, response: Response): Promise<void> {
     decodeToken(request)
-      .then((token: any) => {
+      .then(() => {
         const { title, file_name } = request.body;
-        const projectDirectory = path.join(
-          __dirname,
-          `../public/projects/${title}`,
-        );
+        const projectDirectory = this.getProjectPath(title);
 
-        const filePath = path.join(projectDirectory, file_name);
+        const filePath = path.join(projectDirectory, file_name); // generate created file path
         fs.open(filePath, "w", (error: any) => {
           if (error) {
             sendResponse(response, false, "File not created", error);
@@ -235,15 +255,17 @@ class ProjectController {
       });
   }
 
-  public async saveFile(request: Request, response: Response) {
+  /**
+   * @description Save files changes on the server
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async saveFile(request: Request, response: Response): Promise<void> {
     decodeToken(request)
-      .then((token: any) => {
+      .then(() => {
         const { title, file_name, file_content } = request.body;
-
-        const projectDirectory = path.join(
-          __dirname,
-          `../public/projects/${title}`,
-        );
+        const projectDirectory = this.getProjectPath(title);
 
         const filePath = path.join(projectDirectory, file_name);
         fs.writeFile(filePath, file_content, (error: any) => {
@@ -259,11 +281,18 @@ class ProjectController {
       });
   }
 
+  /**
+   * @description Compile and run the code, multi language can be added based on what is installed on the server, here i added only node js
+   * @param id {string} project id
+   * @param exc_tmp {string} excuted file extension
+   * @param response {Response}
+   * @returns {void}
+   */
   public async runJSCode(
     id: string,
     exc_tmp: string,
     response: Response,
-  ): Promise<any> {
+  ): Promise<void> {
     if (exc_tmp.split(".").pop() == "js") {
       excuteJsFile(id, exc_tmp)
         .then((result: any) => {
@@ -281,7 +310,13 @@ class ProjectController {
     }
   }
 
-  public async excuteCode(request: Request, response: Response) {
+  /**
+   * @description Excute code compilation and run based on file type, for multi language support add more cases
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async excuteCode(request: Request, response: Response): Promise<void> {
     const { title, file_name } = request.body;
     const exc_tmp: string = file_name.split(".").pop() as string;
     switch (exc_tmp) {
@@ -298,78 +333,13 @@ class ProjectController {
     }
   }
 
-  public async deleteFile(request: Request, response: Response) {
-    decodeToken(request)
-      .then((token: any) => {
-        const { title, file_name } = request.body;
-        const projectDirectory = path.join(
-          __dirname,
-          `../public/projects/${title}`,
-        );
-
-        const filePath = path.join(projectDirectory, file_name);
-        fs.unlink(filePath, (error: any) => {
-          if (error) {
-            sendResponse(response, false, "File not deleted", error);
-          } else {
-            sendResponse(response, true, "File deleted successfully");
-          }
-        });
-      })
-      .catch((error: any) => {
-        sendResponse(response, false, "Unauthorized user", error);
-      });
-  }
-
-  public async renameFile(request: Request, response: Response) {
-    decodeToken(request)
-      .then((token: any) => {
-        const { title, file_name, new_file_name } = request.body;
-        const projectDirectory = path.join(
-          __dirname,
-          `../public/projects/${title}`,
-        );
-
-        const filePath = path.join(projectDirectory, file_name);
-        const newFilePath = path.join(projectDirectory, new_file_name);
-        fs.rename(filePath, newFilePath, (error: any) => {
-          if (error) {
-            sendResponse(response, false, "File not renamed", error);
-          } else {
-            sendResponse(response, true, "File renamed successfully");
-          }
-        });
-      })
-      .catch((error: any) => {
-        sendResponse(response, false, "Unauthorized user", error);
-      });
-  }
-
-  public async createFolder(request: Request, response: Response) {
-    decodeToken(request)
-      .then((token: any) => {
-        const { title, folder_name } = request.body;
-        const projectDirectory = path.join(
-          __dirname,
-          `../public/projects/${title}`,
-        );
-
-        const folderPath = path.join(projectDirectory, folder_name);
-        fs.mkdir(folderPath, (error: any) => {
-          if (error) {
-            sendResponse(response, false, "Folder not created", error);
-          } else {
-            sendResponse(response, true, "Folder created");
-          }
-        });
-      })
-
-      .catch((error: any) => {
-        sendResponse(response, false, "Unauthorized user", error);
-      });
-  }
-
-  public async readFile(request: Request, response: Response) {
+  /**
+   * @description Read a specific file content from the server and return it to the client
+   * @param request {Request}
+   * @param response {Response}
+   * @returns {void}
+   */
+  public async readFile(request: Request, response: Response): Promise<void> {
     decodeToken(request)
       .then((token: any) => {
         const { title, file_name } = request.query;
@@ -394,12 +364,89 @@ class ProjectController {
       });
   }
 
+  // ❌ Deprecated
+  public async deleteFile(request: Request, response: Response): Promise<void> {
+    decodeToken(request)
+      .then((token: any) => {
+        const { title, file_name } = request.body;
+        const projectDirectory = path.join(
+          __dirname,
+          `../public/projects/${title}`,
+        );
+
+        const filePath = path.join(projectDirectory, file_name);
+        fs.unlink(filePath, (error: any) => {
+          if (error) {
+            sendResponse(response, false, "File not deleted", error);
+          } else {
+            sendResponse(response, true, "File deleted successfully");
+          }
+        });
+      })
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  // ❌ Deprecated
+  public async renameFile(request: Request, response: Response): Promise<void> {
+    decodeToken(request)
+      .then((token: any) => {
+        const { title, file_name, new_file_name } = request.body;
+        const projectDirectory = path.join(
+          __dirname,
+          `../public/projects/${title}`,
+        );
+
+        const filePath = path.join(projectDirectory, file_name);
+        const newFilePath = path.join(projectDirectory, new_file_name);
+        fs.rename(filePath, newFilePath, (error: any) => {
+          if (error) {
+            sendResponse(response, false, "File not renamed", error);
+          } else {
+            sendResponse(response, true, "File renamed successfully");
+          }
+        });
+      })
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
+  // ❌ Deprecated
+  public async createFolder(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
+    decodeToken(request)
+      .then((token: any) => {
+        const { title, folder_name } = request.body;
+        const projectDirectory = path.join(
+          __dirname,
+          `../public/projects/${title}`,
+        );
+
+        const folderPath = path.join(projectDirectory, folder_name);
+        fs.mkdir(folderPath, (error: any) => {
+          if (error) {
+            sendResponse(response, false, "Folder not created", error);
+          } else {
+            sendResponse(response, true, "Folder created");
+          }
+        });
+      })
+
+      .catch((error: any) => {
+        sendResponse(response, false, "Unauthorized user", error);
+      });
+  }
+
   /**
    * @description Validate invite token
    * @param token {string} invite token
    * @returns {Promise<boolean>} true if token is valid
    */
-  private async validateInviteToken(token: string) {
+  private async validateInviteToken(token: string): Promise<boolean> {
     const project = await prisma.project.findUnique({
       where: {
         inviteToken: token,
@@ -417,7 +464,7 @@ class ProjectController {
    * @param response {Response}
    * @returns {void}
    */
-  public async allowUser(request: Request, response: Response) {
+  public async allowUser(request: Request, response: Response): Promise<void> {
     decodeToken(request)
       .then(async (token: any) => {
         if (token) {
@@ -487,7 +534,10 @@ class ProjectController {
    * @param response {Response}
    * @returns {void}
    */
-  public async checkIfAllowed(request: Request, response: Response) {
+  public async checkIfAllowed(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
     decodeToken(request)
       .then(async (token: any) => {
         if (token) {
@@ -534,7 +584,7 @@ class ProjectController {
    * @param response {Response}
    * @returns {void}
    */
-  sendInviation(request: Request, response: Response) {
+  sendInviation(request: Request, response: Response): void {
     const { email, link } = request.body as { email: string; link: string };
     const validEmail = validateEmail(email);
     if (email && link && validEmail) {

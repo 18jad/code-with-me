@@ -5,12 +5,20 @@ import { contactHTML } from "../views/contact.html";
 const sendEmail = require("../utils/emailTransporter");
 const sendResponse = require("../utils/sendResponse");
 
-type Email = {
+// Interfaces
+interface IEmail {
   name: string;
   email: string;
   subject: string;
   message: string;
-};
+}
+
+interface IMailOptions {
+  from: string;
+  to: string;
+  subject: string;
+  html: string;
+}
 
 const validateEmail = (email: string): Boolean => {
   return authController.validateEmail(email);
@@ -49,8 +57,8 @@ class ContactController {
    * @param data {Request} - Request data
    * @returns {Promise} - Returns a promise
    */
-  validate(data: Request): Promise<Email> {
-    const { name, email, subject, message } = data.body as Email;
+  validate(data: Request): Promise<IEmail> {
+    const { name, email, subject, message } = data.body as IEmail;
     return new Promise((resolve, reject) => {
       if (this.validateName(name)) {
         if (validateEmail(email)) {
@@ -77,25 +85,31 @@ class ContactController {
    * @param request {Request} - Request data
    * @param response {Response} - Response data
    */
-  sendEmail(request: Request, response: Response) {
+  sendEmail(request: Request, response: Response): void {
     this.validate(request)
       .then((result) => {
-        const { name, email, subject, message } = result;
-        const mailOptions = {
-          from: process.env.EMAIL_USERNAME,
-          to: process.env.CONTACT_EMAIL,
-          subject: subject,
-          html: contactHTML(name, email, message),
-        };
-        sendEmail(mailOptions, (error: any, info: any) => {
-          if (error) {
-            sendResponse(response, false, "Something went wrong", {
-              error: error,
-            });
-          } else {
-            sendResponse(response, true, "Email sent successfully");
-          }
-        });
+        const { name, email, subject, message } = result as IEmail;
+        const email_username = process.env.EMAIL_USERNAME;
+        const email_password = process.env.EMAIL_PASSWORD;
+        if (email_username && email_password) {
+          const mailOptions: IMailOptions = {
+            from: email_username,
+            to: email_password,
+            subject: subject,
+            html: contactHTML(name, email, message),
+          };
+          sendEmail(mailOptions, (error: any, info: any) => {
+            if (error) {
+              sendResponse(response, false, "Something went wrong", {
+                error: error,
+              });
+            } else {
+              sendResponse(response, true, "Email sent successfully");
+            }
+          });
+        } else {
+          sendResponse(response, false, "Something went wrong");
+        }
       })
       .catch(({ message }) => {
         sendResponse(response, false, message);

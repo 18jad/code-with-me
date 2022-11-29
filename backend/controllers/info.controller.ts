@@ -12,7 +12,10 @@ class InfoController {
    * @param response {Response}
    * @returns {void}
    */
-  public async getUserById(request: Request, response: Response) {
+  public async getUserById(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
     let { id } = request.query as any;
     if (id) {
       if (typeof id === "string") {
@@ -20,7 +23,7 @@ class InfoController {
           id = parseInt(id);
         } catch (error) {
           sendResponse(response, false, "Invalid user id", error);
-          return null;
+          return;
         }
       }
       try {
@@ -52,7 +55,10 @@ class InfoController {
    * @param response {Response}
    * @returns {void}
    */
-  public async getUserByUsername(request: Request, response: Response) {
+  public async getUserByUsername(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
     let { username } = request.query as any;
     if (username && username.length > 0) {
       try {
@@ -86,7 +92,7 @@ class InfoController {
    * @param response {Response}
    * @returns {void}
    */
-  public async searchUser(request: Request, response: Response) {
+  public async searchUser(request: Request, response: Response): Promise<void> {
     const { query } = request.query as { query: string };
     // check if query is not empty
     if (query && query.length > 0) {
@@ -129,7 +135,10 @@ class InfoController {
    * @param response {Response}
    * @returns {void}
    */
-  public async getProjectByTitle(request: Request, response: Response) {
+  public async getProjectByTitle(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
     const { title } = request.query as { title: string };
     // if title is not null
     if (title && title.length > 0) {

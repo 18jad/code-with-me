@@ -1,10 +1,11 @@
 // Imported packages
+import { Request, Response } from "express";
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const http = require("http");
 
-// Configuration
+// App Configurations
 require("dotenv").config();
 
 // Variables
@@ -16,11 +17,11 @@ const infoRoutes = require("./routes/info.routes");
 const projectRoutes = require("./routes/project.routes");
 const githubRoutes = require("./routes/github.routes");
 const filesRoutes = require("./routes/files.routes");
-const apiVersion: number = 1.0;
-const prefix: string = String("/api/v" + apiVersion.toFixed(1));
 const SocketInstance = require("./socket/SocketInstance");
+const apiVersion: number = 1.0;
+const prefix = String("/api/v" + apiVersion.toFixed(1));
 
-// Configuration
+// Server Configuration
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
@@ -32,8 +33,9 @@ app.use(prefix + "/project", projectRoutes);
 app.use(prefix + "/github", githubRoutes);
 app.use("/", filesRoutes);
 
-app.get("*", (req: any, res: any) => {
-  res.status(404).json({
+// Not found route
+app.get("*", (request: Request, response: Response) => {
+  response.status(404).json({
     message: "Page not found, are you lost?",
   });
 });
@@ -49,6 +51,7 @@ socket.init().then((io: typeof server) => {
   }
 });
 
+// Start server
 server.listen(port, (error: any) => {
   if (error) {
     throw new Error(error.message);

@@ -12,14 +12,26 @@ const userCheck = new AuthUser();
 const jwt_secret = process.env.JWT_SECRET_KEY;
 const jwt_expires = process.env.JWT_EXPIRES_IN;
 
+// Interfaces
+interface IUserinfo {
+  id: number;
+  username: string;
+  email: string;
+}
+
+interface ILikesInfo {
+  likedUsers: number[];
+  isLiked: boolean;
+}
+
 class UserController {
   /**
    * @description Extract jwt token from request header
    * @param request {Request}
    * @returns {string} token
    */
-  private getToken(request: Request) {
-    return request.headers.authorization?.split(" ")[1];
+  private getToken(request: Request): string {
+    return request.headers.authorization?.split(" ")[1] || "";
   }
 
   /**
@@ -27,7 +39,7 @@ class UserController {
    * @param request {Request}
    * @returns {Promise<Userinfo>} user details stored in jwt token
    */
-  private async decodeToken(request: Request) {
+  private async decodeToken(request: Request): Promise<IUserinfo> {
     return new Promise((resolve, reject) => {
       const token = this.getToken(request);
       if (token) {
@@ -53,7 +65,7 @@ class UserController {
    * @param headline {string} user headline
    * @returns {boolean} true if headline is valid
    */
-  public validateHeadline(headline: string) {
+  public validateHeadline(headline: string): boolean {
     const headlineLength: number = Number(headline?.length);
     return headlineLength > 10 && headlineLength < 100; // min is 10 characters and max is 100 characters
   }
@@ -64,8 +76,10 @@ class UserController {
    * @param response {Response}
    * @returns {void} Edit user profile details
    */
-  // TODO: Add image edit and update functionality
-  public async editProfile(request: Request, response: Response) {
+  public async editProfile(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
     this.decodeToken(request)
       .then(async (token: any) => {
         const { id } = token;
@@ -136,7 +150,7 @@ class UserController {
    * @param response {Response}
    * @returns {void}
    */
-  public async uploadProfile(request: any, response: any) {
+  public async uploadProfile(request: any, response: any): Promise<void> {
     const imageURL = `http://localhost:${process.env.PORT}/image/profiles/${request.file.filename}`;
     this.decodeToken(request)
       .then(async (token: any) => {
@@ -171,7 +185,10 @@ class UserController {
    * @param userId {number | string} likked user id
    * @returns {Promise<boolean>} true if user is already liked
    */
-  public async checkIfLiked(id: number | string, userId: number | string) {
+  public async checkIfLiked(
+    id: number | string,
+    userId: number | string,
+  ): Promise<boolean | ILikesInfo> {
     if (typeof userId === "number" || typeof userId === "string") {
       const user = await prisma.user.findUnique({
         where: {
@@ -194,7 +211,10 @@ class UserController {
    * @param response {Response}
    * @returns {void} Like a user
    */
-  public async updateUserLike(request: Request, response: Response) {
+  public async updateUserLike(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
     this.decodeToken(request)
       .then(async (token: any) => {
         if (token) {
@@ -301,7 +321,7 @@ class UserController {
    * @param Response {Response}
    */
   // This would have been redundant and much simpler if we save the project that user is collabed with in his database table, but whatever...
-  getCollabProjects(Request: Request, Response: Response) {
+  getCollabProjects(Request: Request, Response: Response): void {
     this.decodeToken(Request)
       .then(async (token: any) => {
         if (token) {

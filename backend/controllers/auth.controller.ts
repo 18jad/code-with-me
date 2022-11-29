@@ -1,5 +1,5 @@
 // Imported packages
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { Request, Response } from "express";
 import { resetPassworHTML } from "../views/resetPassword.html";
 const bcrypt = require("bcrypt");
@@ -15,13 +15,13 @@ const jwt_secret = process.env.JWT_SECRET_KEY;
 const jwt_expires = process.env.JWT_EXPIRES_IN;
 
 // Type
-type User = {
+interface IUser {
   id?: Number;
   name: string;
   username: string;
   email: string;
   password: string;
-};
+}
 
 // UserAuth class, contains validation, login and register methods
 class UserAuth {
@@ -58,7 +58,7 @@ class UserAuth {
    * @param username {string}
    * @returns {Boolean}
    */
-  validateUsername(username: string) {
+  validateUsername(username: string): boolean {
     return Boolean(
       username?.length >= 3 && username.match(this.usernameFilter),
     );
@@ -125,7 +125,7 @@ class UserAuth {
    * @param data {Request}
    * @returns {Promise<User>}
    */
-  validateRegister(data: Request): Promise<User> {
+  validateRegister(data: Request): Promise<IUser> {
     const { name, username, email, password } = data.body;
     return new Promise(async (resolve, reject) => {
       // Validate email
@@ -209,7 +209,7 @@ class UserAuth {
    * @param response {Response}
    * @returns {Promise<void>}
    */
-  async register(request: Request, response: Response) {
+  async register(request: Request, response: Response): Promise<void> {
     this.response = response;
     this.request = request;
     this.validateRegister(request)
@@ -242,7 +242,7 @@ class UserAuth {
    * @param response {Response}
    * @returns {Promise<void>}
    */
-  async login(request: Request, response: Response) {
+  async login(request: Request, response: Response): Promise<void> {
     this.response = response;
     this.request = request;
     this.validateLogin(request)
@@ -283,7 +283,10 @@ class UserAuth {
    * @param response {Response}
    * @returns {Promise<void>}
    */
-  async generateResetPassword(request: Request, response: Response) {
+  async generateResetPassword(
+    request: Request,
+    response: Response,
+  ): Promise<void> {
     this.response = response;
     this.request = request;
     const { email } = request.body;
@@ -364,7 +367,10 @@ class UserAuth {
    * @param response {Response}
    * @returns {Promise<User>}
    */
-  async validateResetToken(request: Request, response: Response) {
+  async validateResetToken(
+    request: Request,
+    response: Response,
+  ): Promise<User> {
     this.response = response;
     this.request = request;
     const { token } = request.body;
@@ -383,7 +389,7 @@ class UserAuth {
    * @param response {Response}
    * @returns {Promise<void>}
    */
-  async resetPassword(request: Request, response: Response) {
+  async resetPassword(request: Request, response: Response): Promise<void> {
     this.response = response;
     this.request = request;
     const { token, password } = request.body;
